@@ -1,0 +1,26 @@
+Changelog BBL Utility
+
+5.0.0
+- Updated to minecraft 1.21.8
+- Updated Loader Range to 4
+- Renamed from Opolis Utilities to BBL Utility
+- Crook added (same as opolis utilities, now has shift information)
+- Sapling Grower added (same as opolis utilities, uses "utility:valid_for_sapling_grower" tag for valid saplings, saplings tag, red and brown mushrooms are in this tag by default, now has shift information)
+- Animal Net, releasing and catching now done inside the item not through events, now has shift information, tooltips updated now all translatable, durability now works correctly
+- Loot Boxes removed, this will move into BBL Shops in the future
+- Catalogue Book removed, this will move into BBL Shops in the future
+- Death Stone, now uses GlobalPos instead of separate dimension and x,y,z values on the item, now has shift information, now works if the player returns to the main menu when they die upon respawning a death stone with the correct position is always given, death stone no longer given after the end dragon is killed and player returns the the overworld
+- Floating Block replaced with Floater Item, has shift information, when held in off hand will allow the main hand block to be placed in mid air, and water
+- Home Stone removed, underused item no need when most packs have FTB Essentials or similar with /home command
+- Mini Coal and Mini Charcoal are exactly the same as Opolis Utilities
+- Portable GUI removed, way to buggy
+- B Bucks removed, will move to BBL Shops in the future
+- Copper Nugget removed, no longer needed in vanilla now
+- Wooden shears unchanged expect durability can now be set
+- Jerky removed, underused item
+- Leafy string, Soaked Paper and Log Sheets unchanged
+- Drying Table gui changed, recipe tweaked, durability removed now 200, soaking and drying recipes now in a single recipe type, JEI updated to show both soaking and drying recipes and progress bar changes to show soaking and drying
+- Replaced usage of ResourceLocation.fromNamespaceAndPath(Utility.MOD_ID, name) with Utility.rl(name) for cleanliness
+- Block Placer now uses blockItem#place instead of a mess of custom code, this should improve compatibility with various block types without the need for custom code for certain blocks. Now redstone controlled, by default on when powered with a redstone signal will turn off
+- Block Breaker completely rewritten, now uses Block#dropResource for loot, all enchantements should work correctly, now redstone controlled, by default on when powered with a redstone signal will turn off, 
+

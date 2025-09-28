@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "utility:block/ender_ore"
+    }
+  }
+}

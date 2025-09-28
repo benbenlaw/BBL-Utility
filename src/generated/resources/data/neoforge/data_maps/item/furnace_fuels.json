@@ -1,0 +1,10 @@
+{
+  "values": {
+    "utility:mini_charcoal": {
+      "burn_time": 200
+    },
+    "utility:mini_coal": {
+      "burn_time": 200
+    }
+  }
+}

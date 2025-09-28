@@ -1,0 +1,12 @@
+{
+  "type": "utility:drying_table",
+  "input": {
+    "count": 2,
+    "ingredient": "minecraft:diamond"
+  },
+  "output": {
+    "id": "minecraft:emerald",
+    "count": 1
+  },
+  "recipe_type": "drying"
+}
