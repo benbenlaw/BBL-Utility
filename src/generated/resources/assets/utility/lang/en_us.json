@@ -4,6 +4,8 @@
   "block.utility.deepslate_ender_ore": "Deepslate Ender Ore",
   "block.utility.drying_table": "Drying Table",
   "block.utility.ender_ore": "Ender Ore",
+  "block.utility.fluid_collector": "Fluid Collector",
+  "block.utility.fluid_placer": "Fluid Placer",
   "block.utility.resource_generator": "Resource Generator",
   "block.utility.soaking_table": "Soaking Table",
   "item.utility.animal_net": "Animal Net",

@@ -4,6 +4,8 @@
     "utility:deepslate_ender_ore",
     "utility:block_breaker",
     "utility:block_placer",
-    "utility:resource_generator"
+    "utility:resource_generator",
+    "utility:fluid_collector",
+    "utility:fluid_placer"
   ]
 }

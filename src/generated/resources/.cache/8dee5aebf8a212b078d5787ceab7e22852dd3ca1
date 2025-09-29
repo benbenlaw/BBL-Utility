@@ -1,4 +1,4 @@
-// 1.21.8	2025-09-28T19:36:13.8453711	utility Block Tags
+// 1.21.8	2025-09-29T14:38:13.0128667	utility Block Tags
 99f5fa2af16d7b8afb6f6ee7fe40908ce71e8f93 data/minecraft/tags/block/mineable/axe.json
-8c7d839de7adc02654a395a0aa306fc23bae8824 data/minecraft/tags/block/mineable/pickaxe.json
+3dc5d905e1496bf87e23f74bc079775f071c5f9f data/minecraft/tags/block/mineable/pickaxe.json
 36d3b63f15cf05567ef13f7a692c338c38bbeabc data/utility/tags/block/valid_for_sapling_grower.json

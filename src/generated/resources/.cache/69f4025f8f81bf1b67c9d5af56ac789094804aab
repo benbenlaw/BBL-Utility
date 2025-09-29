@@ -1,4 +1,4 @@
-// 1.21.8	2025-09-28T19:36:13.8431889	utility Models
+// 1.21.8	2025-09-29T14:38:13.0101176	utility Models
 24e85a681138e6d4534934d26d5defd3d7ccc990 assets/utility/blockstates/deepslate_ender_ore.json
 87694b9f16e373a3ac48c0cde5a0bcc929b52969 assets/utility/blockstates/ender_ore.json
 9206eec1fe9f71d09debfd8ed9dcafce178bb289 assets/utility/items/animal_net.json
@@ -11,6 +11,8 @@ f89394f11f78737624b873b4ecfd3d4558a83162 assets/utility/items/deepslate_ender_or
 8eabd871c6ba0897e32283d1540a7d64b3623fad assets/utility/items/ender_ore.json
 76ce82371ac52f31413841d9afc19435b4314536 assets/utility/items/ender_pearl_fragment.json
 96a334a4d70747c5d6e9aa34a1264e0ef0398840 assets/utility/items/floater.json
+0c59557d219690eb172c97669809b34b6c9bb1a7 assets/utility/items/fluid_collector.json
+5176a4040409f2070bbdc686bebdc352ef4f44a4 assets/utility/items/fluid_placer.json
 1088eb53568b6ea113833bbed7e987127b4cef95 assets/utility/items/leafy_string.json
 7570fcf6429be11f449e58713bed8d80a12156ad assets/utility/items/log_sheet.json
 9af2bef7a1d427e43c6991a06be45244e0e69603 assets/utility/items/mini_charcoal.json
