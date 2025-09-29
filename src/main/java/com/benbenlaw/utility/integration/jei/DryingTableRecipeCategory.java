@@ -35,7 +35,7 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
 
     public static final ResourceLocation UID = Utility.rl( "drying_table");
     public static final ResourceLocation TEXTURE = Utility.rl("textures/gui/drying_table_jei.png");
-    public static final ResourceLocation WATERLOGGED = Utility.rl("textures/gui/waterlogged_progress_arrow.png");
+    public static final ResourceLocation WATERLOGGED = Utility.rl("textures/gui/sprites/waterlogged_progress_arrow.png");
     public static final IRecipeType<DryingTableRecipe> RECIPE_TYPE = IRecipeType.create(UID, DryingTableRecipe.class);
 
     private final IDrawable icon;

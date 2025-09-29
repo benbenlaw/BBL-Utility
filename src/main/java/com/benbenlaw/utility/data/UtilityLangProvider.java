@@ -21,6 +21,10 @@ public class UtilityLangProvider extends LanguageProvider {
         add("block.utility.drying_table", "Drying Table");
         add("block.utility.soaking_table", "Soaking Table");
         add("block.utility.block_placer", "Block Placer");
+        add("block.utility.block_breaker", "Block Breaker");
+        add("block.utility.resource_generator", "Resource Generator");
+        add("block.utility.fluid_placer", "Fluid Placer");
+        add("block.utility.fluid_collector", "Fluid Collector");
 
         //Items
         add("item.utility.crook", "Crook");
@@ -61,6 +65,8 @@ public class UtilityLangProvider extends LanguageProvider {
         //JEI
         add("jei.utility.drying_table", "Drying Table");
         add("jei.utility.soaking", "Drying Table must be Waterlogged");
+        add("jei.utility.resource_generator", "Resource Generator");
+        add("jei.utility.consumed", "Fluid Consumed");
     }
 
     @Override

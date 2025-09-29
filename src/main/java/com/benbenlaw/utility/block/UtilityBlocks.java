@@ -1,10 +1,7 @@
 package com.benbenlaw.utility.block;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.block.custom.BlockBreakerBlock;
-import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
-import com.benbenlaw.utility.block.custom.DryingTableBlock;
-import com.benbenlaw.utility.block.custom.EnderOreBlock;
+import com.benbenlaw.utility.block.custom.*;
 import com.benbenlaw.utility.item.UtilityItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -47,7 +44,17 @@ public class UtilityBlocks {
             () -> new BlockBreakerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                     .noOcclusion().setId(createID("block_breaker"))));
 
+    public static final DeferredBlock<Block> RESOURCE_GENERATOR = registerBlock("resource_generator",
+            () -> new ResourceGeneratorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("resource_generator"))));
 
+    public static final DeferredBlock<Block> FLUID_PLACER = registerBlock("fluid_placer",
+            () -> new FluidPlacerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("fluid_placer"))));
+
+    public static final DeferredBlock<Block> FLUID_COLLECTOR = registerBlock("fluid_collector",
+            () -> new FluidCollectorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("fluid_collector"))));
 
 
 

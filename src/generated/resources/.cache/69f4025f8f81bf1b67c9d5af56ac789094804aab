@@ -1,7 +1,9 @@
-// 1.21.8	2025-09-20T15:46:45.2828522	utility Models
+// 1.21.8	2025-09-28T19:36:13.8431889	utility Models
 24e85a681138e6d4534934d26d5defd3d7ccc990 assets/utility/blockstates/deepslate_ender_ore.json
 87694b9f16e373a3ac48c0cde5a0bcc929b52969 assets/utility/blockstates/ender_ore.json
 9206eec1fe9f71d09debfd8ed9dcafce178bb289 assets/utility/items/animal_net.json
+bf92ff024d8153b2a9374c4599f690dac2d87408 assets/utility/items/block_breaker.json
+829c1d68b5b0dafb15ced0785aec990327298177 assets/utility/items/block_placer.json
 7b47ea4aed9a0c9714dacf616316bb5717614bb7 assets/utility/items/crook.json
 80c699ebb21da5cd33dbf0291a5db1f9ba347005 assets/utility/items/death_stone.json
 f89394f11f78737624b873b4ecfd3d4558a83162 assets/utility/items/deepslate_ender_ore.json
@@ -13,6 +15,7 @@ f89394f11f78737624b873b4ecfd3d4558a83162 assets/utility/items/deepslate_ender_or
 7570fcf6429be11f449e58713bed8d80a12156ad assets/utility/items/log_sheet.json
 9af2bef7a1d427e43c6991a06be45244e0e69603 assets/utility/items/mini_charcoal.json
 dbd20b835b391ecf93103642c865fcb406195a34 assets/utility/items/mini_coal.json
+f0b4a5aae010f61ae07765757b4b70d48875d019 assets/utility/items/resource_generator.json
 6e50c4db434a98982dc750047918b0a29d3b470e assets/utility/items/sapling_grower.json
 661614adc3c1b76c4023a108a1c71a5f55c669bf assets/utility/items/soaked_paper.json
 dbf065b248d482f0bf3cf8a246932ce914d6e3f8 assets/utility/items/wooden_shears.json

@@ -19,8 +19,9 @@ Changelog BBL Utility
 - Wooden shears unchanged expect durability can now be set
 - Jerky removed, underused item
 - Leafy string, Soaked Paper and Log Sheets unchanged
-- Drying Table gui changed, recipe tweaked, durability removed now 200, soaking and drying recipes now in a single recipe type, JEI updated to show both soaking and drying recipes and progress bar changes to show soaking and drying
+- Drying Table gui changed, recipe tweaked, durability removed now 200, soaking and drying recipes now in a single recipe type, JEI updated to show both soaking and drying recipes and progress bar changes to show soaking and drying, redstone controlled
 - Replaced usage of ResourceLocation.fromNamespaceAndPath(Utility.MOD_ID, name) with Utility.rl(name) for cleanliness
 - Block Placer now uses blockItem#place instead of a mess of custom code, this should improve compatibility with various block types without the need for custom code for certain blocks. Now redstone controlled, by default on when powered with a redstone signal will turn off
-- Block Breaker completely rewritten, now uses Block#dropResource for loot, all enchantements should work correctly, now redstone controlled, by default on when powered with a redstone signal will turn off, 
+- Block Breaker completely rewritten, now uses Block#dropResource for loot, all enchantements should work correctly, now redstone controlled, by default on when powered with a redstone signal will turn off,
+- Resource Generator now has 2 tanks, these can be filled with any fluids, recipes now use fluids and fluids can be optionally consumed, redstone controlled, revamped JEI
 

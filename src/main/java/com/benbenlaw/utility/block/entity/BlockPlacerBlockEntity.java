@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +52,12 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
     public ItemStackHandler getItemStackHandler() {
         return itemHandler;
+    }
+
+    public IItemHandler getIItemHandler(Direction side) {
+        return new InputOutputItemHandler(itemHandler,
+                (i, stack) -> i == INPUT_SLOT,
+                i -> false);
     }
 
     public BlockPlacerBlockEntity(BlockPos pos, BlockState state) {

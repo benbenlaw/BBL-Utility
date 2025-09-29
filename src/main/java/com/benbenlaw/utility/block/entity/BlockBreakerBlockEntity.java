@@ -1,12 +1,14 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockBreakerBlock;
 import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
@@ -38,6 +40,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +65,12 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
 
     public ItemStackHandler getItemStackHandler() {
         return itemHandler;
+    }
+
+    public IItemHandler getIItemHandler(Direction side) {
+        return new InputOutputItemHandler(itemHandler,
+                (i, stack) -> i == INPUT_SLOT,
+                i -> false);
     }
 
     public BlockBreakerBlockEntity(BlockPos pos, BlockState state) {

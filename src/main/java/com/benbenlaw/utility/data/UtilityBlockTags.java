@@ -33,6 +33,11 @@ public class UtilityBlockTags extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(UtilityBlocks.ENDER_ORE.get())
                 .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get())
+                .add(UtilityBlocks.BLOCK_BREAKER.get())
+                .add(UtilityBlocks.BLOCK_PLACER.get())
+                .add(UtilityBlocks.RESOURCE_GENERATOR.get())
+                .add(UtilityBlocks.FLUID_COLLECTOR.get())
+                .add(UtilityBlocks.FLUID_PLACER.get())
         ;
 
         //Axe

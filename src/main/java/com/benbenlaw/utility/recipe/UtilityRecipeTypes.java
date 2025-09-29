@@ -2,6 +2,7 @@ package com.benbenlaw.utility.recipe;
 
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
+import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -19,4 +20,13 @@ public class UtilityRecipeTypes {
 
     public static final Supplier<RecipeType<DryingTableRecipe>> DRYING_TABLE_TYPE =
             TYPES.register("drying_table", () -> DryingTableRecipe.Type.INSTANCE);
+
+
+    public static final Supplier<RecipeSerializer<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_SERIALIZER =
+            SERIALIZER.register("resource_generator", () -> ResourceGeneratorRecipe.Serializer.INSTANCE);
+
+    public static final Supplier<RecipeType<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_TYPE =
+            TYPES.register("resource_generator", () -> ResourceGeneratorRecipe.Type.INSTANCE);
+
+
 }

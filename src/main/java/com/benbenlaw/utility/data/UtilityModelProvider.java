@@ -49,7 +49,13 @@ public class UtilityModelProvider extends ModelProvider {
     @Override
     protected @NotNull Stream<? extends Holder<Block>> getKnownBlocks() {
         return UtilityBlocks.BLOCKS.getEntries().stream().filter(x ->
-                !x.is(UtilityBlocks.DRYING_TABLE.getId()));
+                !x.is(UtilityBlocks.DRYING_TABLE.getId()) &&
+                !x.is(UtilityBlocks.BLOCK_PLACER.getId()) &&
+                !x.is(UtilityBlocks.BLOCK_BREAKER.getId()) &&
+                !x.is(UtilityBlocks.FLUID_COLLECTOR.getId()) &&
+                !x.is(UtilityBlocks.FLUID_PLACER.getId()) &&
+                !x.is(UtilityBlocks.RESOURCE_GENERATOR.getId())
+        );
     }
 
     @Override

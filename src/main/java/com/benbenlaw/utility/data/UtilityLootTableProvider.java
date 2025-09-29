@@ -32,6 +32,11 @@ public class UtilityLootTableProvider extends VanillaBlockLoot {
         this.createEnderOreDrops(UtilityBlocks.ENDER_ORE.get());
         this.createEnderOreDrops(UtilityBlocks.DEEPSLATE_ENDER_ORE.get());
         this.dropSelf(UtilityBlocks.DRYING_TABLE.get());
+        this.dropSelf(UtilityBlocks.BLOCK_PLACER.get());
+        this.dropSelf(UtilityBlocks.BLOCK_BREAKER.get());
+        this.dropSelf(UtilityBlocks.RESOURCE_GENERATOR.get());
+        this.dropSelf(UtilityBlocks.FLUID_COLLECTOR.get());
+        this.dropSelf(UtilityBlocks.FLUID_PLACER.get());
     }
 
     protected void createEnderOreDrops(Block block) {

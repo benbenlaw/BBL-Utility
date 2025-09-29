@@ -1,9 +1,7 @@
 package com.benbenlaw.utility.block;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.block.entity.BlockBreakerBlockEntity;
-import com.benbenlaw.utility.block.entity.BlockPlacerBlockEntity;
-import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
+import com.benbenlaw.utility.block.entity.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -25,4 +23,16 @@ public class UtilityBlockEntities {
     public static final Supplier<BlockEntityType<BlockBreakerBlockEntity>> BLOCK_BREAKER_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("block_breaker_block_entity", () ->
                     new BlockEntityType<>(BlockBreakerBlockEntity::new, UtilityBlocks.BLOCK_BREAKER.get()));
+
+    public static final Supplier<BlockEntityType<ResourceGeneratorBlockEntity>> RESOURCE_GENERATOR_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("resource_generator_block_entity", () ->
+                    new BlockEntityType<>(ResourceGeneratorBlockEntity::new, UtilityBlocks.RESOURCE_GENERATOR.get()));
+
+    public static final Supplier<BlockEntityType<FluidPlacerBlockEntity>> FLUID_PLACER_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("fluid_placer_block_entity", () ->
+                    new BlockEntityType<>(FluidPlacerBlockEntity::new, UtilityBlocks.FLUID_PLACER.get()));
+
+    public static final Supplier<BlockEntityType<FluidCollectorBlockEntity>> FLUID_COLLECTOR_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("fluid_collector_block_entity", () ->
+                    new BlockEntityType<>(FluidCollectorBlockEntity::new, UtilityBlocks.FLUID_COLLECTOR.get()));
 }

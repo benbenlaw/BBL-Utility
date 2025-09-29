@@ -1,4 +1,7 @@
-// 1.21.8	2025-09-20T15:57:12.902877	Loot Tables
+// 1.21.8	2025-09-28T19:36:13.8453711	Loot Tables
+d8e3abf1bbd543c916f4b0050a91c8883639ca87 data/utility/loot_table/blocks/block_breaker.json
+9e54278cade735ab2fad4d916750e0c4101fd21b data/utility/loot_table/blocks/block_placer.json
 a62611520d389a80bc1345a1423fe63cde7846e9 data/utility/loot_table/blocks/deepslate_ender_ore.json
 9e7fdf0d34cc639b78816432c2115b6be4644b51 data/utility/loot_table/blocks/drying_table.json
 ae0dc794d802b2dcc89f3f6e669c15b8cbb30093 data/utility/loot_table/blocks/ender_ore.json
+d97509111d4ba56a8056292b13197a05aa2e32fe data/utility/loot_table/blocks/resource_generator.json

@@ -3,6 +3,8 @@ package com.benbenlaw.utility.data;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.data.custom.DryingTableRecipeBuilder;
+import com.benbenlaw.utility.data.custom.ResourceGeneratorRecipeBuilder;
+import com.benbenlaw.utility.integration.jei.ResourceGeneratorRecipeCategory;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
 import com.benbenlaw.utility.recipe.DryingTableRecipeType;
@@ -24,8 +26,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -281,6 +285,58 @@ public class UtilityRecipeProvider extends RecipeProvider {
         //Dry Sponge
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.SPONGE), 1),
                 new ItemStack(Items.WET_SPONGE), DryingTableRecipeType.SOAKING).save(output, "soaking/wet_sponge");
+
+        //Resource Generator
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.COBBLESTONE.getDefaultInstance(), Items.COBBLESTONE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "cobblestone");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.STONE.getDefaultInstance(), Items.STONE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "stone");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.ANDESITE.getDefaultInstance(), Items.ANDESITE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "andesite");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.DIORITE.getDefaultInstance(), Items.DIORITE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "diorite");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.GRANITE.getDefaultInstance(), Items.GRANITE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "granite");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.DEEPSLATE.getDefaultInstance(), Items.DEEPSLATE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "deepslate");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.COBBLED_DEEPSLATE.getDefaultInstance(), Items.COBBLED_DEEPSLATE.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "cobbled_deepslate");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.TUFF.getDefaultInstance(), Items.TUFF.getDefaultInstance(),
+                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                .save(output, "tuff");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.OBSIDIAN.getDefaultInstance(), Items.OBSIDIAN.getDefaultInstance(),
+                        new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, true)
+                .save(output, "obsidian");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.BASALT.getDefaultInstance(), Items.BASALT.getDefaultInstance(),
+                        new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
+                .save(output, "basalt");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.BLACKSTONE.getDefaultInstance(), Items.BLACKSTONE.getDefaultInstance(),
+                        new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
+                .save(output, "blackstone");
+
+        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.NETHERRACK.getDefaultInstance(), Items.NETHERRACK.getDefaultInstance(),
+                        new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
+                .save(output, "netherrack");
+
+
+
     }
 
     protected void oreSmelting(List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {

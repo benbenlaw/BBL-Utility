@@ -1,7 +1,10 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.handler.IInventoryHandlingBlockEntity;
+import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
+import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.block.custom.DryingTableBlock;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
@@ -9,6 +12,7 @@ import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
@@ -23,6 +27,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +54,12 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
 
     public ItemStackHandler getItemStackHandler() {
         return itemHandler;
+    }
+
+    public IItemHandler getIItemHandler(Direction side) {
+        return new InputOutputItemHandler(itemHandler,
+                (i, stack) -> i == INPUT_SLOT,
+                i -> i == OUTPUT_SLOT);
     }
 
     public DryingTableBlockEntity(BlockPos pos, BlockState state) {
@@ -80,6 +91,9 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
 
     public void tick() {
         if (!level.isClientSide()) {
+
+            if (!level.getBlockState(worldPosition).getValue(DryingTableBlock.RUNNING)) return;
+
             if (cachedRecipe == null) {
                 updateCachedRecipe();
             }
@@ -97,11 +111,10 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
 
     private void craftItem() {
         if (cachedRecipe != null) {
-            ItemStack output = cachedRecipe.value().output().copy();
-            itemHandler.extractItem(INPUT_SLOT, cachedRecipe.value().input().count(), false);
-            itemHandler.insertItem(OUTPUT_SLOT, output, false);
+            var recipe = cachedRecipe.value();
+            itemHandler.extractItem(INPUT_SLOT, recipe.input().count(), false);
+            itemHandler.insertItem(OUTPUT_SLOT, recipe.output().copy(), false);
             progress = 0;
-            updateCachedRecipe();
             sync();
         }
     }

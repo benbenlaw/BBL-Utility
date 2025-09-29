@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,19 @@ public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterlogg
             }
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    protected void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @Nullable Orientation orientation, boolean p_60514_) {
+
+        if (!level.isClientSide()) {
+            boolean powered = level.hasNeighborSignal(pos);
+            if (powered && state.getValue(RUNNING)) {
+                level.setBlock(pos, state.setValue(RUNNING, false), 3);
+            } else if (!powered && !state.getValue(RUNNING)) {
+                level.setBlock(pos, state.setValue(RUNNING, true), 3);
+            }
+        }
     }
 
     @Override
