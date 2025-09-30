@@ -27,4 +27,5 @@ public class UtilityDataComponents {
             COMPONENTS.register("global_pos", () ->
                     DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 
+
 }

@@ -18,6 +18,7 @@ public class FluidCollectorMenu extends SimpleAbstractContainerMenu {
     protected ContainerData data;
     protected Player player;
     protected BlockPos blockPos;
+    protected boolean whitelist;
 
     public FluidCollectorMenu(int containerID, Inventory inventory, FriendlyByteBuf extraData) {
         this(containerID, inventory, extraData.readBlockPos(), new SimpleContainerData(2));
@@ -30,6 +31,8 @@ public class FluidCollectorMenu extends SimpleAbstractContainerMenu {
         this.data = data;
         this.blockPos = pos;
         this.blockEntity = (FluidCollectorBlockEntity) level.getBlockEntity(pos);
+        assert blockEntity != null;
+        this.whitelist = blockEntity.getWhitelist();
 
         assert blockEntity != null;
         //this.addSlot(new SlotItemHandler(blockEntity.getItemStackHandler(), FluidCollectorBlockEntity.INPUT_SLOT, 60, 35));

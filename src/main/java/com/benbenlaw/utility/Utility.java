@@ -7,6 +7,7 @@ import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.item.UtilityCreativeTab;
 import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.item.UtilityItems;
+import com.benbenlaw.utility.network.UtilityNetworking;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
@@ -28,6 +29,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -50,6 +52,7 @@ public class Utility {
         modContainer.registerConfig(ModConfig.Type.STARTUP, UtilityStartUpConfig.SPEC, "bbl/utility/startup.toml");
 
         eventBus.addListener(this::registerCapabilities);
+        eventBus.addListener(this::registerNetworking);
     }
 
     public static ResourceLocation rl(String path) {
@@ -72,6 +75,10 @@ public class Utility {
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         UtilityCapabilities.registerCapabilities(event);
+    }
+
+    public void registerNetworking(RegisterPayloadHandlersEvent event) {
+        UtilityNetworking.registerNetworking(event);
     }
 
 }

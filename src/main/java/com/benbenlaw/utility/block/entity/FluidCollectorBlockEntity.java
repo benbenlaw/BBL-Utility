@@ -122,5 +122,4 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
 
         super.loadAdditional(input);
     }
-
 }
