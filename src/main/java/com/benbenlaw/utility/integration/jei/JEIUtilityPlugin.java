@@ -5,6 +5,8 @@ import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
 import com.benbenlaw.utility.event.ClientRecipeCache;
 import com.benbenlaw.utility.item.UtilityItems;
+import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
+import com.benbenlaw.utility.screen.collector.FluidCollectorScreen;
 import com.benbenlaw.utility.screen.drying.DryingTableScreen;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
 import mezz.jei.api.IModPlugin;
@@ -50,5 +52,11 @@ public class JEIUtilityPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(DryingTableScreen.class, 76, 34, 24, 17, DryingTableRecipeCategory.RECIPE_TYPE);
         registration.addRecipeClickArea(ResourceGeneratorScreen.class, 76, 34, 24, 17, ResourceGeneratorRecipeCategory.RECIPE_TYPE);
+
+        registration.addGhostIngredientHandler(BlockBreakerScreen.class, new GhostFilter());
+        registration.addGhostIngredientHandler(FluidCollectorScreen.class, new GhostFilterCollector());
+
     }
+
+
 }

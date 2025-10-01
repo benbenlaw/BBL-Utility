@@ -17,6 +17,7 @@ import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
 import com.benbenlaw.utility.screen.placer.BlockPlacerScreen;
 import com.benbenlaw.utility.screen.placer.FluidPlacerScreen;
+import com.benbenlaw.utility.screen.repairer.ItemRepairerScreen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -69,6 +70,7 @@ public class Utility {
             event.register(UtilityMenuTypes.RESOURCE_GENERATOR_MENU.get(), ResourceGeneratorScreen::new);
             event.register(UtilityMenuTypes.FLUID_PLACER_MENU.get(), FluidPlacerScreen::new);
             event.register(UtilityMenuTypes.FLUID_COLLECTOR_MENU.get(), FluidCollectorScreen::new);
+            event.register(UtilityMenuTypes.ITEM_REPAIRER_MENU.get(), ItemRepairerScreen::new);
         }
 
     }

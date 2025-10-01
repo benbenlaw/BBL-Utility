@@ -1,11 +1,12 @@
 package com.benbenlaw.utility.block.entity;
 
+import com.benbenlaw.core.block.entity.FilterableBlockEntity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.handler.FilterItemHandler;
 import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockBreakerBlock;
-import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,42 +14,33 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class BlockBreakerBlockEntity extends SyncableBlockEntity implements MenuProvider {
+public class BlockBreakerBlockEntity extends SyncableBlockEntity implements MenuProvider, FilterableBlockEntity {
 
     private final ContainerData data;
     private float maxProgress = 1.0f;
@@ -61,6 +53,8 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
             sync();
         }
     };
+    private boolean whitelist = true; // block entity owns it
+    private FilterItemHandler filterHandler = new FilterItemHandler(8);
     public static final int INPUT_SLOT = 0;
 
     public ItemStackHandler getItemStackHandler() {
@@ -117,7 +111,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
             BlockState targetBlockState = level.getBlockState(targetPos);
             BlockEntity targetBlockEntity = level.getBlockEntity(targetPos);
 
-            if (targetBlockState.isAir()) {
+            if (targetBlockState.isAir() || !filterHandler.allows(targetBlockState)) {
                 progress = 0f;
                 return;
             }
@@ -194,6 +188,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     protected void saveAdditional(@NotNull ValueOutput output) {
 
         itemHandler.serialize(output);
+        filterHandler.serialize(output);
         output.putFloat("maxProgress", maxProgress);
         output.putFloat("progress", progress);
 
@@ -204,6 +199,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     protected void loadAdditional(@NotNull ValueInput input) {
 
         itemHandler.deserialize(input);
+        filterHandler.deserialize(input);
         maxProgress = input.getFloatOr("maxProgress", 1.0f);
         progress = input.getFloatOr("progress", 0);
 
@@ -211,12 +207,24 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     }
 
     @Override
-    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
-        NonNullList<ItemStack> stacks = NonNullList.create();
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            stacks.add(itemHandler.getStackInSlot(i));
-        }
-        assert this.level != null;
-        Containers.dropContents(this.level, this.worldPosition, stacks);
+    public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
+        dropInventoryContents(itemHandler);
+    }
+
+    @Override
+    public boolean isWhitelist() {
+        return whitelist;
+    }
+
+    @Override
+    public void setWhitelist(boolean whitelist) {
+        this.whitelist = whitelist;
+        setChanged();
+        sync();
+    }
+
+    @Override
+    public FilterItemHandler getFilterItemHandler() {
+        return filterHandler;
     }
 }

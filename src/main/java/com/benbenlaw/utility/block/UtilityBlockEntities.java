@@ -35,4 +35,9 @@ public class UtilityBlockEntities {
     public static final Supplier<BlockEntityType<FluidCollectorBlockEntity>> FLUID_COLLECTOR_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("fluid_collector_block_entity", () ->
                     new BlockEntityType<>(FluidCollectorBlockEntity::new, UtilityBlocks.FLUID_COLLECTOR.get()));
+
+    public static final Supplier<BlockEntityType<ItemRepairerBlockEntity>> ITEM_REPAIRER_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("item_repairer_block_entity", () ->
+                    new BlockEntityType<>(ItemRepairerBlockEntity::new, UtilityBlocks.ITEM_REPAIRER.get()));
+
 }

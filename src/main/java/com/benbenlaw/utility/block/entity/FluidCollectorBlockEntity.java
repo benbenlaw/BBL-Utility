@@ -1,8 +1,10 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.CoreFluidTank;
+import com.benbenlaw.core.block.entity.FilterableBlockEntity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.handler.CoreFluidHandler;
+import com.benbenlaw.core.block.entity.handler.FilterItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidCollectorBlock;
 import com.benbenlaw.utility.screen.collector.FluidCollectorMenu;
@@ -26,13 +28,15 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidCollectorBlockEntity extends SyncableBlockEntity implements MenuProvider {
+public class FluidCollectorBlockEntity extends SyncableBlockEntity implements MenuProvider, FilterableBlockEntity {
 
     private final ContainerData data;
     private int maxProgress = 20;
     private int progress = 0;
     public final FluidTank TANK = new CoreFluidTank(this, 16000, "tank");
     private final IFluidHandler fluidHandler = new CoreFluidHandler(TANK);
+    private boolean whitelist = true; // block entity owns it
+    private FilterItemHandler filterHandler = new FilterItemHandler(1);
 
     public FluidCollectorBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.FLUID_COLLECTOR_BLOCK_ENTITY.get(), pos, state);
@@ -71,10 +75,10 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
             Fluid fluidInWorld = level.getFluidState(targetPos).getType();
 
             if (TANK.getFluidAmount() > TANK.getCapacity() - 1000) return;
-            if (!TANK.getFluid().is(fluidInWorld)) return;
+            if (!TANK.getFluid().is(fluidInWorld) && !TANK.isEmpty()) return;
 
 
-            if (!level.getFluidState(targetPos).isEmpty()) {
+            if (!level.getFluidState(targetPos).isEmpty() && filterHandler.allows(fluidInWorld.defaultFluidState())) {
                 progress++;
                 if (progress >= maxProgress) {
                     TANK.fill(new FluidStack(fluidInWorld, 1000), IFluidHandler.FluidAction.EXECUTE);
@@ -107,6 +111,7 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     protected void saveAdditional(@NotNull ValueOutput output) {
 
         TANK.serialize(output);
+        filterHandler.serialize(output);
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -117,9 +122,27 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     protected void loadAdditional(@NotNull ValueInput input) {
 
         TANK.deserialize(input);
+        filterHandler.deserialize(input);
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
 
         super.loadAdditional(input);
+    }
+
+    @Override
+    public boolean isWhitelist() {
+        return whitelist;
+    }
+
+    @Override
+    public void setWhitelist(boolean whitelist) {
+        this.whitelist = whitelist;
+        setChanged();
+        sync();
+    }
+
+    @Override
+    public FilterItemHandler getFilterItemHandler() {
+        return filterHandler;
     }
 }

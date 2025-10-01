@@ -56,6 +56,10 @@ public class UtilityBlocks {
             () -> new FluidCollectorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                     .noOcclusion().setId(createID("fluid_collector"))));
 
+    public static final DeferredBlock<Block> ITEM_REPAIRER = registerBlock("item_repairer",
+            () -> new ItemRepairerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("item_repairer"))));
+
 
 
 

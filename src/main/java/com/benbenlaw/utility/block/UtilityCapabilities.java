@@ -1,9 +1,6 @@
 package com.benbenlaw.utility.block;
 
-import com.benbenlaw.utility.block.entity.BlockBreakerBlockEntity;
-import com.benbenlaw.utility.block.entity.BlockPlacerBlockEntity;
-import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
-import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
+import com.benbenlaw.utility.block.entity.*;
 import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -24,6 +21,11 @@ public class UtilityCapabilities {
 
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
                 UtilityBlockEntities.RESOURCE_GENERATOR_BLOCK_ENTITY.get(), ResourceGeneratorBlockEntity::getIItemHandler);
+
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                UtilityBlockEntities.ITEM_REPAIRER_BLOCK_ENTITY.get(), ItemRepairerBlockEntity::getIItemHandler);
+
+
 
 
     }

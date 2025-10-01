@@ -86,7 +86,7 @@ dependencies {
     //JEI
     implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
     //BBL Core
-    implementation("curse.maven:bblcore-1135181:7045651")
+    implementation("curse.maven:bblcore-1135181:7054482")
 }
 
 tasks.withType(ProcessResources).configureEach {

@@ -202,12 +202,6 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        NonNullList<ItemStack> stacks = NonNullList.create();
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            stacks.add(itemHandler.getStackInSlot(i));
-        }
-        assert this.level != null;
-        Containers.dropContents(this.level, this.worldPosition, stacks);
+        dropInventoryContents(itemHandler);
     }
-
 }

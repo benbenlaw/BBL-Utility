@@ -8,6 +8,7 @@ import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorMenu;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
 import com.benbenlaw.utility.screen.placer.FluidPlacerMenu;
+import com.benbenlaw.utility.screen.repairer.ItemRepairerMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -35,6 +36,9 @@ public class UtilityMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<FluidCollectorMenu>> FLUID_COLLECTOR_MENU = MENUS.register("fluid_collector_menu",
             () -> IMenuTypeExtension.create(FluidCollectorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<ItemRepairerMenu>> ITEM_REPAIRER_MENU = MENUS.register("item_repairer_menu",
+            () -> IMenuTypeExtension.create(ItemRepairerMenu::new));
 
 }
 

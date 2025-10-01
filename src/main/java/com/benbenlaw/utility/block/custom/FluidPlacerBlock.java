@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.block.custom;
 
+import com.benbenlaw.core.block.SyncableBlock;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.entity.BlockPlacerBlockEntity;
 import com.benbenlaw.utility.block.entity.FluidPlacerBlockEntity;
@@ -26,11 +27,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidPlacerBlock extends BaseEntityBlock {
+public class FluidPlacerBlock extends SyncableBlock {
 
     public static final MapCodec<FluidPlacerBlock> CODEC = simpleCodec(FluidPlacerBlock::new);
-    public static final BooleanProperty RUNNING = BooleanProperty.create("running");
-    public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
 
     public @NotNull MapCodec<FluidPlacerBlock> codec() {
         return CODEC;
@@ -38,7 +37,6 @@ public class FluidPlacerBlock extends BaseEntityBlock {
 
     public FluidPlacerBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(RUNNING, true).setValue(FACING, Direction.NORTH));
     }
 
     @Override
@@ -55,40 +53,6 @@ public class FluidPlacerBlock extends BaseEntityBlock {
             }
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    protected void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @Nullable Orientation orientation, boolean p_60514_) {
-        if (!level.isClientSide()) {
-            boolean powered = level.hasNeighborSignal(pos);
-            if (powered && state.getValue(RUNNING)) {
-                level.setBlock(pos, state.setValue(RUNNING, false), 3);
-            } else if (!powered && !state.getValue(RUNNING)) {
-                level.setBlock(pos, state.setValue(RUNNING, true), 3);
-            }
-        }
-    }
-
-    @Override
-    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction direction = context.getNearestLookingDirection().getOpposite();
-        return this.defaultBlockState().setValue(FACING, direction).setValue(RUNNING, true);
-    }
-
-    @Override
-    public @NotNull BlockState rotate(BlockState blockState, @NotNull LevelAccessor level, @NotNull BlockPos blockPos, Rotation direction) {
-        return blockState.setValue(RUNNING, blockState.getValue(RUNNING)).setValue(FACING, direction.rotate(blockState.getValue(FACING)));
-
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(RUNNING, FACING);
-    }
-
-    @Override
-    protected @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.MODEL;
     }
 
     @Override
