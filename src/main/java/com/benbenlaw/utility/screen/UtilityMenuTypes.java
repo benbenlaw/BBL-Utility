@@ -3,8 +3,10 @@ package com.benbenlaw.utility.screen;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
+import com.benbenlaw.utility.screen.clock.RedstoneClockMenu;
 import com.benbenlaw.utility.screen.collector.FluidCollectorMenu;
 import com.benbenlaw.utility.screen.drying.DryingTableMenu;
+import com.benbenlaw.utility.screen.generator.FluidGeneratorMenu;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorMenu;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
 import com.benbenlaw.utility.screen.placer.FluidPlacerMenu;
@@ -40,5 +42,10 @@ public class UtilityMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<ItemRepairerMenu>> ITEM_REPAIRER_MENU = MENUS.register("item_repairer_menu",
             () -> IMenuTypeExtension.create(ItemRepairerMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<FluidGeneratorMenu>> FLUID_GENERATOR_MENU = MENUS.register("fluid_generator_menu",
+            () -> IMenuTypeExtension.create(FluidGeneratorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<RedstoneClockMenu>> REDSTONE_CLOCK_MENU = MENUS.register("redstone_clock_menu",
+            () -> IMenuTypeExtension.create(RedstoneClockMenu::new));
 }
 

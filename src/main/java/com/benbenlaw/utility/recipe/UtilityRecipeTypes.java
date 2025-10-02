@@ -2,6 +2,7 @@ package com.benbenlaw.utility.recipe;
 
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
+import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -27,6 +28,12 @@ public class UtilityRecipeTypes {
 
     public static final Supplier<RecipeType<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_TYPE =
             TYPES.register("resource_generator", () -> ResourceGeneratorRecipe.Type.INSTANCE);
+
+    public static final Supplier<RecipeType<FluidGeneratorRecipe>> FLUID_GENERATOR_TYPE =
+            TYPES.register("fluid_generator", () -> FluidGeneratorRecipe.Type.INSTANCE);
+
+    public static final Supplier<RecipeSerializer<FluidGeneratorRecipe>> FLUID_GENERATOR_SERIALIZER =
+            SERIALIZER.register("fluid_generator", () -> FluidGeneratorRecipe.Serializer.INSTANCE);
 
 
 }

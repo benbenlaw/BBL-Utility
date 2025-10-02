@@ -62,6 +62,11 @@ public class UtilityLangProvider extends LanguageProvider {
         //Death Stone Tooltips
         add("tooltip.death_stone.returning", "Returning to the crime scene");
 
+        //Redstone Clock Tooltips
+        add("tooltip.redstone_clock.max_progress", "Time between pluses in ticks");
+        add("tooltip.redstone_clock.on_time", "Pulse in ticks");
+        add("tooltip.redstone_clock.signal_strength", "Signal Strength (0-15)");
+
         //JEI
         add("jei.utility.drying_table", "Drying Table");
         add("jei.utility.soaking", "Drying Table must be Waterlogged");

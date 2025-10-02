@@ -40,5 +40,8 @@
   "tooltip.death_stone.info": "Given upon death, right click to return to your death location",
   "tooltip.death_stone.returning": "Returning to the crime scene",
   "tooltip.floater.info": "When in your off hand allows you to place a block in your main hand in the air or water",
+  "tooltip.redstone_clock.max_progress": "Time between pluses in ticks",
+  "tooltip.redstone_clock.on_time": "Pulse in ticks",
+  "tooltip.redstone_clock.signal_strength": "Signal Strength (0-15)",
   "tooltip.sapling_grower.info": "Used to grow saplings instantly"
 }

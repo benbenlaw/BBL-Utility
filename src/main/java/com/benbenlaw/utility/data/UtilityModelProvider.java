@@ -54,7 +54,10 @@ public class UtilityModelProvider extends ModelProvider {
                 !x.is(UtilityBlocks.BLOCK_BREAKER.getId()) &&
                 !x.is(UtilityBlocks.FLUID_COLLECTOR.getId()) &&
                 !x.is(UtilityBlocks.FLUID_PLACER.getId()) &&
-                !x.is(UtilityBlocks.RESOURCE_GENERATOR.getId())
+                !x.is(UtilityBlocks.RESOURCE_GENERATOR.getId()) &&
+                !x.is(UtilityBlocks.FLUID_GENERATOR.getId()) &&
+                !x.is(UtilityBlocks.ITEM_REPAIRER.getId()) &&
+                !x.is(UtilityBlocks.REDSTONE_CLOCK.getId())
         );
     }
 

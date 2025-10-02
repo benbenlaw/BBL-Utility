@@ -11,8 +11,11 @@ import com.benbenlaw.utility.network.UtilityNetworking;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
+import com.benbenlaw.utility.screen.clock.RedstoneClockScreen;
 import com.benbenlaw.utility.screen.collector.FluidCollectorScreen;
 import com.benbenlaw.utility.screen.drying.DryingTableScreen;
+import com.benbenlaw.utility.screen.generator.FluidGeneratorMenu;
+import com.benbenlaw.utility.screen.generator.FluidGeneratorScreen;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
 import com.benbenlaw.utility.screen.placer.BlockPlacerScreen;
@@ -71,8 +74,9 @@ public class Utility {
             event.register(UtilityMenuTypes.FLUID_PLACER_MENU.get(), FluidPlacerScreen::new);
             event.register(UtilityMenuTypes.FLUID_COLLECTOR_MENU.get(), FluidCollectorScreen::new);
             event.register(UtilityMenuTypes.ITEM_REPAIRER_MENU.get(), ItemRepairerScreen::new);
+            event.register(UtilityMenuTypes.FLUID_GENERATOR_MENU.get(), FluidGeneratorScreen::new);
+            event.register(UtilityMenuTypes.REDSTONE_CLOCK_MENU.get(), RedstoneClockScreen::new);
         }
-
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

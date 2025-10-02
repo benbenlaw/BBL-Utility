@@ -40,4 +40,14 @@ public class UtilityBlockEntities {
             BLOCK_ENTITIES.register("item_repairer_block_entity", () ->
                     new BlockEntityType<>(ItemRepairerBlockEntity::new, UtilityBlocks.ITEM_REPAIRER.get()));
 
+    public static final Supplier<BlockEntityType<FluidGeneratorBlockEntity>> FLUID_GENERATOR_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("fluid_generator_block_entity", () ->
+                    new BlockEntityType<>(FluidGeneratorBlockEntity::new, UtilityBlocks.FLUID_GENERATOR.get()));
+
+    public static final Supplier<BlockEntityType<RedstoneClockBlockEntity>> REDSTONE_CLOCK_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("redstone_clock_block_entity", () ->
+                    new BlockEntityType<>(RedstoneClockBlockEntity::new, UtilityBlocks.REDSTONE_CLOCK.get()));
+
+
+
 }

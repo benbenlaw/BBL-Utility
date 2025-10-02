@@ -60,6 +60,13 @@ public class UtilityBlocks {
             () -> new ItemRepairerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                     .noOcclusion().setId(createID("item_repairer"))));
 
+    public static final DeferredBlock<Block> FLUID_GENERATOR = registerBlock("fluid_generator",
+            () -> new FluidGeneratorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("fluid_generator"))));
+
+    public static final DeferredBlock<Block> REDSTONE_CLOCK = registerBlock("redstone_clock",
+            () -> new RedstoneClockBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("redstone_clock"))));
 
 
 
