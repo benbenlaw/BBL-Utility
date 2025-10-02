@@ -29,3 +29,4 @@ Changelog BBL Utility
 - Item Repairer now changes its speed based on the amount of damage to restore, redstone controlled, basically each damage point is a tick
 - Advanced Crafter, removed may take a look at this again in the future but for now its gone
 - Redstone clock now uses text boxes for setting time, signal strength and pulse time, redstone controlled, by default on when powered with a redstone signal will turn off
+- TEST
