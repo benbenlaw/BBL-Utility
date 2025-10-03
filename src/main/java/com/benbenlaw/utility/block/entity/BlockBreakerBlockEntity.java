@@ -173,7 +173,6 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
         }
     }
 
-
     @Override
     public @Nullable AbstractContainerMenu createMenu(int container, Inventory inventory, Player player) {
         return new BlockBreakerMenu(container, inventory, this.worldPosition, data);

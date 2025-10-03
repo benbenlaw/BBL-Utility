@@ -2,6 +2,7 @@ package com.benbenlaw.utility.item.custom;
 
 import com.benbenlaw.utility.item.UtilityDataComponents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
@@ -39,7 +40,7 @@ public class DeathStoneItem extends Item {
 
             assert globalPos != null;
             player.teleportTo(
-                    Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getLevel(globalPos.dimension())),
+                    Objects.requireNonNull(Objects.requireNonNull(player.level().getServer()).getLevel(globalPos.dimension())),
                     globalPos.pos().getX() + 0.5,
                     globalPos.pos().getY() + 0.5,
                     globalPos.pos().getZ() + 0.5,
@@ -60,7 +61,7 @@ public class DeathStoneItem extends Item {
     @SuppressWarnings("deprecation")
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display, @NotNull Consumer<Component> consumer, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             consumer.accept(Component.translatable("tooltip.death_stone.info").withStyle(ChatFormatting.BLUE));
         } else {
             consumer.accept(Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW));

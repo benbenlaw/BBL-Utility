@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.item.custom;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -51,7 +52,7 @@ public class FloaterItem extends Item {
     @SuppressWarnings("deprecation")
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display, @NotNull Consumer<Component> consumer, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             consumer.accept(Component.translatable("tooltip.floater.info").withStyle(ChatFormatting.BLUE));
         } else {
             consumer.accept(Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW));

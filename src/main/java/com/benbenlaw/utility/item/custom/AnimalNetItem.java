@@ -4,6 +4,7 @@ import com.benbenlaw.core.util.DirectionUtil;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.item.UtilityDataComponents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -138,7 +139,7 @@ public class AnimalNetItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display, @NotNull Consumer<Component> consumer, TooltipFlag flag) {
 
-        if (Screen.hasShiftDown()) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             consumer.accept(Component.translatable("tooltip.animal_net.info").withStyle(ChatFormatting.BLUE));
 
             if (stack.get(UtilityDataComponents.ENTITY_TYPE.get()) != null) {

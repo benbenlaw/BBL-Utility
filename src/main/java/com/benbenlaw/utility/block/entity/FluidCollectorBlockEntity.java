@@ -25,6 +25,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +34,13 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     private final ContainerData data;
     private int maxProgress = 20;
     private int progress = 0;
+    private final FluidStacksResourceHandler TANK = new FluidStacksResourceHandler(1, 16000) {
+        @Override
+        protected void onContentsChanged(int index, FluidStack previousContents) {
+            super.onContentsChanged(index, previousContents);
+        }
+    };
+
     public final FluidTank TANK = new CoreFluidTank(this, 16000, "tank");
     private final IFluidHandler fluidHandler = new CoreFluidHandler(TANK);
     private boolean whitelist = true; // block entity owns it

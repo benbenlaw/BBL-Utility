@@ -20,7 +20,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -34,11 +35,19 @@ public record FluidGeneratorRecipe(String input, FluidStack output) implements R
         ItemStack stack = recipeInput.getItem(FluidGeneratorBlockEntity.INPUT_SLOT);
         if (stack.isEmpty()) return false;
 
-        FluidStack inputFluid = Objects.requireNonNull(stack.getCapability(Capabilities.FluidHandler.ITEM)).getFluidInTank(0);
-
-        if (!inputFluid.isEmpty()) {
-            return inputFluid.getFluid() == output.getFluid();
-        }
+        //var fluidHandler = Capabilities.Fluid.ITEM.getCapability(stack, null);
+//
+        //if (fluidHandler != null && fluidHandler.size() > 0) {
+        //    FluidResource res = fluidHandler.getResource(0);
+        //    long amount = fluidHandler.getAmountAsLong(0);
+//
+        //    FluidStack inputFluid = new FluidStack(res.getFluid(), (int) amount);
+//
+//
+        //    if (!inputFluid.isEmpty()) {
+        //        return inputFluid.getFluid() == output.getFluid();
+        //    }
+        //}
         return false;
     }
 

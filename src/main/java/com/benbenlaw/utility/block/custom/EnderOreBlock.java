@@ -58,7 +58,7 @@ public class EnderOreBlock extends Block {
     }
 
     protected @NotNull InteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             spawnParticles(level, pos);
         } else {
             interact(state, level, pos);

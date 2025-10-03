@@ -1,7 +1,8 @@
 Changelog BBL Utility
 
 5.0.0
-- Updated to minecraft 1.21.8
+- Updated to minecraft 1.21.9
+- Name Changed to BBL Utility
 - Updated Loader Range to 4
 - Renamed from Opolis Utilities to BBL Utility
 - Crook added (same as opolis utilities, now has shift information)
@@ -29,4 +30,4 @@ Changelog BBL Utility
 - Item Repairer now changes its speed based on the amount of damage to restore, redstone controlled, basically each damage point is a tick
 - Advanced Crafter, removed may take a look at this again in the future but for now its gone
 - Redstone clock now uses text boxes for setting time, signal strength and pulse time, redstone controlled, by default on when powered with a redstone signal will turn off
-- TEST
+- If there are items, blocks or features missing from opolis utilities please let me know and I may add them back in the future (if needed)

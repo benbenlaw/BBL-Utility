@@ -5,7 +5,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.103'
+    id 'net.neoforged.moddev' version '2.0.110'
     id 'net.darkhax.curseforgegradle' version '1.1.24'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -86,7 +86,7 @@ dependencies {
     //JEI
     implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
     //BBL Core
-    implementation("curse.maven:bblcore-1135181:7054482")
+    implementation("curse.maven:bblcore-1135181:7058418")
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -147,7 +147,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
 
     apiToken = System.getenv("curseforge_token").toString()
 
-    def projectId = "${curseforge_id}"
+    def projectId = curseforge_id
     def mainFile = upload(projectId, jar)
 
     mainFile.changelog = changelog

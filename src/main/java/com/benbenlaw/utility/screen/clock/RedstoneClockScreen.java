@@ -9,6 +9,9 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -105,50 +108,54 @@ public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMe
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        if (this.maxProgressBox.charTyped(codePoint, modifiers)) {
+    public boolean charTyped(CharacterEvent event) {
+        if (this.maxProgressBox.charTyped(event)) {
             return true;
         }
-        if (this.onTime.charTyped(codePoint, modifiers)) {
+        if (this.onTime.charTyped(event)) {
             return true;
         }
-        if (this.signalStrength.charTyped(codePoint, modifiers)) {
+        if (this.signalStrength.charTyped(event)) {
             return true;
         }
-        return super.charTyped(codePoint, modifiers);
+
+        return super.charTyped(event);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (this.maxProgressBox.keyPressed(keyCode, scanCode, modifiers)) {
+    public boolean keyPressed(KeyEvent event) {
+
+        if (this.maxProgressBox.keyPressed(event)) {
             return true;
         }
-        if (this.onTime.keyPressed(keyCode, scanCode, modifiers)) {
+        if (this.onTime.keyPressed(event)) {
             return true;
         }
-        if (this.signalStrength.keyPressed(keyCode, scanCode, modifiers)) {
+        if (this.signalStrength.keyPressed(event)) {
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (this.maxProgressBox.mouseClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+
+        if (this.maxProgressBox.mouseClicked(event, doubleClick)) {
             this.setFocused(this.maxProgressBox);
             return true;
         }
-        if (this.onTime.mouseClicked(mouseX, mouseY, button)) {
+        if (this.onTime.mouseClicked(event, doubleClick)) {
             this.setFocused(this.onTime);
             return true;
         }
-        if (this.signalStrength.mouseClicked(mouseX, mouseY, button)) {
+        if (this.signalStrength.mouseClicked(event, doubleClick)) {
             this.setFocused(this.signalStrength);
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
+        return super.mouseClicked(event, doubleClick);
 
+    }
     private int parseSafe(EditBox box) {
         String value = box.getValue();
         if (value == null || value.isEmpty()) {
