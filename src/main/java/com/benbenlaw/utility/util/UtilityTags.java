@@ -1,6 +1,5 @@
 package com.benbenlaw.utility.util;
 
-import com.benbenlaw.core.Core;
 import com.benbenlaw.core.util.CoreTags;
 import com.benbenlaw.utility.Utility;
 import net.minecraft.tags.TagKey;

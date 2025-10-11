@@ -1,8 +1,8 @@
 package com.benbenlaw.utility.screen.generator;
 
+import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
+import com.benbenlaw.core.screen.util.slot.InputSlot;
 import com.benbenlaw.utility.block.entity.FluidGeneratorBlockEntity;
-import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
-import com.benbenlaw.utility.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class FluidGeneratorMenu extends SimpleAbstractContainerMenu {
 
@@ -34,7 +33,8 @@ public class FluidGeneratorMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (FluidGeneratorBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new SlotItemHandler(blockEntity.getItemStackHandler(), FluidGeneratorBlockEntity.INPUT_SLOT, 44, 35));
+        this.addSlot(new InputSlot(blockEntity.getItemCapability(), blockEntity.getInputItemHandler()::set,
+                FluidGeneratorBlockEntity.INPUT_SLOT, 44, 35).size(1));
 
         this.addDataSlots(data);
     }

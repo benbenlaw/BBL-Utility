@@ -1,10 +1,6 @@
 package com.benbenlaw.utility.recipe.custom;
 
-import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
 import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
-import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
-import com.benbenlaw.utility.recipe.DryingTableRecipeType;
-import com.benbenlaw.utility.recipe.DryingTableRecipeTypeCodec;
 import com.benbenlaw.utility.recipe.ResourceGeneratorRecipeInput;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -15,7 +11,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,16 +18,13 @@ public record ResourceGeneratorRecipe(ItemStack input, ItemStack output, FluidSt
 
     @Override
     public boolean matches(@NotNull ResourceGeneratorRecipeInput recipeInput, Level level) {
-        if (!level.isClientSide()) {
+        if (level.isClientSide()) return false;
 
-            boolean inputMatches = input().is(recipeInput.getItem(ResourceGeneratorBlockEntity.INPUT_SLOT).getItem());
-            boolean leftFluidMatches = leftFluid.is(recipeInput.getLeftFluid().getFluid()) && leftFluid.getAmount() <= recipeInput.getLeftFluid().getAmount();
-            boolean rightFluidMatches = rightFluid.is(recipeInput.getRightFluid().getFluid()) && rightFluid.getAmount() <= recipeInput.getRightFluid().getAmount();
+        boolean inputMatches = input().is(recipeInput.getItem(ResourceGeneratorBlockEntity.INPUT_SLOT).getItem());
+        boolean leftFluidMatches = leftFluid.is(recipeInput.getLeftFluid().getFluid()) && leftFluid.getAmount() <= recipeInput.getLeftFluid().getAmount();
+        boolean rightFluidMatches = rightFluid.is(recipeInput.getRightFluid().getFluid()) && rightFluid.getAmount() <= recipeInput.getRightFluid().getAmount();
 
-            return inputMatches && leftFluidMatches && rightFluidMatches;
-        }
-
-        return false;
+        return inputMatches && leftFluidMatches && rightFluidMatches;
     }
 
     @Override

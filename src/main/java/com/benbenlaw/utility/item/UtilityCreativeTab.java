@@ -1,7 +1,6 @@
 package com.benbenlaw.utility.item;
 
 import com.benbenlaw.utility.Utility;
-import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

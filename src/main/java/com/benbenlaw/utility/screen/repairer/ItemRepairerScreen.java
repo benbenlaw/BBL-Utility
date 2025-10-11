@@ -1,8 +1,6 @@
 package com.benbenlaw.utility.screen.repairer;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.block.custom.DryingTableBlock;
-import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;

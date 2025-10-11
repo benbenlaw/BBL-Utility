@@ -2,7 +2,6 @@ package com.benbenlaw.utility.integration.jei;
 
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
-import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
 import com.benbenlaw.utility.event.ClientRecipeCache;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
@@ -13,7 +12,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

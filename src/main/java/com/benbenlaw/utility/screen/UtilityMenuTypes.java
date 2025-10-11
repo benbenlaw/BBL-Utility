@@ -1,7 +1,6 @@
 package com.benbenlaw.utility.screen;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
 import com.benbenlaw.utility.screen.clock.RedstoneClockMenu;
 import com.benbenlaw.utility.screen.collector.FluidCollectorMenu;

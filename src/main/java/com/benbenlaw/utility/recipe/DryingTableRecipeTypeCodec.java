@@ -2,7 +2,6 @@ package com.benbenlaw.utility.recipe;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.world.inventory.ClickType;
 
 import java.util.Locale;
 

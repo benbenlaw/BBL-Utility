@@ -2,6 +2,7 @@ package com.benbenlaw.utility.screen.generator;
 
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
+import com.benbenlaw.utility.block.entity.FluidGeneratorBlockEntity;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -43,6 +44,6 @@ public class FluidGeneratorScreen extends AbstractContainerScreen<FluidGenerator
     }
 
     private void renderTanks(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.OUTPUT_TANK, x, y, 116, 20, 47, 16, mouseX, mouseY);
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getOutputFluidHandler(), FluidGeneratorBlockEntity.TANK_SLOT, x, y, 116, 20, 47, 16, mouseX, mouseY);
     }
 }

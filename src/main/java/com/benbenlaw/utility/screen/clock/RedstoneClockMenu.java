@@ -1,8 +1,7 @@
 package com.benbenlaw.utility.screen.clock;
 
-import com.benbenlaw.utility.block.entity.ItemRepairerBlockEntity;
+import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.block.entity.RedstoneClockBlockEntity;
-import com.benbenlaw.utility.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class RedstoneClockMenu extends SimpleAbstractContainerMenu {
 

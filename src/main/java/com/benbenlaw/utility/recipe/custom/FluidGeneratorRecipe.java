@@ -1,30 +1,28 @@
 package com.benbenlaw.utility.recipe.custom;
 
 import com.benbenlaw.utility.block.entity.FluidGeneratorBlockEntity;
-import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
-import com.benbenlaw.utility.recipe.ResourceGeneratorRecipeInput;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.Optional;
 
 public record FluidGeneratorRecipe(String input, FluidStack output) implements Recipe<RecipeInput> {
 
@@ -33,22 +31,14 @@ public record FluidGeneratorRecipe(String input, FluidStack output) implements R
         if (level.isClientSide()) return false;
 
         ItemStack stack = recipeInput.getItem(FluidGeneratorBlockEntity.INPUT_SLOT);
+
         if (stack.isEmpty()) return false;
 
-        //var fluidHandler = Capabilities.Fluid.ITEM.getCapability(stack, null);
-//
-        //if (fluidHandler != null && fluidHandler.size() > 0) {
-        //    FluidResource res = fluidHandler.getResource(0);
-        //    long amount = fluidHandler.getAmountAsLong(0);
-//
-        //    FluidStack inputFluid = new FluidStack(res.getFluid(), (int) amount);
-//
-//
-        //    if (!inputFluid.isEmpty()) {
-        //        return inputFluid.getFluid() == output.getFluid();
-        //    }
-        //}
-        return false;
+        FluidStack fluidInStack = FluidUtil.getFirstStackContained(stack);
+        Optional<Fluid> fluidInTank = BuiltInRegistries.FLUID.getOptional(ResourceLocation.parse(input));
+
+        return fluidInTank.filter(fluid -> fluidInStack.getFluid() == fluid).isPresent();
+
     }
 
     @Override

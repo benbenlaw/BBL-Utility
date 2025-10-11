@@ -1,37 +1,24 @@
 package com.benbenlaw.utility.block.entity;
 
-import com.benbenlaw.core.block.entity.CoreFluidTank;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.CoreFluidHandler;
-import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.fluid.OutputFluidHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidPlacerBlock;
 import com.benbenlaw.utility.screen.placer.FluidPlacerMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,8 +27,9 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     private final ContainerData data;
     private int maxProgress = 20;
     private int progress = 0;
-    public final FluidTank TANK = new CoreFluidTank(this, 16000, "tank");
-    private final IFluidHandler fluidHandler = new CoreFluidHandler(TANK);
+    private final OutputFluidHandler outputFluidHandler = new OutputFluidHandler(this,1, 16000, i -> false);
+
+    public static final int TANK_SLOT = 0;
 
     public FluidPlacerBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.FLUID_PLACER_BLOCK_ENTITY.get(), pos, state);
@@ -76,14 +64,14 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
             if (!level.getBlockState(worldPosition).getValue(FluidPlacerBlock.RUNNING)) return;
 
-            if (TANK.isEmpty()) return;
+            if (outputFluidHandler.getAmountAsInt(TANK_SLOT) != 0) return;
 
             BlockPos targetPos = worldPosition.relative(level.getBlockState(worldPosition).getValue(FluidPlacerBlock.FACING));
 
-            if (TANK.getFluid().getAmount() >= 1000 && level.getFluidState(targetPos).isEmpty() && level.getBlockState(targetPos).isEmpty()) {
+            if (outputFluidHandler.getAmountAsInt(TANK_SLOT) >= 1000 && level.getFluidState(targetPos).isEmpty() && level.getBlockState(targetPos).isEmpty()) {
                 progress++;
                 if (progress >= maxProgress) {
-                    FluidUtil.tryPlaceFluid(null, level, InteractionHand.MAIN_HAND, targetPos, TANK, TANK.getFluid().copy());
+                    FluidUtil.tryPlaceFluid(outputFluidHandler.getResource(TANK_SLOT), null, level, InteractionHand.MAIN_HAND, this.worldPosition);
                     progress = 0;
                     setChanged();
                     sync();
@@ -93,8 +81,17 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
             }
         }
     }
+
+    public OutputFluidHandler getOutputFluidHandler() {
+        return outputFluidHandler;
+    }
+
+    public ResourceHandler<FluidResource> getFluidCapability() {
+        return outputFluidHandler;
+    }
+
     public boolean onPlayerUse(Player player, InteractionHand hand) {
-        return FluidUtil.interactWithFluidHandler(player, hand, TANK);
+        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, outputFluidHandler);
     }
 
     @Override
@@ -110,7 +107,7 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        TANK.serialize(output);
+        outputFluidHandler.serialize(output);
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -120,7 +117,7 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        TANK.deserialize(input);
+        outputFluidHandler.deserialize(input);
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
 

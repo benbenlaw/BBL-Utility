@@ -1,6 +1,5 @@
 package com.benbenlaw.utility.screen.collector;
 
-import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.core.screen.util.button.WhitelistButton;
 import com.benbenlaw.utility.Utility;
 import net.minecraft.client.gui.GuiGraphics;
@@ -54,6 +53,6 @@ public class FluidCollectorScreen extends AbstractContainerScreen<FluidCollector
     }
 
     private void renderTanks(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.TANK, x, y, 60, 20, 47, 16, mouseX, mouseY);
+        //FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.TANK, x, y, 60, 20, 47, 16, mouseX, mouseY);
     }
 }

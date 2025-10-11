@@ -2,7 +2,6 @@ package com.benbenlaw.utility.item;
 
 import com.benbenlaw.utility.Utility;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;

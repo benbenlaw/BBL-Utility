@@ -1,8 +1,8 @@
 package com.benbenlaw.utility.screen.collector;
 
+import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.core.screen.util.slot.FilterSlot;
 import com.benbenlaw.utility.block.entity.FluidCollectorBlockEntity;
-import com.benbenlaw.utility.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -35,7 +35,7 @@ public class FluidCollectorMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (FluidCollectorBlockEntity) level.getBlockEntity(pos);
         assert blockEntity != null;
 
-        this.addSlot(new FilterSlot(blockEntity.getFilterItemHandler(), 0, 134, 53));
+        //this.addSlot(new FilterSlot(blockEntity.getFilterItemHandler(), blockEntity.getFilterItemHandler()::set, 0, 134, 53));
 
         this.addDataSlots(data);
     }

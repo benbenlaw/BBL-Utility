@@ -1,7 +1,9 @@
 package com.benbenlaw.utility.screen.drying;
 
+import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
+import com.benbenlaw.core.screen.util.slot.InputSlot;
+import com.benbenlaw.core.screen.util.slot.ResultSlot;
 import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
-import com.benbenlaw.utility.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class DryingTableMenu extends SimpleAbstractContainerMenu {
 
@@ -33,8 +34,10 @@ public class DryingTableMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (DryingTableBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new SlotItemHandler(blockEntity.getItemStackHandler(), DryingTableBlockEntity.INPUT_SLOT, 44, 35));
-        this.addSlot(new SlotItemHandler(blockEntity.getItemStackHandler(), DryingTableBlockEntity.OUTPUT_SLOT, 116, 35));
+        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+                DryingTableBlockEntity.INPUT_SLOT, 44, 35));
+        this.addSlot(new ResultSlot(blockEntity.getOutputHandler(), blockEntity.getOutputHandler()::set,
+                DryingTableBlockEntity.OUTPUT_SLOT, 116, 35));
 
         this.addDataSlots(data);
     }

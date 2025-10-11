@@ -1,12 +1,12 @@
 package com.benbenlaw.utility.screen.breaker;
 
+import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.core.screen.util.slot.FilterSlot;
+import com.benbenlaw.core.screen.util.slot.InputSlot;
 import com.benbenlaw.utility.block.entity.BlockBreakerBlockEntity;
-import com.benbenlaw.utility.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -14,7 +14,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class BlockBreakerMenu extends SimpleAbstractContainerMenu {
 
@@ -37,10 +36,12 @@ public class BlockBreakerMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (BlockBreakerBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new SlotItemHandler(blockEntity.getItemStackHandler(), BlockBreakerBlockEntity.INPUT_SLOT, 60, 23));
+        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+                BlockBreakerBlockEntity.INPUT_SLOT, 60, 23));
 
         for (int i = 0; i < 8; i++) {
-            this.addSlot(new FilterSlot(blockEntity.getFilterItemHandler(), i, 8 + i * 18, 53));
+            this.addSlot(new FilterSlot(blockEntity.getFilterHandler(), blockEntity.getFilterHandler()::set,
+                    i, 8 + i * 18, 53));
         }
 
         this.addDataSlots(data);

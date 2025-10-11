@@ -1,37 +1,41 @@
 package com.benbenlaw.utility.recipe;
 
+import com.benbenlaw.core.block.entity.handler.fluid.InputFluidHandler;
+import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+
 
 public class ResourceGeneratorRecipeInput implements RecipeInput {
 
-    private final ItemStackHandler handler;
-    private final IFluidHandler fluidHandler;
+    private final InputItemHandler handler;
+    private final InputFluidHandler fluidHandlerLeft;
+    private final InputFluidHandler fluidHandlerRight;
 
-    public ResourceGeneratorRecipeInput(ItemStackHandler handler, IFluidHandler fluidHandler) {
+    public ResourceGeneratorRecipeInput(InputItemHandler handler, InputFluidHandler fluidHandlerLeft, InputFluidHandler fluidHandlerRight) {
         this.handler = handler;
-        this.fluidHandler = fluidHandler;
+        this.fluidHandlerLeft = fluidHandlerLeft;
+        this.fluidHandlerRight = fluidHandlerRight;
     }
 
     @Override
     public ItemStack getItem(int i) {
-        return handler.getStackInSlot(i);
+        return handler.getResource(i).toStack();
     }
 
     @Override
     public int size() {
-        return handler.getSlots();
+        return handler.size();
     }
 
     public FluidStack getLeftFluid() {
-        return fluidHandler.getFluidInTank(0);
+        return fluidHandlerLeft.copyToList().getFirst();
     }
 
     public FluidStack getRightFluid() {
-        return fluidHandler.getFluidInTank(1);
+        return fluidHandlerRight.copyToList().getFirst();
     }
 
 

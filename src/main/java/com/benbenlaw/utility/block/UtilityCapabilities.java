@@ -1,40 +1,50 @@
 package com.benbenlaw.utility.block;
 
-import com.benbenlaw.utility.block.entity.*;
-import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 
 public class UtilityCapabilities {
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.BLOCK_PLACER_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
+        );
 
-        //Todo: when i know what on earth im doing
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.BLOCK_BREAKER_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
+        );
 
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.DRYING_TABLE_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
+        );
 
-        event.registerBlockEntity(Capabilities.Item.BLOCK,
-                UtilityBlockEntities.DRYING_TABLE_BLOCK_ENTITY.get(), DryingTableBlockEntity::getIItemHandler);
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.RESOURCE_GENERATOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
+        );
 
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, UtilityBlockEntities.RESOURCE_GENERATOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getFluidCapability(side)
+        );
 
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.ITEM_REPAIRER_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
+        );
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
-                UtilityBlockEntities.BLOCK_PLACER_BLOCK_ENTITY.get(), BlockPlacerBlockEntity::getIItemHandler);
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, UtilityBlockEntities.FLUID_COLLECTOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getFluidOutputHandler()
+        );
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
-                UtilityBlockEntities.BLOCK_BREAKER_BLOCK_ENTITY.get(), BlockBreakerBlockEntity::getIItemHandler);
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, UtilityBlockEntities.FLUID_PLACER_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getFluidCapability()
+        );
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
-                UtilityBlockEntities.RESOURCE_GENERATOR_BLOCK_ENTITY.get(), ResourceGeneratorBlockEntity::getIItemHandler);
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.FLUID_GENERATOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
+        );
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
-                UtilityBlockEntities.ITEM_REPAIRER_BLOCK_ENTITY.get(), ItemRepairerBlockEntity::getIItemHandler);
-
-         */
-
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, UtilityBlockEntities.FLUID_GENERATOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getFluidCapability()
+        );
     }
-
 }

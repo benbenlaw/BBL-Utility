@@ -1,10 +1,10 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.IInventoryHandlingBlockEntity;
-import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.CombinedItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
-import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.block.custom.DryingTableBlock;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
@@ -12,12 +12,8 @@ import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -27,40 +23,24 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
     private final ContainerData data;
     private int maxProgress = UtilityStartUpConfig.dryingTableMaxDuration.get();
     private int progress = 0;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            cachedRecipe = null;
-            setChanged();
-            sync();
-        }
-    };
+
+    private final InputItemHandler inputHandler = new InputItemHandler(this,1, (i, stack) -> i == INPUT_SLOT);
+    private final OutputItemHandler outputHandler = new OutputItemHandler(this,1, i -> i == OUTPUT_SLOT);
+
     public static final int INPUT_SLOT = 0;
-    public static final int OUTPUT_SLOT = 1;
+    public static final int OUTPUT_SLOT = 0;
     private RecipeHolder<DryingTableRecipe> cachedRecipe;
-
-    public ItemStackHandler getItemStackHandler() {
-        return itemHandler;
-    }
-
-    public IItemHandler getIItemHandler(Direction side) {
-        return new InputOutputItemHandler(itemHandler,
-                (i, stack) -> i == INPUT_SLOT,
-                i -> i == OUTPUT_SLOT);
-    }
 
     public DryingTableBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.DRYING_TABLE_BLOCK_ENTITY.get(), pos, state);
@@ -90,37 +70,54 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
     }
 
     public void tick() {
-        if (!level.isClientSide()) {
+        assert level != null;
+        if (level.isClientSide()) return;
 
-            if (!level.getBlockState(worldPosition).getValue(DryingTableBlock.RUNNING)) return;
+        boolean running = level.getBlockState(worldPosition).getValue(DryingTableBlock.RUNNING);
+        if (!running) {
+            progress = 0;
+            sync();
+            return;
+        }
 
-            if (cachedRecipe == null) {
-                updateCachedRecipe();
-            }
-            if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
-                progress++;
-                if (progress >= maxProgress) {
-                    craftItem();
-                }
-            } else {
-                progress = 0;
-                setChanged();
-            }
+        ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
+
+        if (inputStack.isEmpty()) {
+            progress = 0;
+            sync();
+            cachedRecipe = null;
+            return;
+        }
+
+        if (cachedRecipe == null) {
+            updateCachedRecipe();
+        }
+
+        if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
+            progress++;
+            if (progress >= maxProgress) craftItem();
+        } else {
+            progress = 0;
+            sync();
         }
     }
+
 
     private void craftItem() {
         if (cachedRecipe != null) {
             var recipe = cachedRecipe.value();
-            itemHandler.extractItem(INPUT_SLOT, recipe.input().count(), false);
-            itemHandler.insertItem(OUTPUT_SLOT, recipe.output().copy(), false);
+            try (Transaction tx = Transaction.open(null)) {
+                inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), recipe.input().count(), tx);
+                outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(recipe.output()), recipe.output().getCount(), tx);
+                tx.commit();
+            }
             progress = 0;
             sync();
         }
     }
 
     private boolean canInsertOutput(ItemStack output) {
-        ItemStack outputSlot = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack outputSlot = outputHandler.getResource(OUTPUT_SLOT).toStack();
         if (outputSlot.isEmpty()) {
             return true;
         } else if (!ItemStack.isSameItemSameComponents(outputSlot, output)) {
@@ -133,9 +130,24 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
 
     private void updateCachedRecipe() {
         if (level != null && level.getServer() != null) {
+            boolean isWaterlogged = this.getBlockState().getValue(DryingTableBlock.WATERLOGGED);
             cachedRecipe = level.getServer().getRecipeManager().getRecipeFor(UtilityRecipeTypes.DRYING_TABLE_TYPE.get(),
-                            new DryingTableRecipeInput(itemHandler, this.getBlockState().getValue(DryingTableBlock.WATERLOGGED)), level).orElse(null);
+                    new DryingTableRecipeInput(inputHandler, isWaterlogged), level
+            ).orElse(null);
         }
+    }
+
+
+    public InputItemHandler getInputHandler() {
+        return inputHandler;
+    }
+
+    public OutputItemHandler getOutputHandler() {
+        return outputHandler;
+    }
+
+    public ResourceHandler<ItemResource> getItemCapability() {
+        return new CombinedItemHandler(inputHandler, outputHandler);
     }
 
     @Override
@@ -155,7 +167,8 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        itemHandler.serialize(output);
+        inputHandler.serialize(output.child("input"));
+        outputHandler.serialize(output.child("output"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -165,7 +178,8 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        itemHandler.deserialize(input);
+        inputHandler.deserialize(input.childOrEmpty("input"));
+        outputHandler.deserialize(input.childOrEmpty("output"));
         maxProgress = input.getIntOr("maxProgress", UtilityStartUpConfig.dryingTableMaxDuration.get());
         progress = input.getIntOr("progress", 0);
 
@@ -174,6 +188,7 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(itemHandler);
+        dropInventoryContents(inputHandler);
+        dropInventoryContents(outputHandler);
     }
 }

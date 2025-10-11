@@ -1,18 +1,13 @@
 package com.benbenlaw.utility.block.entity;
 
-import com.benbenlaw.core.block.entity.CoreFluidTank;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.CoreFluidHandler;
-import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.fluid.OutputFluidHandler;
+import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidGeneratorBlock;
-import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
-import com.benbenlaw.utility.recipe.ResourceGeneratorRecipeInput;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorMenu;
-import com.benbenlaw.utility.screen.generator.ResourceGeneratorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -24,17 +19,16 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,30 +37,14 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     private final ContainerData data;
     private int maxProgress = 200;
     private int progress = 0;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            cachedRecipe = null;
-            setChanged();
-            sync();
-        }
-    };
+    private final InputItemHandler inputHandler = new InputItemHandler(this, 1, (index, stack) -> true);
 
-    public final FluidTank OUTPUT_TANK = new CoreFluidTank(this, 16000, "outputTank");
-    private final IFluidHandler fluidHandler = new CoreFluidHandler(OUTPUT_TANK);
+    private final OutputFluidHandler outputFluidHandler = new OutputFluidHandler(this,1,16000, i -> i == TANK_SLOT);
 
     public static final int INPUT_SLOT = 0;
+    public static final int TANK_SLOT = 0;
+
     private RecipeHolder<FluidGeneratorRecipe> cachedRecipe;
-
-    public ItemStackHandler getItemStackHandler() {
-        return itemHandler;
-    }
-
-    public IItemHandler getIItemHandler(Direction side) {
-        return new InputOutputItemHandler(itemHandler,
-                (i, stack) -> i == INPUT_SLOT,
-                i -> false);
-    }
 
     public FluidGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.FLUID_GENERATOR_BLOCK_ENTITY.get(), pos, state);
@@ -101,6 +79,15 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
 
             if (!level.getBlockState(worldPosition).getValue(FluidGeneratorBlock.RUNNING)) return;
 
+            ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
+
+            if (inputStack.isEmpty()) {
+                progress = 0;
+                sync();
+                cachedRecipe = null;
+                return;
+            }
+
             if (cachedRecipe == null) {
                 updateCachedRecipe();
             }
@@ -118,34 +105,52 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     private void craftItem() {
         if (cachedRecipe != null) {
             var recipe = cachedRecipe.value();
-
-            OUTPUT_TANK.fill(recipe.output(), IFluidHandler.FluidAction.EXECUTE);
+            try (Transaction tx = Transaction.open(null)) {
+                outputFluidHandler.insertInternal(TANK_SLOT, FluidResource.of(recipe.output()), recipe.output().getAmount(), tx);
+                tx.commit();
+            }
             progress = 0;
             sync();
         }
     }
 
     private boolean canInsertOutput(FluidStack output) {
-        FluidStack outputTankFluid = OUTPUT_TANK.getFluid();
+        FluidStack outputTankFluid = outputFluidHandler.getResource(TANK_SLOT).toStack(TANK_SLOT);
         if (outputTankFluid.isEmpty()) {
             return true;
         } else if (!FluidStack.isSameFluidSameComponents(outputTankFluid, output)) {
             return false;
         } else {
             int result = outputTankFluid.getAmount() + output.getAmount();
-            return result <= OUTPUT_TANK.getCapacity();
+            return result <= outputFluidHandler.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY);
         }
     }
 
     private void updateCachedRecipe() {
         if (level != null && level.getServer() != null) {
             cachedRecipe = level.getServer().getRecipeManager().getRecipeFor(UtilityRecipeTypes.FLUID_GENERATOR_TYPE.get(),
-                    new SingleRecipeInput(itemHandler.getStackInSlot(INPUT_SLOT)), level).orElse(null);
+                    new SingleRecipeInput(inputHandler.getResource(INPUT_SLOT).toStack()), level).orElse(null);
         }
     }
 
     public boolean onPlayerUse(Player player, InteractionHand hand, Direction direction) {
-        return FluidUtil.interactWithFluidHandler(player, hand, OUTPUT_TANK);
+        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, outputFluidHandler);
+    }
+
+    public InputItemHandler getInputItemHandler() {
+        return inputHandler;
+    }
+
+    public OutputFluidHandler getOutputFluidHandler() {
+        return outputFluidHandler;
+    }
+
+    public ResourceHandler<ItemResource> getItemCapability() {
+        return inputHandler;
+    }
+
+    public ResourceHandler<FluidResource> getFluidCapability() {
+        return outputFluidHandler;
     }
 
     @Override
@@ -161,8 +166,8 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        itemHandler.serialize(output);
-        OUTPUT_TANK.serialize(output);
+        inputHandler.serialize(output.child("input"));
+        outputFluidHandler.serialize(output.child("outputFluid"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -172,8 +177,8 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        itemHandler.deserialize(input);
-        OUTPUT_TANK.deserialize(input);
+        inputHandler.deserialize(input.childOrEmpty("input"));
+        outputFluidHandler.deserialize(input.childOrEmpty("outputFluid"));
         maxProgress = input.getIntOr("maxProgress", 200);
         progress = input.getIntOr("progress", 0);
 
@@ -182,6 +187,6 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(itemHandler);
+        dropInventoryContents(inputHandler);
     }
 }

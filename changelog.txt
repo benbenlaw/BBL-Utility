@@ -1,6 +1,11 @@
 Changelog BBL Utility
 
-5.0.0
+1.1.0
+- Moved to Resource Handlers instead of old handlers
+- Fixed drying table acting weird with soaking and drying recipes
+- Reworked Fluid Generators, now should work with any fluid containing item
+
+1.0.0
 - Updated to minecraft 1.21.9
 - Name Changed to BBL Utility
 - Updated Loader Range to 4

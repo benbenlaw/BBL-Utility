@@ -19,17 +19,22 @@ public record DryingTableRecipe(SizedIngredient input, ItemStack output, DryingT
 
     @Override
     public boolean matches(@NotNull DryingTableRecipeInput recipeInput, Level level) {
-        if (!level.isClientSide()) {
+        if (level.isClientSide()) return false;
 
-            if (recipeType == DryingTableRecipeType.DRYING && !recipeInput.isWaterlogged()) {
-                return input.test(recipeInput.getItem(DryingTableBlockEntity.INPUT_SLOT));
-            } else if (recipeType == DryingTableRecipeType.SOAKING && recipeInput.isWaterlogged()) {
-                return input.test(recipeInput.getItem(DryingTableBlockEntity.INPUT_SLOT));
-            }
+        ItemStack stack = recipeInput.getItem(DryingTableBlockEntity.INPUT_SLOT);
+        if (stack.isEmpty()) return false;
+
+        if (recipeType == DryingTableRecipeType.DRYING && !recipeInput.isWaterlogged()) {
+            return input.test(stack);
+        }
+
+        if (recipeType == DryingTableRecipeType.SOAKING && recipeInput.isWaterlogged()) {
+            return input.test(stack);
         }
 
         return false;
     }
+
 
     @Override
     public @NotNull ItemStack assemble(@NotNull DryingTableRecipeInput recipeInput, HolderLookup.@NotNull Provider provider) {

@@ -1,26 +1,20 @@
 package com.benbenlaw.utility.block.entity;
 
-import com.benbenlaw.core.block.entity.CoreFluidTank;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.CoreFluidHandler;
-import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.fluid.InputFluidHandler;
+import com.benbenlaw.core.block.entity.handler.item.CombinedItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
+import com.benbenlaw.core.util.DirectionUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
-import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
-import com.benbenlaw.utility.block.custom.DryingTableBlock;
 import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
-import com.benbenlaw.utility.config.UtilityStartUpConfig;
-import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
 import com.benbenlaw.utility.recipe.ResourceGeneratorRecipeInput;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
-import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
-import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,11 +26,12 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,32 +40,17 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     private final ContainerData data;
     private int maxProgress = 200;
     private int progress = 0;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            cachedRecipe = null;
-            setChanged();
-            sync();
-        }
-    };
 
-    public final FluidTank LEFT_TANK = new CoreFluidTank(this, 16000, "leftTank");
-    public final FluidTank RIGHT_TANK = new CoreFluidTank(this, 16000, "rightTank");
-    private final IFluidHandler fluidHandler = new CoreFluidHandler(LEFT_TANK, RIGHT_TANK);
+    private final InputItemHandler inputHandler = new SingleInputItemHandler(this, 1, (index, stack) -> true);
+    private final OutputItemHandler outputHandler = new OutputItemHandler(this,1, i -> i == OUTPUT_SLOT);
+    private final InputFluidHandler inputFluidHandlerLeft = new InputFluidHandler(this,2,16000, (i, stack) -> i == LEFT_TANK_SLOT);
+    private final InputFluidHandler inputFluidHandlerRight = new InputFluidHandler(this,2,16000, (i, stack) -> i == RIGHT_TANK_SLOT);
 
     public static final int INPUT_SLOT = 0;
-    public static final int OUTPUT_SLOT = 1;
+    public static final int OUTPUT_SLOT = 0;
+    public static final int LEFT_TANK_SLOT = 0;
+    public static final int RIGHT_TANK_SLOT = 0;
     private RecipeHolder<ResourceGeneratorRecipe> cachedRecipe;
-
-    public ItemStackHandler getItemStackHandler() {
-        return itemHandler;
-    }
-
-    public IItemHandler getIItemHandler(Direction side) {
-        return new InputOutputItemHandler(itemHandler,
-                (i, stack) -> false,
-                i -> i == OUTPUT_SLOT);
-    }
 
     public ResourceGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.RESOURCE_GENERATOR_BLOCK_ENTITY.get(), pos, state);
@@ -108,6 +88,16 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
             if (cachedRecipe == null) {
                 updateCachedRecipe();
             }
+
+            ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
+
+            if (inputStack.isEmpty()) {
+                progress = 0;
+                sync();
+                cachedRecipe = null;
+                return;
+            }
+
             if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
                 progress++;
                 if (progress >= maxProgress) {
@@ -124,13 +114,17 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
             var recipe = cachedRecipe.value();
 
             ItemStack output = recipe.output().copy();
-            itemHandler.insertItem(OUTPUT_SLOT, output, false);
 
-            if (recipe.consumeLeft()) {
-                LEFT_TANK.drain(recipe.leftFluid(), IFluidHandler.FluidAction.EXECUTE);
-            }
-            if (recipe.consumeRight()) {
-                RIGHT_TANK.drain(recipe.rightFluid(), IFluidHandler.FluidAction.EXECUTE);
+            try (Transaction tx = Transaction.open(null)) {
+                outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(output), output.getCount(), tx);
+
+                if (recipe.consumeLeft()) {
+                    inputFluidHandlerLeft.extractInternal(LEFT_TANK_SLOT, FluidResource.of(recipe.leftFluid()), recipe.leftFluid().getAmount(), tx);
+                }
+                if (recipe.consumeRight()) {
+                    inputFluidHandlerRight.extractInternal(RIGHT_TANK_SLOT, FluidResource.of(recipe.rightFluid()), recipe.rightFluid().getAmount(), tx);
+                }
+                tx.commit();
             }
             progress = 0;
             sync();
@@ -138,7 +132,7 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     }
 
     private boolean canInsertOutput(ItemStack output) {
-        ItemStack outputSlot = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack outputSlot = outputHandler.getResource(OUTPUT_SLOT).toStack();
         if (outputSlot.isEmpty()) {
             return true;
         } else if (!ItemStack.isSameItemSameComponents(outputSlot, output)) {
@@ -152,18 +146,50 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     private void updateCachedRecipe() {
         if (level != null && level.getServer() != null) {
             cachedRecipe = level.getServer().getRecipeManager().getRecipeFor(UtilityRecipeTypes.RESOURCE_GENERATOR_TYPE.get(),
-                    new ResourceGeneratorRecipeInput(itemHandler, fluidHandler), level).orElse(null);
+                    new ResourceGeneratorRecipeInput(inputHandler, inputFluidHandlerLeft, inputFluidHandlerRight), level).orElse(null);
         }
     }
 
     public boolean onPlayerUse(Player player, InteractionHand hand, Direction direction) {
-        if (direction == Direction.NORTH || direction == Direction.SOUTH) {
-            return FluidUtil.interactWithFluidHandler(player, hand, LEFT_TANK);
-        } else if (direction == Direction.EAST || direction == Direction.WEST) {
-            return FluidUtil.interactWithFluidHandler(player, hand, RIGHT_TANK);
+
+        if (direction == Direction.UP || direction == Direction.WEST || direction == Direction.NORTH) {
+            return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, inputFluidHandlerLeft);
+        } else if (direction == Direction.DOWN || direction == Direction.EAST || direction == Direction.SOUTH) {
+            return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, inputFluidHandlerRight);
         }
 
         return false;
+    }
+
+    public InputItemHandler getInputHandler() {
+        return inputHandler;
+    }
+
+    public OutputItemHandler getOutputHandler() {
+        return outputHandler;
+    }
+
+    public ResourceHandler<ItemResource> getItemCapability() {
+        return new CombinedItemHandler(inputHandler, outputHandler);
+    }
+
+    public InputFluidHandler getInputFluidHandlerLeft() {
+        return inputFluidHandlerLeft;
+    }
+
+    public InputFluidHandler getInputFluidHandlerRight() {
+        return inputFluidHandlerRight;
+    }
+
+    public ResourceHandler<FluidResource> getFluidCapability(Direction direction) {
+
+        if (direction == Direction.UP || direction == Direction.WEST || direction == Direction.NORTH) {
+            return inputFluidHandlerLeft;
+        } else if (direction == Direction.DOWN || direction == Direction.EAST || direction == Direction.SOUTH) {
+            return inputFluidHandlerRight;
+        }
+
+        return null;
     }
 
     @Override
@@ -179,9 +205,10 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        itemHandler.serialize(output);
-        LEFT_TANK.serialize(output);
-        RIGHT_TANK.serialize(output);
+        inputHandler.serialize(output.child("input"));
+        outputHandler.serialize(output.child("output"));
+        inputFluidHandlerLeft.serialize(output.child("inputFluidLeft"));
+        inputFluidHandlerRight.serialize(output.child("inputFluidRight"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -191,9 +218,10 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        itemHandler.deserialize(input);
-        LEFT_TANK.deserialize(input);
-        RIGHT_TANK.deserialize(input);
+        inputHandler.deserialize(input.childOrEmpty("input"));
+        outputHandler.deserialize(input.childOrEmpty("output"));
+        inputFluidHandlerLeft.deserialize(input.childOrEmpty("inputFluidLeft"));
+        inputFluidHandlerRight.deserialize(input.childOrEmpty("inputFluidRight"));
         maxProgress = input.getIntOr("maxProgress", 200);
         progress = input.getIntOr("progress", 0);
 
@@ -202,6 +230,7 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(itemHandler);
+        dropInventoryContents(inputHandler);
+        dropInventoryContents(outputHandler);
     }
 }

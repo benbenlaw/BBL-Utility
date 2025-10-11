@@ -3,7 +3,6 @@ package com.benbenlaw.utility.block.custom;
 import com.benbenlaw.core.block.SyncableBlock;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.entity.FluidGeneratorBlockEntity;
-import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;

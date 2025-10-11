@@ -1,7 +1,8 @@
 package com.benbenlaw.utility.screen.placer;
 
+import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
+import com.benbenlaw.core.screen.util.slot.InputSlot;
 import com.benbenlaw.utility.block.entity.BlockPlacerBlockEntity;
-import com.benbenlaw.utility.screen.SimpleAbstractContainerMenu;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class BlockPlacerMenu extends SimpleAbstractContainerMenu {
 
@@ -33,7 +33,9 @@ public class BlockPlacerMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (BlockPlacerBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new SlotItemHandler(blockEntity.getItemStackHandler(), BlockPlacerBlockEntity.INPUT_SLOT, 60, 35));
+
+        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+                BlockPlacerBlockEntity.INPUT_SLOT, 60, 35));
 
         this.addDataSlots(data);
     }

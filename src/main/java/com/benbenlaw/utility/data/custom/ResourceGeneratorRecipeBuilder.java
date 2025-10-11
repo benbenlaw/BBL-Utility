@@ -1,9 +1,6 @@
 package com.benbenlaw.utility.data.custom;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.integration.jei.ResourceGeneratorRecipeCategory;
-import com.benbenlaw.utility.recipe.DryingTableRecipeType;
-import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -17,7 +14,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

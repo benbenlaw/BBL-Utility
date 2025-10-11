@@ -1,38 +1,27 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.InputOutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,24 +30,9 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     private final ContainerData data;
     private int maxProgress = 20;
     private int progress = 0;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-            sync();
-        }
-    };
+    private final InputItemHandler inputHandler = new InputItemHandler(this, 1, (i, stack) -> i == INPUT_SLOT);
+
     public static final int INPUT_SLOT = 0;
-
-    public ItemStackHandler getItemStackHandler() {
-        return itemHandler;
-    }
-
-    public IItemHandler getIItemHandler(Direction side) {
-        return new InputOutputItemHandler(itemHandler,
-                (i, stack) -> i == INPUT_SLOT,
-                i -> false);
-    }
 
     public BlockPlacerBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.BLOCK_PLACER_BLOCK_ENTITY.get(), pos, state);
@@ -93,16 +67,20 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
             if (!level.getBlockState(worldPosition).getValue(BlockPlacerBlock.RUNNING)) return;
 
-            if (itemHandler.getStackInSlot(INPUT_SLOT).getItem() instanceof BlockItem blockItem) {
+            if (inputHandler.getResource(INPUT_SLOT).toStack().getItem() instanceof BlockItem blockItem) {
 
                 BlockHitResult rayTrace = new BlockHitResult(worldPosition.getCenter(), getBlockState().getValue(BlockPlacerBlock.FACING), worldPosition, false);
-                BlockPlaceContext blockPlaceContext = new BlockPlaceContext(level, null, InteractionHand.MAIN_HAND, itemHandler.getStackInSlot(INPUT_SLOT), rayTrace);
+                BlockPlaceContext blockPlaceContext = new BlockPlaceContext(level, null, InteractionHand.MAIN_HAND, inputHandler.getResource(INPUT_SLOT).toStack(), rayTrace);
 
                 if (blockPlaceContext.canPlace()) {
                     progress++;
                     if (progress >= maxProgress) {
-
-                        blockItem.place(blockPlaceContext);
+                        if (blockItem.place(blockPlaceContext).consumesAction()) {
+                            try (Transaction tx = Transaction.open(null)) {
+                                inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), 1, tx);
+                                tx.commit();
+                            }
+                        }
                         progress = 0;
                         sync();
                     }
@@ -112,6 +90,14 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
                 sync();
             }
         }
+    }
+
+    public InputItemHandler getInputHandler() {
+        return inputHandler;
+    }
+
+    public ResourceHandler<ItemResource> getItemCapability() {
+        return inputHandler;
     }
 
     @Override
@@ -127,7 +113,7 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        itemHandler.serialize(output);
+        inputHandler.serialize(output.child("input"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -137,7 +123,7 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        itemHandler.deserialize(input);
+        inputHandler.deserialize(input.childOrEmpty("input"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
 
@@ -146,6 +132,6 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(itemHandler);
+        dropInventoryContents(inputHandler);
     }
 }

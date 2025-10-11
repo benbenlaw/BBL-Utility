@@ -5,7 +5,6 @@ import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.item.custom.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShearsItem;
 import net.neoforged.neoforge.registries.DeferredItem;

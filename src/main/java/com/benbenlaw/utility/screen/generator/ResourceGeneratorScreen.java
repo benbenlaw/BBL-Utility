@@ -2,22 +2,14 @@ package com.benbenlaw.utility.screen.generator;
 
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
-import net.minecraft.client.Minecraft;
+import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
+import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ResourceGeneratorScreen extends AbstractContainerScreen<ResourceGeneratorMenu> {
     private static final ResourceLocation TEXTURE = Utility.rl("textures/gui/resource_generator_gui.png");
@@ -52,7 +44,7 @@ public class ResourceGeneratorScreen extends AbstractContainerScreen<ResourceGen
     }
 
     private void renderTanks(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.LEFT_TANK, x, y, 8, 20, 47, 16, mouseX, mouseY);
-        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.RIGHT_TANK, x, y, 152, 20, 47, 16, mouseX, mouseY);
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getInputFluidHandlerLeft(), ResourceGeneratorBlockEntity.LEFT_TANK_SLOT, x, y, 8, 20, 47, 16, mouseX, mouseY);
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getInputFluidHandlerRight(), ResourceGeneratorBlockEntity.RIGHT_TANK_SLOT, x, y, 152, 20, 47, 16, mouseX, mouseY);
     }
 }
