@@ -9,6 +9,8 @@ import com.benbenlaw.utility.block.custom.ItemRepairerBlock;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -82,9 +84,10 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
                     tool.setDamageValue(-maxDamage);
                     outputHandler.set(OUTPUT_SLOT, ItemResource.of(tool.copy()), 1);
                     try (Transaction tx = Transaction.open(null)) {
-                        inputHandler.extract(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), 1, tx);
+                        inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), 1, tx);
                         tx.commit();
                     }
+                    level.playSound(null, worldPosition, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.4f, 1.0f);
                     progress = 0;
                     maxProgress = 200;
                 }
@@ -94,7 +97,7 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
         }
     }
 
-    public InputItemHandler getItemHandler() {
+    public InputItemHandler getInputHandler() {
         return inputHandler;
     }
 

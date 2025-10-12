@@ -34,9 +34,9 @@ public class ItemRepairerMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (ItemRepairerBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new InputSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
+        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
                 ItemRepairerBlockEntity.INPUT_SLOT, 44, 35).size(1));
-        this.addSlot(new ResultSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
+        this.addSlot(new ResultSlot(blockEntity.getOutputHandler(), blockEntity.getOutputHandler()::set,
                 ItemRepairerBlockEntity.OUTPUT_SLOT, 116, 35));
 
         this.addDataSlots(data);

@@ -91,6 +91,9 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
             if (cachedRecipe == null) {
                 updateCachedRecipe();
             }
+
+            if (!hasEnoughSpace(cachedRecipe.value().output())) return;
+
             if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
                 progress++;
                 if (progress >= maxProgress) {
@@ -100,6 +103,11 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
                 progress = 0;
             }
         }
+    }
+
+    private boolean hasEnoughSpace(FluidStack stack) {
+        FluidResource current = outputFluidHandler.getResource(TANK_SLOT);
+        return current.isEmpty() || (current.getFluid().isSame(stack.getFluid()) && outputFluidHandler.getAmountAsInt(TANK_SLOT) <= outputFluidHandler.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY) - stack.getAmount());
     }
 
     private void craftItem() {

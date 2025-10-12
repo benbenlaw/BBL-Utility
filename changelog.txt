@@ -1,5 +1,13 @@
 Changelog BBL Utility
 
+1.2.0
+- Implemented filter filtering for the fluid collector
+- Fluid Generators now stops progressing if there is no space in the tank
+- A bunch of block now make sounds when completed their action
+- Redstone clock works correctly after world reload when the block is on
+- Redstone clock now has default values when placed instead of 0 for everything
+- Everything should be named correctly now
+
 1.1.0
 - Moved to Resource Handlers instead of old handlers
 - Fixed drying table acting weird with soaking and drying recipes

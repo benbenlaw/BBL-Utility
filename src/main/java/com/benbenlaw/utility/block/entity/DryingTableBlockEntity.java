@@ -8,11 +8,14 @@ import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.DryingTableBlock;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
+import com.benbenlaw.utility.recipe.DryingTableRecipeType;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +26,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.client.event.sound.SoundEvent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -111,6 +115,14 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
                 outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(recipe.output()), recipe.output().getCount(), tx);
                 tx.commit();
             }
+
+            assert level != null;
+            if (recipe.recipeType() == DryingTableRecipeType.SOAKING) {
+                level.playSound(null, worldPosition, SoundEvents.MUD_PLACE, SoundSource.BLOCKS, 0.4f, 1.0f);
+            } else {
+                level.playSound(null, worldPosition, SoundEvents.DRY_GRASS, SoundSource.BLOCKS, 0.4f, 1.0f);
+            }
+
             progress = 0;
             sync();
         }

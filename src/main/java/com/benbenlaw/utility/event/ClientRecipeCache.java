@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.event;
 
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
+import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import net.minecraft.resources.ResourceLocation;
 
@@ -32,6 +33,16 @@ public class ClientRecipeCache {
         cachedResourceGeneratorRecipes = recipes;
     }
 
+    //Fluid Generator Recipe Cache
+    public static Map<ResourceLocation, FluidGeneratorRecipe> cachedFluidGeneratorRecipes = new HashMap<>();
+
+    public static Collection<FluidGeneratorRecipe> getCachedFluidGeneratorRecipes() {
+        return cachedFluidGeneratorRecipes.values();
+    }
+
+    public static void setCachedFluidGeneratorRecipes(Map<ResourceLocation, FluidGeneratorRecipe> recipes) {
+        cachedFluidGeneratorRecipes = recipes;
+    }
 
 
 }

@@ -1,13 +1,22 @@
 package com.benbenlaw.utility.screen.collector;
 
+import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.core.screen.util.button.WhitelistButton;
 import com.benbenlaw.utility.Utility;
+import com.benbenlaw.utility.block.entity.FluidCollectorBlockEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.AtlasManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
 public class FluidCollectorScreen extends AbstractContainerScreen<FluidCollectorMenu> {
     private static final ResourceLocation TEXTURE = Utility.rl("textures/gui/fluid_collector_gui.png");
@@ -45,14 +54,18 @@ public class FluidCollectorScreen extends AbstractContainerScreen<FluidCollector
 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
+        FluidStack fluidStack = FluidUtil.getStack(menu.blockEntity.getFilterFluidHandler(), FluidCollectorBlockEntity.TANK_SLOT);
 
         renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        FluidRenderingUtils.renderFluidStack(guiGraphics, fluidStack,
+                x + 134, y + 53, 16, 16, mouseX, mouseY);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTanks(guiGraphics, x, y, mouseX, mouseY);
         renderTooltip(guiGraphics, mouseX, mouseY);
+        FluidRenderingUtils.renderFluidStackTooltip(guiGraphics, fluidStack, x + 134, y + 53, 16, 16, mouseX, mouseY );
     }
 
     private void renderTanks(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        //FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.TANK, x, y, 60, 20, 47, 16, mouseX, mouseY);
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getFluidOutputHandler(), FluidCollectorBlockEntity.TANK_SLOT, x, y, 60, 20, 47, 16, mouseX, mouseY);
     }
 }

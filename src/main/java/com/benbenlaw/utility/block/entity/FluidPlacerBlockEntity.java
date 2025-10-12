@@ -1,12 +1,16 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.handler.fluid.InputFluidHandler;
 import com.benbenlaw.core.block.entity.handler.fluid.OutputFluidHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidPlacerBlock;
 import com.benbenlaw.utility.screen.placer.FluidPlacerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,11 +18,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +36,7 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     private final ContainerData data;
     private int maxProgress = 20;
     private int progress = 0;
-    private final OutputFluidHandler outputFluidHandler = new OutputFluidHandler(this,1, 16000, i -> false);
+    private final InputFluidHandler inputFluidHandler = new InputFluidHandler(this,1, 16000, (i, stack) -> i == TANK_SLOT);
 
     public static final int TANK_SLOT = 0;
 
@@ -64,14 +73,27 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
             if (!level.getBlockState(worldPosition).getValue(FluidPlacerBlock.RUNNING)) return;
 
-            if (outputFluidHandler.getAmountAsInt(TANK_SLOT) != 0) return;
+            if (inputFluidHandler.getAmountAsInt(TANK_SLOT) == 0) return;
 
             BlockPos targetPos = worldPosition.relative(level.getBlockState(worldPosition).getValue(FluidPlacerBlock.FACING));
 
-            if (outputFluidHandler.getAmountAsInt(TANK_SLOT) >= 1000 && level.getFluidState(targetPos).isEmpty() && level.getBlockState(targetPos).isEmpty()) {
+            if (inputFluidHandler.getAmountAsInt(TANK_SLOT) >= 1000 && level.getFluidState(targetPos).isEmpty() && level.getBlockState(targetPos).isEmpty()) {
                 progress++;
                 if (progress >= maxProgress) {
-                    FluidUtil.tryPlaceFluid(outputFluidHandler.getResource(TANK_SLOT), null, level, InteractionHand.MAIN_HAND, this.worldPosition);
+
+                    Fluid fluid = inputFluidHandler.getResource(TANK_SLOT).getFluid();
+                    SoundEvent soundEvent = fluid.getFluidType().getSound(new FluidStack(fluid, 1000), SoundActions.BUCKET_EMPTY);
+                    if (soundEvent == null)
+                        soundEvent = SoundEvents.BUCKET_EMPTY;
+                    level.playSound(null, worldPosition, soundEvent, SoundSource.BLOCKS, 0.4f, 1.0f);
+
+                    level.setBlockAndUpdate(targetPos, inputFluidHandler.getResource(TANK_SLOT).getFluid().defaultFluidState().createLegacyBlock());
+
+                    try (Transaction tx = Transaction.open(null)) {
+                        inputFluidHandler.extractInternal(TANK_SLOT, FluidResource.of(inputFluidHandler.getResource(TANK_SLOT).getFluid()), 1000, tx);
+                        tx.commit();
+                    }
+
                     progress = 0;
                     setChanged();
                     sync();
@@ -82,16 +104,16 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
         }
     }
 
-    public OutputFluidHandler getOutputFluidHandler() {
-        return outputFluidHandler;
+    public InputFluidHandler getInputFluidHandler() {
+        return inputFluidHandler;
     }
 
     public ResourceHandler<FluidResource> getFluidCapability() {
-        return outputFluidHandler;
+        return inputFluidHandler;
     }
 
     public boolean onPlayerUse(Player player, InteractionHand hand) {
-        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, outputFluidHandler);
+        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, inputFluidHandler);
     }
 
     @Override
@@ -107,7 +129,7 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        outputFluidHandler.serialize(output);
+        inputFluidHandler.serialize(output.child("inputFluid"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -117,7 +139,7 @@ public class FluidPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        outputFluidHandler.deserialize(input);
+        inputFluidHandler.deserialize(input.childOrEmpty("inputFluid"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
 

@@ -6,6 +6,8 @@ import com.benbenlaw.utility.block.custom.RedstoneClockBlock;
 import com.benbenlaw.utility.screen.clock.RedstoneClockMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 public class RedstoneClockBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
     private final ContainerData data;
-    private int maxProgress;
-    private int onTime;
-    private int signalStrength;
+    private int maxProgress = 200;
+    private int onTime = 10;
+    private int signalStrength = 15;
     private boolean emittingRedstoneSignal = false;
     private int progress = 0;
     int emittingProgress = 0;
@@ -66,6 +68,8 @@ public class RedstoneClockBlockEntity extends SyncableBlockEntity implements Men
                     emittingRedstoneSignal = true;
                     emittingProgress = 0;
                     level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+                    level.playSound(null, worldPosition, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS, 0.4f, 1.0f);
+                    ;
                 }
             } else {
                 emittingProgress++;
@@ -74,6 +78,7 @@ public class RedstoneClockBlockEntity extends SyncableBlockEntity implements Men
                     progress = 0;
                     emittingProgress = 0;
                     level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+                    level.playSound(null, worldPosition, SoundEvents.STONE_BUTTON_CLICK_OFF, SoundSource.BLOCKS, 0.4f, 1.0f);
                 }
             }
         }
@@ -133,6 +138,7 @@ public class RedstoneClockBlockEntity extends SyncableBlockEntity implements Men
         output.putInt("signalStrength", signalStrength);
         output.putInt("progress", progress);
         output.putInt("emittingProgress", emittingProgress);
+        output.putBoolean("emittingRedstoneSignal", emittingRedstoneSignal);
 
         super.saveAdditional(output);
     }
@@ -145,6 +151,7 @@ public class RedstoneClockBlockEntity extends SyncableBlockEntity implements Men
         signalStrength = input.getIntOr("signalStrength", 15);
         progress = input.getIntOr("progress", 0);
         emittingProgress = input.getIntOr("emittingProgress", 0);
+        emittingRedstoneSignal = input.getBooleanOr("emittingRedstoneSignal", false);
 
         super.loadAdditional(input);
     }

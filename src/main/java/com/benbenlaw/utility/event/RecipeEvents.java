@@ -3,6 +3,7 @@ package com.benbenlaw.utility.event;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
+import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -29,23 +30,32 @@ public class RecipeEvents {
     public static void onRecipeReceived(RecipesReceivedEvent event) {
         RecipeMap recipeMap = event.getRecipeMap();
 
+        //Drying Table Recipes
+
         Collection<RecipeHolder<DryingTableRecipe>> dryingTableRecipes = recipeMap.byType(UtilityRecipeTypes.DRYING_TABLE_TYPE.get());
-        Collection<RecipeHolder<ResourceGeneratorRecipe>> resourceGeneratorRecipes = recipeMap.byType(UtilityRecipeTypes.RESOURCE_GENERATOR_TYPE.get());
-
-
         Map<ResourceLocation, DryingTableRecipe> dryingTableRecipeMap = new HashMap<>();
-        Map<ResourceLocation, ResourceGeneratorRecipe> resourceGeneratorRecipeMap = new HashMap<>();
 
         for (RecipeHolder<DryingTableRecipe> holder : dryingTableRecipes) {
             dryingTableRecipeMap.put(holder.id().location(), holder.value());
         }
+        ClientRecipeCache.setCachedDryingTableRecipes(dryingTableRecipeMap);
+
+        //Resource Generator Recipes
+        Collection<RecipeHolder<ResourceGeneratorRecipe>> resourceGeneratorRecipes = recipeMap.byType(UtilityRecipeTypes.RESOURCE_GENERATOR_TYPE.get());
+        Map<ResourceLocation, ResourceGeneratorRecipe> resourceGeneratorRecipeMap = new HashMap<>();
 
         for (RecipeHolder<ResourceGeneratorRecipe> holder : resourceGeneratorRecipes) {
             resourceGeneratorRecipeMap.put(holder.id().location(), holder.value());
         }
-
-        ClientRecipeCache.setCachedDryingTableRecipes(dryingTableRecipeMap);
         ClientRecipeCache.setCachedResourceGeneratorRecipes(resourceGeneratorRecipeMap);
 
+        //Fluid Generator Recipes
+        Collection<RecipeHolder<FluidGeneratorRecipe>> fluidGeneratorRecipes = recipeMap.byType(UtilityRecipeTypes.FLUID_GENERATOR_TYPE.get());
+        Map<ResourceLocation, FluidGeneratorRecipe> fluidGeneratorRecipeMap = new HashMap<>();
+
+        for (RecipeHolder<FluidGeneratorRecipe> holder : fluidGeneratorRecipes) {
+            fluidGeneratorRecipeMap.put(holder.id().location(), holder.value());
+        }
+        ClientRecipeCache.setCachedFluidGeneratorRecipes(fluidGeneratorRecipeMap);
     }
 }

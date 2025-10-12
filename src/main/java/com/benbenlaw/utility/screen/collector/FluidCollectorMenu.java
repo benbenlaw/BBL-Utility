@@ -1,7 +1,7 @@
 package com.benbenlaw.utility.screen.collector;
 
 import com.benbenlaw.core.screen.SimpleAbstractContainerMenu;
-import com.benbenlaw.core.screen.util.slot.FilterSlot;
+import com.benbenlaw.core.screen.util.slot.FilterFluidSlot;
 import com.benbenlaw.utility.block.entity.FluidCollectorBlockEntity;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import net.minecraft.core.BlockPos;
@@ -13,6 +13,8 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
 public class FluidCollectorMenu extends SimpleAbstractContainerMenu {
 
@@ -35,7 +37,7 @@ public class FluidCollectorMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (FluidCollectorBlockEntity) level.getBlockEntity(pos);
         assert blockEntity != null;
 
-        //this.addSlot(new FilterSlot(blockEntity.getFilterItemHandler(), blockEntity.getFilterItemHandler()::set, 0, 134, 53));
+        this.addSlot(new FilterFluidSlot(blockEntity.getFilterFluidHandler(), FluidCollectorBlockEntity.TANK_SLOT, 134, 53));
 
         this.addDataSlots(data);
     }
@@ -43,17 +45,21 @@ public class FluidCollectorMenu extends SimpleAbstractContainerMenu {
     @Override
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
         if (slotId >= 0 && slotId < slots.size()) {
-            if (this.slots.get(slotId) instanceof FilterSlot filterSlot) {
-                ItemStack carried = this.getCarried();
-                if (!carried.isEmpty()) {
-                    filterSlot.set(carried.copyWithCount(1));
+            if (this.slots.get(slotId) instanceof FilterFluidSlot filterSlot) {
+
+                if (this.getCarried().isEmpty()) {
+                    filterSlot.setEmpty(FluidCollectorBlockEntity.TANK_SLOT);
                 } else {
-                    filterSlot.set(ItemStack.EMPTY);
+                    ItemStack carried = this.getCarried();
+                    FluidStack fluidInStack = FluidUtil.getFirstStackContained(carried);
+                    if (!fluidInStack.isEmpty()) {
+                        filterSlot.set(fluidInStack, FluidCollectorBlockEntity.TANK_SLOT);
+                    }
                 }
                 return;
             }
+            super.clicked(slotId, button, clickType, player);
         }
-        super.clicked(slotId, button, clickType, player);
     }
 
     public boolean isCrafting() {
