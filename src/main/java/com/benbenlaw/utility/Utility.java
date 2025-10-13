@@ -13,6 +13,7 @@ import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
 import com.benbenlaw.utility.screen.clock.RedstoneClockScreen;
 import com.benbenlaw.utility.screen.collector.FluidCollectorScreen;
+import com.benbenlaw.utility.screen.collector.ItemCollectorScreen;
 import com.benbenlaw.utility.screen.drying.DryingTableScreen;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorScreen;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
@@ -73,6 +74,7 @@ public class Utility {
             event.register(UtilityMenuTypes.ITEM_REPAIRER_MENU.get(), ItemRepairerScreen::new);
             event.register(UtilityMenuTypes.FLUID_GENERATOR_MENU.get(), FluidGeneratorScreen::new);
             event.register(UtilityMenuTypes.REDSTONE_CLOCK_MENU.get(), RedstoneClockScreen::new);
+            event.register(UtilityMenuTypes.ITEM_COLLECTOR_MENU.get(), ItemCollectorScreen::new);
         }
     }
 

@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "minecraft:crafting_table"
+            "items": "minecraft:dispenser"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "utility:drying_table"
+        "recipe": "utility:block_placer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "utility:drying_table"
+      "utility:block_placer"
     ]
   }
 }

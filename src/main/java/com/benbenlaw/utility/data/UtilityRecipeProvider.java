@@ -58,6 +58,117 @@ public class UtilityRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
 
+        //Drying Table
+        shaped(RecipeCategory.MISC, UtilityBlocks.DRYING_TABLE.get())
+                .pattern("ABA")
+                .pattern("CCC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.NUGGETS_IRON)
+                .define('C', Tags.Items.STRINGS)
+                .group("utility")
+                .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
+                .save(output);
+
+        //Block Placer
+        shaped(RecipeCategory.MISC, UtilityBlocks.BLOCK_PLACER.get())
+                .pattern("ABA")
+                .pattern("C C")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Tags.Items.STONES)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.DISPENSER))
+                .save(output);
+
+        //Block Breaker
+        shaped(RecipeCategory.MISC, UtilityBlocks.BLOCK_BREAKER.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Tags.Items.RODS_WOODEN)
+                .define('D', Tags.Items.TOOLS)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.DISPENSER))
+                .save(output);
+
+        //Resource Generator
+        shaped(RecipeCategory.MISC, UtilityBlocks.RESOURCE_GENERATOR.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.BUCKET)
+                .define('D', Tags.Items.CHESTS_WOODEN)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.BUCKET))
+                .save(output);
+
+        //Fluid Generator
+        shaped(RecipeCategory.MISC, UtilityBlocks.FLUID_GENERATOR.get())
+                .pattern("ABA")
+                .pattern("DCD")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.BUCKET)
+                .define('D', Tags.Items.CHESTS_WOODEN)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.BUCKET))
+                .save(output);
+
+        //Fluid Placer
+        shaped(RecipeCategory.MISC, UtilityBlocks.FLUID_PLACER.get())
+                .pattern("ABA")
+                .pattern("C C")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.BUCKET)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.BUCKET))
+                .save(output);
+
+        //Fluid Collector
+        shaped(RecipeCategory.MISC, UtilityBlocks.FLUID_COLLECTOR.get())
+                .pattern("ABA")
+                .pattern("C C")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.BUCKET)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.BUCKET))
+                .save(output);
+
+        //Item Repairer
+        shaped(RecipeCategory.MISC, UtilityBlocks.ITEM_REPAIRER.get())
+                .pattern("ABA")
+                .pattern("CCC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.ANVIL)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.ANVIL))
+                .save(output);
+
+        //Redstone Clock
+        shaped(RecipeCategory.MISC, UtilityBlocks.REDSTONE_CLOCK.get())
+                .pattern("ABA")
+                .pattern("CCC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.REDSTONE)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.REDSTONE))
+                .save(output);
+
         //Animal Net
         shaped(RecipeCategory.MISC, UtilityItems.ANIMAL_NET.get())
                 .pattern("ABA")
@@ -145,17 +256,6 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .group("utility")
                 .unlockedBy("has_item", has(Items.DIAMOND))
                 .save(output, String.valueOf(Utility.rl("diamond_horse_armor")));
-
-        //Drying Table
-        shaped(RecipeCategory.DECORATIONS, UtilityBlocks.DRYING_TABLE.get())
-                .pattern("ABA")
-                .pattern("ABA")
-                .pattern("A A")
-                .define('A', ItemTags.LOGS)
-                .define('B', Tags.Items.STRINGS)
-                .group("utility")
-                .unlockedBy("has_item", has(Items.CRAFTING_TABLE))
-                .save(output);
 
         //Ender Pearl
         shapeless(RecipeCategory.MISC, Items.ENDER_PEARL)

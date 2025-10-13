@@ -4,16 +4,16 @@
   "group": "utility",
   "key": {
     "A": "#c:ingots/iron",
-    "B": "#c:nuggets/iron",
-    "C": "#c:strings"
+    "B": "#c:ingots/gold",
+    "C": "#c:stones"
   },
   "pattern": [
     "ABA",
-    "CCC",
+    "C C",
     "ABA"
   ],
   "result": {
     "count": 1,
-    "id": "utility:drying_table"
+    "id": "utility:block_placer"
   }
 }

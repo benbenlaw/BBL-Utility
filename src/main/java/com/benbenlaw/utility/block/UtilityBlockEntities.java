@@ -48,6 +48,8 @@ public class UtilityBlockEntities {
             BLOCK_ENTITIES.register("redstone_clock_block_entity", () ->
                     new BlockEntityType<>(RedstoneClockBlockEntity::new, UtilityBlocks.REDSTONE_CLOCK.get()));
 
-
+    public static final Supplier<BlockEntityType<ItemCollectorBlockEntity>> ITEM_COLLECTOR_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("item_collector_block_entity", () ->
+                    new BlockEntityType<>(ItemCollectorBlockEntity::new, UtilityBlocks.ITEM_COLLECTOR.get()));
 
 }

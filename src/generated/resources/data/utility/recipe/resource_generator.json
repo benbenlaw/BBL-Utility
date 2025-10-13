@@ -4,16 +4,17 @@
   "group": "utility",
   "key": {
     "A": "#c:ingots/iron",
-    "B": "#c:nuggets/iron",
-    "C": "#c:strings"
+    "B": "#c:ingots/gold",
+    "C": "minecraft:bucket",
+    "D": "#c:chests/wooden"
   },
   "pattern": [
     "ABA",
-    "CCC",
+    "CDC",
     "ABA"
   ],
   "result": {
     "count": 1,
-    "id": "utility:drying_table"
+    "id": "utility:resource_generator"
   }
 }

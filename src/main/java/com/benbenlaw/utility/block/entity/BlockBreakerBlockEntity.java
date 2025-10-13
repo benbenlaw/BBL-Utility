@@ -152,12 +152,12 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
         return inputHandler;
     }
 
-    public FilterItemHandler getFilterHandler() {
-        return filterHandler;
-    }
-
     public ResourceHandler<ItemResource> getItemCapability() {
         return inputHandler;
+    }
+
+    public FilterItemHandler getFilterHandler() {
+        return filterHandler;
     }
 
     public void sendBlockBreakingPacket(int breakerId, BlockPos targetPos, float progressPerTick) {

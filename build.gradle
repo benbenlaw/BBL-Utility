@@ -45,8 +45,8 @@ neoForge {
     version = project.neo_version
 
     parchment {
-        minecraftVersion = '1.21.1'
-        mappingsVersion = '2024.11.17'
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
     }
 
     runs {
@@ -86,7 +86,7 @@ dependencies {
     //JEI
     implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
     //BBL Core
-    implementation("curse.maven:bblcore-1135181:7098903")
+    implementation("curse.maven:bblcore-1135181:7102267")
 }
 
 tasks.withType(ProcessResources).configureEach {

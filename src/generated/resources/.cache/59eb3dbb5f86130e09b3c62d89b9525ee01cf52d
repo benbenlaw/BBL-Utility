@@ -1,4 +1,4 @@
-// 1.21.9	2025-10-12T16:42:53.9355577	Loot Tables
+// 1.21.10	2025-10-13T10:36:22.4147075	Loot Tables
 d8e3abf1bbd543c916f4b0050a91c8883639ca87 data/utility/loot_table/blocks/block_breaker.json
 9e54278cade735ab2fad4d916750e0c4101fd21b data/utility/loot_table/blocks/block_placer.json
 a62611520d389a80bc1345a1423fe63cde7846e9 data/utility/loot_table/blocks/deepslate_ender_ore.json

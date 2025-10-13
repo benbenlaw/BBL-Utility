@@ -4,16 +4,17 @@
   "group": "utility",
   "key": {
     "A": "#c:ingots/iron",
-    "B": "#c:nuggets/iron",
-    "C": "#c:strings"
+    "B": "#c:ingots/gold",
+    "C": "#c:rods/wooden",
+    "D": "#c:tools"
   },
   "pattern": [
     "ABA",
-    "CCC",
+    "CDC",
     "ABA"
   ],
   "result": {
     "count": 1,
-    "id": "utility:drying_table"
+    "id": "utility:block_breaker"
   }
 }

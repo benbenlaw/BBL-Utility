@@ -65,7 +65,9 @@ public class UtilityBlocks {
             () -> new RedstoneClockBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                     .noOcclusion().setId(createID("redstone_clock"))));
 
-
+    public static final DeferredBlock<Block> ITEM_COLLECTOR = registerBlock("item_collector",
+            () -> new ItemCollectorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("item_collector"))));
 
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
