@@ -26,8 +26,6 @@ public class WorldEvents {
 
     }
 
-
-
     @SubscribeEvent
     public static void addDeathStoneOnPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
 

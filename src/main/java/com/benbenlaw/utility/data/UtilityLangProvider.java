@@ -67,7 +67,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("tooltip.death_stone.returning", "Returning to the crime scene");
 
         //Redstone Clock Tooltips
-        add("tooltip.redstone_clock.max_progress", "Time between pluses in ticks");
+        add("tooltip.redstone_clock.max_progress", "Time between pulses in ticks");
         add("tooltip.redstone_clock.on_time", "Pulse in ticks");
         add("tooltip.redstone_clock.signal_strength", "Signal Strength (0-15)");
 

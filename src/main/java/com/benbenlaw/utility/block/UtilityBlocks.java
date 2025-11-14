@@ -76,7 +76,6 @@ public class UtilityBlocks {
         return toReturn;
     }
 
-
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
         UtilityItems.ITEMS.registerItem(name, (properties) -> new BlockItem(block.get(), properties.useBlockDescriptionPrefix()));
     }

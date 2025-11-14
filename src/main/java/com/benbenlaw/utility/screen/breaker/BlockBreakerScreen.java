@@ -29,7 +29,6 @@ public class BlockBreakerScreen extends AbstractContainerScreen<BlockBreakerMenu
         int y = (height - imageHeight) / 2;
 
         addRenderableWidget(WhitelistButton.create(x + 151, y + 52, 20, 20, menu.blockEntity));
-
     }
 
     @Override
