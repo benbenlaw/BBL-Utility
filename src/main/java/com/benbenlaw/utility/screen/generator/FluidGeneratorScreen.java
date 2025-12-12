@@ -7,13 +7,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class FluidGeneratorScreen extends AbstractContainerScreen<FluidGeneratorMenu> {
-    private static final ResourceLocation TEXTURE = Utility.rl("textures/gui/fluid_generator_gui.png");
-    private static final ResourceLocation PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.rl("textures/gui/fluid_generator_gui.png");
+    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
 
     public FluidGeneratorScreen(FluidGeneratorMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

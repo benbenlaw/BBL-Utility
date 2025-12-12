@@ -1,6 +1,5 @@
 package com.benbenlaw.utility.screen.breaker;
 
-import com.benbenlaw.core.network.packets.SyncWhitelistMode;
 import com.benbenlaw.core.screen.util.button.WhitelistButton;
 import com.benbenlaw.utility.Utility;
 import net.minecraft.client.gui.GuiGraphics;
@@ -8,14 +7,14 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 
 public class BlockBreakerScreen extends AbstractContainerScreen<BlockBreakerMenu> {
-    private static final ResourceLocation TEXTURE = Utility.rl("textures/gui/block_breaker_gui.png");
-    private static final ResourceLocation PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.rl("textures/gui/block_breaker_gui.png");
+    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
 
     public BlockBreakerScreen(BlockBreakerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

@@ -9,7 +9,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -35,7 +36,7 @@ public record FluidGeneratorRecipe(String input, FluidStack output) implements R
         if (stack.isEmpty()) return false;
 
         FluidStack fluidInStack = FluidUtil.getFirstStackContained(stack);
-        Optional<Fluid> fluidInTank = BuiltInRegistries.FLUID.getOptional(ResourceLocation.parse(input));
+        Optional<Fluid> fluidInTank = BuiltInRegistries.FLUID.getOptional(Identifier.parse(input));
 
         return fluidInTank.filter(fluid -> fluidInStack.getFluid() == fluid).isPresent();
 

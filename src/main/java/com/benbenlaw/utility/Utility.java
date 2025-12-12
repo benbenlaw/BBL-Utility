@@ -21,7 +21,7 @@ import com.benbenlaw.utility.screen.placer.BlockPlacerScreen;
 import com.benbenlaw.utility.screen.placer.FluidPlacerScreen;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerScreen;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -57,8 +57,8 @@ public class Utility {
         eventBus.addListener(this::registerNetworking);
     }
 
-    public static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier rl(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @EventBusSubscriber(modid = Utility.MOD_ID, value = Dist.CLIENT)

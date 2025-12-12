@@ -6,11 +6,13 @@ import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.item.UtilityItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -41,8 +43,10 @@ public class WorldEvents {
             stack.set(UtilityDataComponents.GLOBAL_POS.get(), pos);
 
             if (UtilityStartUpConfig.shouldPlayerGetDeathStoneOnDeath.get()) {
+                ServerLevel serverLevel = (ServerLevel) level;
 
-                if (Objects.requireNonNull(level.getServer()).getGameRules().getRule(GameRules.RULE_KEEPINVENTORY).get()) {
+
+                if (Objects.requireNonNull(serverLevel.getGameRules().get(GameRules.KEEP_INVENTORY))) {
                     level.addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), stack));
                 } else {
                     player.addItem(stack);

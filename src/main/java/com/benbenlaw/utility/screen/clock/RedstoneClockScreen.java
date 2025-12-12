@@ -13,7 +13,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMenu> {
-    private static final ResourceLocation TEXTURE = Utility.rl("textures/gui/redstone_clock_gui.png");
-    private static final ResourceLocation PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.rl("textures/gui/redstone_clock_gui.png");
+    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
     private EditBox maxProgressBox;
     private EditBox onTime;
     private EditBox signalStrength;

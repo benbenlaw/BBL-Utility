@@ -3,7 +3,7 @@ package com.benbenlaw.utility.event;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,9 +12,9 @@ import java.util.Map;
 public class ClientRecipeCache {
 
     //Drying Table Recipe Cache
-    public static Map<ResourceLocation, DryingTableRecipe> cachedDryingTableRecipes = new HashMap<>();
+    public static Map<Identifier, DryingTableRecipe> cachedDryingTableRecipes = new HashMap<>();
 
-    public static void setCachedDryingTableRecipes(Map<ResourceLocation, DryingTableRecipe> recipes) {
+    public static void setCachedDryingTableRecipes(Map<Identifier, DryingTableRecipe> recipes) {
         cachedDryingTableRecipes = recipes;
     }
 
@@ -23,24 +23,24 @@ public class ClientRecipeCache {
     }
 
     //Resource Generator Recipe Cache
-    public static Map<ResourceLocation, ResourceGeneratorRecipe> cachedResourceGeneratorRecipes = new HashMap<>();
+    public static Map<Identifier, ResourceGeneratorRecipe> cachedResourceGeneratorRecipes = new HashMap<>();
 
     public static Collection<DryingTableRecipe> getCachedDryingTableRecipes() {
         return cachedDryingTableRecipes.values();
     }
 
-    public static void setCachedResourceGeneratorRecipes(Map<ResourceLocation, ResourceGeneratorRecipe> recipes) {
+    public static void setCachedResourceGeneratorRecipes(Map<Identifier, ResourceGeneratorRecipe> recipes) {
         cachedResourceGeneratorRecipes = recipes;
     }
 
     //Fluid Generator Recipe Cache
-    public static Map<ResourceLocation, FluidGeneratorRecipe> cachedFluidGeneratorRecipes = new HashMap<>();
+    public static Map<Identifier, FluidGeneratorRecipe> cachedFluidGeneratorRecipes = new HashMap<>();
 
     public static Collection<FluidGeneratorRecipe> getCachedFluidGeneratorRecipes() {
         return cachedFluidGeneratorRecipes.values();
     }
 
-    public static void setCachedFluidGeneratorRecipes(Map<ResourceLocation, FluidGeneratorRecipe> recipes) {
+    public static void setCachedFluidGeneratorRecipes(Map<Identifier, FluidGeneratorRecipe> recipes) {
         cachedFluidGeneratorRecipes = recipes;
     }
 
