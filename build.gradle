@@ -85,7 +85,7 @@ dependencies {
     //JEI
     //implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
     //BBL Core
-    implementation("curse.maven:bblcore-1135181:7324230")
+    implementation("curse.maven:bblcore-1135181:7335770")
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -167,7 +167,7 @@ tasks.getByName("modrinth").setGroup("modpublishing")
 modrinth {
     token = System.getenv("modrinth_token").toString()
     projectId = "${modrinth_id}"
-    versionType = "release"
+    versionType = "${release_type}"
     versionName = "${mod_id}" + "$minecraft_version" + "-" + "$mod_version"
     uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
 

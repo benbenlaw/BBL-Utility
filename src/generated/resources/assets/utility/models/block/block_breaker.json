@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "utility:block/block_breaker_front",
+    "side": "utility:block/machine_side_idle",
+    "top": "utility:block/machine_top"
+  }
+}

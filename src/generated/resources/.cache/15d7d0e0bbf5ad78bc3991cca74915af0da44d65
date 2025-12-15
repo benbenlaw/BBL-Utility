@@ -1,4 +1,4 @@
-// 1.21.10	2025-10-13T10:36:22.4091914	utility Recipes
+// 1.21.11	2025-12-15T17:40:29.8723386	utility Recipes
 73b5546cf27f021bc6df91331d9be01b9568b60d data/utility/advancement/recipes/drying_table/drying_table/drying/cracked_stone_bricks.json
 5e44addfc78033c81f450d8791f450ed02cb6eba data/utility/advancement/recipes/drying_table/drying_table/drying/dead_bush.json
 09e9222b960ab94bf15bd667453d8148b52646bf data/utility/advancement/recipes/drying_table/drying_table/drying/paper.json
@@ -25,6 +25,7 @@ e3093e9779e443bee42a898ba697adcc0347466d data/utility/advancement/recipes/misc/f
 76040cad5581cb4331439a673431103c0af0e031 data/utility/advancement/recipes/misc/gold_horse_armor.json
 574193e87f973d5785cf56267e9badf2bc69d5d0 data/utility/advancement/recipes/misc/green_wool.json
 cf45a64394de92ab17fa7306a5bc47bc7977155b data/utility/advancement/recipes/misc/iron_horse_armor.json
+515c6ff23e794e9b4d6ef3e017fd478034887738 data/utility/advancement/recipes/misc/item_collector.json
 5dd90b4a90f9f53cf81b65d7b4f257e18c3b904c data/utility/advancement/recipes/misc/item_repairer.json
 ea5f40ee6347e29bd29e90edd7429136e5d68a5a data/utility/advancement/recipes/misc/leafy_string.json
 e83371b89874070dcf1542c9e7f6c3cff3b0885e data/utility/advancement/recipes/misc/log_sheet.json
@@ -76,6 +77,7 @@ d3663438beef44c02c31cede823b7a843d75018f data/utility/recipe/ender_pearl_fragmen
 1aa045881257245d596f15181f1104a556856c8b data/utility/recipe/gold_horse_armor.json
 efe4d52635f875f6206df322755ab2833bdb7393 data/utility/recipe/green_wool.json
 7db8a6ab1f77a71c7ff17ca1e9533ead9dac0f9f data/utility/recipe/iron_horse_armor.json
+8c04e3c4b04133e9eb4d8ffd7269a1e2f204e1f7 data/utility/recipe/item_collector.json
 0bfe8c8a3b963faea700d0adc76c972a0e01fb76 data/utility/recipe/item_repairer.json
 0932311b4ecd256af09ad0ba0de3cd7adbdc02a5 data/utility/recipe/leafy_string.json
 efabde00d0205ad0f4567b6eea899b98dae954fb data/utility/recipe/log_sheet.json

@@ -1,9 +1,13 @@
-// 1.21.10	2025-10-13T10:36:22.4147075	Loot Tables
+// 1.21.11	2025-12-15T17:40:29.8759245	Loot Tables
 d8e3abf1bbd543c916f4b0050a91c8883639ca87 data/utility/loot_table/blocks/block_breaker.json
 9e54278cade735ab2fad4d916750e0c4101fd21b data/utility/loot_table/blocks/block_placer.json
 a62611520d389a80bc1345a1423fe63cde7846e9 data/utility/loot_table/blocks/deepslate_ender_ore.json
 9e7fdf0d34cc639b78816432c2115b6be4644b51 data/utility/loot_table/blocks/drying_table.json
 ae0dc794d802b2dcc89f3f6e669c15b8cbb30093 data/utility/loot_table/blocks/ender_ore.json
 1268818418a3e5cbc532f4b3a2afcaf63dc40835 data/utility/loot_table/blocks/fluid_collector.json
+e687c1115de04fb8520cda7aa2f0fbd1b62dcbcf data/utility/loot_table/blocks/fluid_generator.json
 168a89992cbc7da36363b09931f7b6fbad20379d data/utility/loot_table/blocks/fluid_placer.json
+91b84fd31fa8f599861fa03c4f98e147924575c8 data/utility/loot_table/blocks/item_collector.json
+22af363c53b51a8d60aad4e37026cfd69b500f41 data/utility/loot_table/blocks/item_repairer.json
+d521f239d7084e622ec54eaebab467cc4117cce0 data/utility/loot_table/blocks/redstone_clock.json
 d97509111d4ba56a8056292b13197a05aa2e32fe data/utility/loot_table/blocks/resource_generator.json

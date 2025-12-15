@@ -28,7 +28,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("block.utility.redstone_clock", "Redstone Clock");
         add("block.utility.fluid_generator", "Fluid Generator");
         add("block.utility.item_repairer", "Item Repairer");
-
+        add("block.utility.item_collector", "Item Collector");
 
         //Items
         add("item.utility.crook", "Crook");
@@ -70,6 +70,14 @@ public class UtilityLangProvider extends LanguageProvider {
         add("tooltip.redstone_clock.max_progress", "Time between pulses in ticks");
         add("tooltip.redstone_clock.on_time", "Pulse in ticks");
         add("tooltip.redstone_clock.signal_strength", "Signal Strength (0-15)");
+
+        //Item Collector Tooltips
+        add("tooltip.item_collector.left_right", "Positive: Left,  Negative: Right");
+        add("tooltip.item_collector.forward_backward", "Positive: Forward,  Negative: Backward");
+        add("tooltip.item_collector.up_down", "Positive: Up,  Negative: Down");
+        add("tooltip.item_collector.width", "Width");
+        add("tooltip.item_collector.height", "Height");
+        add("tooltip.item_collector.depth", "Depth");
 
         //JEI
         add("jei.utility.drying_table", "Drying Table");

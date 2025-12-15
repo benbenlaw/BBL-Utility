@@ -199,6 +199,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
         filterHandler.serialize(output.child("filter"));
         output.putFloat("maxProgress", maxProgress);
         output.putFloat("progress", progress);
+        output.putBoolean("whitelist", whitelist);
 
         super.saveAdditional(output);
     }
@@ -210,6 +211,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
         filterHandler.deserialize(input.childOrEmpty("filter"));
         maxProgress = input.getFloatOr("maxProgress", 1.0f);
         progress = input.getFloatOr("progress", 0);
+        whitelist = input.getBooleanOr("whitelist", true);
 
         super.loadAdditional(input);
     }

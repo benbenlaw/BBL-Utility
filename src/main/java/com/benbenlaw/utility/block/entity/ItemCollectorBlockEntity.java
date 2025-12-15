@@ -3,41 +3,28 @@ package com.benbenlaw.utility.block.entity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
-import com.benbenlaw.core.util.FakePlayerUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.ItemCollectorBlock;
 import com.benbenlaw.utility.screen.collector.ItemCollectorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -45,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ItemCollectorBlockEntity extends SyncableBlockEntity implements MenuProvider, WhitelistBlockEntity {
 
@@ -53,13 +39,13 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     private int maxProgress = 20;
     private int progress = 0;
 
-    private int offsetXPos = 0;
-    private int offsetYPos = 0;
-    private int offsetZPos = 0;
+    private int leftRightOffset = 0;
+    private int upDownOffset = 0;
+    private int forwardBackOffset = 0;
 
-    private int xSize = 1;
-    private int ySize = 1;
-    private int zSize = 1;
+    private int width = 1;
+    private int height = 1;
+    private int depth = 1;
 
     private final OutputItemHandler outputHandler = new OutputItemHandler(this,9, i -> {
         for (int slot : OUTPUT_SLOTS) {
@@ -113,74 +99,84 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
             if (progress >= maxProgress) {
                 progress = 0;
                 List<Entity> entityList = level.getEntities(null, box);
-                System.out.println(box);
 
                 for (Entity entity : entityList) {
-                    if (entity instanceof ItemEntity itemEntity) {
-                        ItemStack stack = itemEntity.getItem();
-                        if (stack.isEmpty()) continue;
+                    if (!(entity instanceof ItemEntity itemEntity)) continue;
 
-                        System.out.println(entity);
+                    ItemStack stack = itemEntity.getItem();
+                    if (stack.isEmpty()) continue;
 
-                        boolean canInsert = filterHandler.matchesItem(stack, whitelist);
+                    if (!filterHandler.matchesItem(stack, whitelist)) continue;
 
-                        if (canInsert) {
-                            int slot = getInsertableSlot(stack);
-                            if (slot != -1) {
-                                ItemResource resource = ItemResource.of(stack);
-                                try (Transaction tx = Transaction.open(null)) {
-                                    outputHandler.insertInternal(slot, resource, stack.getCount(), tx);
-                                    tx.commit();
-                                }
-                                itemEntity.discard();
+                    ItemResource resource = ItemResource.of(stack);
+
+                    boolean fullyInserted = false;
+
+                    for (int i = 0; i < outputHandler.size(); i++) {
+                        ItemStack outputSlot = outputHandler.getResource(i).toStack();
+
+                        if (!outputSlot.isEmpty() && !ItemStack.isSameItemSameComponents(outputSlot, stack)) continue;
+
+                        try (Transaction tx = Transaction.open(null)) {
+                            long inserted = outputHandler.insertInternalReturn(i, resource, stack.getCount(), tx);
+                            if (inserted > 0) {
+                                tx.commit();
+                                stack.shrink((int) inserted);
+                                if (stack.isEmpty()) itemEntity.discard();
+                                break;
                             }
                         }
-
                     }
+                    if (!fullyInserted) itemEntity.setItem(stack);
                 }
-
             }
         }
     }
 
-    private int getInsertableSlot(ItemStack stack) {
-        for (int i = 0; i < outputHandler.size(); i++) {
-            ItemStack outputSlot = outputHandler.getResource(i).toStack();
-            if (outputSlot.isEmpty()) {
-                return i; // empty slot
-            } else if (ItemStack.isSameItemSameComponents(outputSlot, stack)) {
-                int result = outputSlot.getCount() + stack.getCount();
-                if (result <= outputSlot.getMaxStackSize()) {
-                    return i; // same item and enough space
-                }
-            }
-        }
-        return -1; // no valid slot
-    }
-
-    public AABB createArea() {
-        if (level == null) return null;
-
+    private AABB createArea() {
+        BlockPos startPos = getOffsetStartPos();
         BlockState state = getBlockState();
         Direction facing = state.getValue(ItemCollectorBlock.FACING);
 
-        int xAmount = Math.max(1, xSize);
-        int yAmount = Math.max(1, ySize);
-        int zAmount = Math.max(1, zSize);
+        if (!facing.getAxis().isHorizontal()) {
+            facing = Direction.NORTH;
+        }
 
-        BlockPos startPos = worldPosition.relative(facing, 1);
+        Direction leftDir;
+        if (facing.getAxis().isHorizontal()) {
+            leftDir = facing.getClockWise();
+        } else {
+            leftDir = Direction.WEST;
+        }
 
-        startPos = startPos.offset(offsetXPos, offsetYPos, offsetZPos);
-
+        // Calculate world-space min/max coordinates
         int minX = startPos.getX();
         int minY = startPos.getY();
         int minZ = startPos.getZ();
-        int maxX = minX + xAmount - 1;
-        int maxY = minY + yAmount - 1;
-        int maxZ = minZ + zAmount - 1;
 
-        return new AABB(minX, minY, minZ, maxX + 1.0, maxY + 1.0, maxZ + 1.0); // +1 because AABB max is exclusive
+        // Left/right expansion
+        int maxX = minX + leftDir.getStepX() * (width - 1);
+        int maxZ = minZ + leftDir.getStepZ() * (width - 1);
+
+        // Forward/back expansion
+        maxX += facing.getStepX() * (depth - 1);
+        maxZ += facing.getStepZ() * (depth - 1);
+
+        // Up/down expansion
+        int maxY = minY + height - 1;
+
+        // Ensure min/max are correct (for negative step)
+        double finalMinX = Math.min(minX, maxX);
+        double finalMaxX = Math.max(minX, maxX);
+        double finalMinY = minY;
+        double finalMaxY = maxY;
+        double finalMinZ = Math.min(minZ, maxZ);
+        double finalMaxZ = Math.max(minZ, maxZ);
+
+        return new AABB(finalMinX, finalMinY, finalMinZ, finalMaxX + 1.0, finalMaxY + 1.0, finalMaxZ + 1.0);
     }
+
+
 
 
     public OutputItemHandler getOutputHandler() {
@@ -196,86 +192,136 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public int getOffsetX() {
-        return offsetXPos;
+        return leftRightOffset;
     }
 
     public void setOffsetX(int offsetXPos) {
-        this.offsetXPos = offsetXPos;
+        this.leftRightOffset = offsetXPos;
         setChanged();
         sync();
     }
 
     public int getOffsetY() {
-        return offsetYPos;
+        return upDownOffset;
     }
 
     public void setOffsetY(int offsetYPos) {
-        this.offsetYPos = offsetYPos;
+        this.upDownOffset = offsetYPos;
         setChanged();
         sync();
     }
 
     public int getOffsetZ() {
-        return offsetZPos;
+        return forwardBackOffset;
     }
 
     public void setOffsetZ(int offsetZPos) {
-        this.offsetZPos = offsetZPos;
+        this.forwardBackOffset = offsetZPos;
         setChanged();
         sync();
     }
 
     public int getSizeX() {
-        return xSize;
+        return width;
     }
 
     public void setSizeX(int xSize) {
-        this.xSize = xSize;
+        this.width = xSize;
         setChanged();
         sync();
     }
 
     public int getSizeY() {
-        return ySize;
+        return height;
     }
 
     public void setSizeY(int ySize) {
-        this.ySize = ySize;
+        this.height = ySize;
         setChanged();
         sync();
     }
 
     public int getSizeZ() {
-        return zSize;
+        return depth;
     }
 
     public void setSizeZ(int zSize) {
-        this.zSize = zSize;
+        this.depth = zSize;
         setChanged();
         sync();
     }
 
-    public void sendBlockBreakingPacket(int breakerId, BlockPos targetPos, float progressPerTick) {
-        assert level != null;
-        int newCrackStage = Math.min(9, (int) ((progress + progressPerTick) * 10));
-        int currentCrackStage = Math.min(9, (int) (progress * 10));
+    public void onRightClick() {
+        Level level = this.getLevel();
+        if (level != null && !level.isClientSide()) {
+            showFlightRangeOutline((ServerLevel) level);
+        }
+    }
 
-        if (newCrackStage != currentCrackStage || newCrackStage == 0) {
-            ClientboundBlockDestructionPacket packet = new ClientboundBlockDestructionPacket(breakerId, targetPos, newCrackStage);
-            for (ServerPlayer player : ((ServerLevel) level).getPlayers(p -> p.distanceToSqr(targetPos.getX(), targetPos.getY(), targetPos.getZ()) < 1024)) {
-                player.connection.send(packet);
+    private void showFlightRangeOutline(ServerLevel level) {
+        AABB range = createArea();
+
+        int minX = (int) Math.floor(range.minX);
+        int minY = (int) Math.floor(range.minY);
+        int minZ = (int) Math.floor(range.minZ);
+        int maxX = (int) Math.ceil(range.maxX);
+        int maxY = (int) Math.ceil(range.maxY);
+        int maxZ = (int) Math.ceil(range.maxZ);
+
+        // Draw edges
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                spawnParticle(level, x + 0.5, y + 0.5, minZ + 0.5);
+                spawnParticle(level, x + 0.5, y + 0.5, maxZ + 0.5);
+            }
+        }
+
+        for (int z = minZ; z <= maxZ; z++) {
+            for (int y = minY; y <= maxY; y++) {
+                spawnParticle(level, minX + 0.5, y + 0.5, z + 0.5);
+                spawnParticle(level, maxX + 0.5, y + 0.5, z + 0.5);
+            }
+        }
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                spawnParticle(level, x + 0.5, minY + 0.5, z + 0.5);
+                spawnParticle(level, x + 0.5, maxY + 0.5, z + 0.5);
             }
         }
     }
 
-    public void clearBlockBreakingProgress(int breakerId, BlockPos targetPos, float progressPerTick) {
-        if (level instanceof ServerLevel serverLevel) {
-            ClientboundBlockDestructionPacket packet = new ClientboundBlockDestructionPacket(breakerId, targetPos, -1);
-            for (ServerPlayer player : serverLevel.getPlayers(p -> p.distanceToSqr(targetPos.getX(), targetPos.getY(), targetPos.getZ()) < 1024)) {
-                player.connection.send(packet);
-            }
-        }
+
+    private void spawnParticle(ServerLevel level, double x, double y, double z) {
+        level.sendParticles(ParticleTypes.END_ROD,true, true,
+                x - 0.5, y - 0.5, z - 0.5,1,0.0, 0.0, 0.0, 0.0);
     }
+
+    private BlockPos getOffsetStartPos() {
+        if (level == null) return worldPosition;
+
+        BlockState state = getBlockState();
+        Direction facing = state.getValue(ItemCollectorBlock.FACING);
+
+        if (!facing.getAxis().isHorizontal()) {
+            facing = Direction.NORTH;
+        }
+
+        Direction leftDir;
+        if (facing.getAxis().isHorizontal()) {
+            leftDir = facing.getClockWise();
+        } else {
+            leftDir = Direction.WEST;
+        }
+
+
+        int x = worldPosition.getX() + forwardBackOffset * facing.getStepX() + leftRightOffset * leftDir.getStepX();
+        int y = worldPosition.getY() + upDownOffset;
+        int z = worldPosition.getZ() + forwardBackOffset * facing.getStepZ() + leftRightOffset * leftDir.getStepZ();
+
+        return new BlockPos(x, y, z);
+    }
+
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int container, Inventory inventory, Player player) {
@@ -294,6 +340,14 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         filterHandler.serialize(output.child("filter"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
+        output.putInt("leftRightOffset", leftRightOffset);
+        output.putInt("upDownOffset", upDownOffset);
+        output.putInt("forwardBackOffset", forwardBackOffset);
+        output.putInt("width", width);
+        output.putInt("height", height);
+        output.putInt("depth", depth);
+        output.putBoolean("whitelist", whitelist);
+
 
         super.saveAdditional(output);
     }
@@ -305,6 +359,13 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         filterHandler.deserialize(input.childOrEmpty("filter"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
+        leftRightOffset = input.getIntOr("leftRightOffset", 0);
+        upDownOffset = input.getIntOr("upDownOffset", 0);
+        forwardBackOffset = input.getIntOr("forwardBackOffset", 0);
+        width = input.getIntOr("width", 1);
+        height = input.getIntOr("height", 1);
+        depth = input.getIntOr("depth", 1);
+        whitelist = input.getBooleanOr("whitelist", true);
 
         super.loadAdditional(input);
     }

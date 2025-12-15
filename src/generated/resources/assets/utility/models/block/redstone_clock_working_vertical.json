@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/orientable_vertical",
+  "textures": {
+    "front": "utility:block/redstone_clock_front",
+    "side": "utility:block/machine_side_working"
+  }
+}

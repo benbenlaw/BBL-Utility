@@ -36,6 +36,10 @@ public class UtilityBlockTags extends BlockTagsProvider {
                 .add(UtilityBlocks.RESOURCE_GENERATOR.get())
                 .add(UtilityBlocks.FLUID_COLLECTOR.get())
                 .add(UtilityBlocks.FLUID_PLACER.get())
+                .add(UtilityBlocks.FLUID_GENERATOR.get())
+                .add(UtilityBlocks.ITEM_COLLECTOR.get())
+                .add(UtilityBlocks.ITEM_REPAIRER.get())
+                .add(UtilityBlocks.REDSTONE_CLOCK.get())
         ;
 
         //Axe

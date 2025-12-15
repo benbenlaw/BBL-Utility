@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.block;
 
+import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
@@ -24,7 +25,7 @@ public class UtilityCapabilities {
         );
 
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, UtilityBlockEntities.RESOURCE_GENERATOR_BLOCK_ENTITY.get(),
-                (blockEntity, side) -> blockEntity.getFluidCapability(side)
+                ResourceGeneratorBlockEntity::getFluidCapability
         );
 
         event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.ITEM_REPAIRER_BLOCK_ENTITY.get(),
@@ -45,6 +46,10 @@ public class UtilityCapabilities {
 
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, UtilityBlockEntities.FLUID_GENERATOR_BLOCK_ENTITY.get(),
                 (blockEntity, side) -> blockEntity.getFluidCapability()
+        );
+
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.ITEM_COLLECTOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemCapability()
         );
     }
 }

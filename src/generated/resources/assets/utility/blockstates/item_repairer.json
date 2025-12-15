@@ -1,0 +1,48 @@
+{
+  "variants": {
+    "facing=down,running=false": {
+      "model": "utility:block/item_repairer_vertical",
+      "x": 180
+    },
+    "facing=down,running=true": {
+      "model": "utility:block/item_repairer_working_vertical",
+      "x": 180
+    },
+    "facing=east,running=false": {
+      "model": "utility:block/item_repairer",
+      "y": 90
+    },
+    "facing=east,running=true": {
+      "model": "utility:block/item_repairer_working",
+      "y": 90
+    },
+    "facing=north,running=false": {
+      "model": "utility:block/item_repairer"
+    },
+    "facing=north,running=true": {
+      "model": "utility:block/item_repairer_working"
+    },
+    "facing=south,running=false": {
+      "model": "utility:block/item_repairer",
+      "y": 180
+    },
+    "facing=south,running=true": {
+      "model": "utility:block/item_repairer_working",
+      "y": 180
+    },
+    "facing=up,running=false": {
+      "model": "utility:block/item_repairer_vertical"
+    },
+    "facing=up,running=true": {
+      "model": "utility:block/item_repairer_working_vertical"
+    },
+    "facing=west,running=false": {
+      "model": "utility:block/item_repairer",
+      "y": 270
+    },
+    "facing=west,running=true": {
+      "model": "utility:block/item_repairer_working",
+      "y": 270
+    }
+  }
+}

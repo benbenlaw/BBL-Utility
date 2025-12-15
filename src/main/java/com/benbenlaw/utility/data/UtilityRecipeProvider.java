@@ -58,6 +58,19 @@ public class UtilityRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
 
+        //Item Collector
+        shaped(RecipeCategory.MISC, UtilityBlocks.ITEM_COLLECTOR.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.ENDER_EYE)
+                .define('D', Items.HOPPER)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.ENDER_EYE))
+                .save(output);
+
         //Drying Table
         shaped(RecipeCategory.MISC, UtilityBlocks.DRYING_TABLE.get())
                 .pattern("ABA")

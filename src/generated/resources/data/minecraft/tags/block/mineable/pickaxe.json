@@ -6,6 +6,10 @@
     "utility:block_placer",
     "utility:resource_generator",
     "utility:fluid_collector",
-    "utility:fluid_placer"
+    "utility:fluid_placer",
+    "utility:fluid_generator",
+    "utility:item_collector",
+    "utility:item_repairer",
+    "utility:redstone_clock"
   ]
 }

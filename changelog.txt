@@ -1,5 +1,13 @@
 Changelog BBL Utility
 
+Requires a lot of textures for the blocks as part of the refresh
+
+1.4.0
+- Reverted versioning
+- Added Item Collector block, collects items in front of it into an internal inventory, can be filtered, redstone controlled, size and offset can be configured in the gui
+- Fixed some missing tags, translations and recipe
+- Re added all textures and added new ones for the new blocks
+
 1.11.0
 - Updated to Minecraft 1.21.11
 - Removed JEI integration until JEI is updated for 1.21.11
