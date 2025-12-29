@@ -85,6 +85,6 @@ public class UtilityBlocks {
     }
 
     public static ResourceKey<Block> createID(String name) {
-        return ResourceKey.create(Registries.BLOCK, Utility.rl(name));
+        return ResourceKey.create(Registries.BLOCK, Utility.identifier(name));
     }
 }

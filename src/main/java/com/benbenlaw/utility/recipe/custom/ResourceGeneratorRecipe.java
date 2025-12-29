@@ -21,10 +21,14 @@ public record ResourceGeneratorRecipe(ItemStack input, ItemStack output, FluidSt
         if (level.isClientSide()) return false;
 
         boolean inputMatches = input().is(recipeInput.getItem(ResourceGeneratorBlockEntity.INPUT_SLOT).getItem());
-        boolean leftFluidMatches = leftFluid.is(recipeInput.getLeftFluid().getFluid()) && leftFluid.getAmount() <= recipeInput.getLeftFluid().getAmount();
-        boolean rightFluidMatches = rightFluid.is(recipeInput.getRightFluid().getFluid()) && rightFluid.getAmount() <= recipeInput.getRightFluid().getAmount();
 
-        return inputMatches && leftFluidMatches && rightFluidMatches;
+        var leftTank = recipeInput.getLeftFluid();
+        var rightTank = recipeInput.getRightFluid();
+
+        boolean defaultOrder = leftFluid.is(leftTank.getFluid()) && leftFluid.getAmount() <= leftTank.getAmount() && rightFluid.is(rightTank.getFluid()) && rightFluid.getAmount() <= rightTank.getAmount();
+        boolean swappedOrder = leftFluid.is(rightTank.getFluid()) && leftFluid.getAmount() <= rightTank.getAmount() && rightFluid.is(leftTank.getFluid()) && rightFluid.getAmount() <= leftTank.getAmount();
+
+        return inputMatches && (defaultOrder || swappedOrder);
     }
 
     @Override

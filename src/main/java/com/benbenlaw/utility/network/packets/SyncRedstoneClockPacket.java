@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record SyncRedstoneClockPacket(BlockPos pos, int maxProgress, int onTime, int signalStrength) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<SyncRedstoneClockPacket> TYPE = new CustomPacketPayload.Type<>(Utility.rl("sync_redstone_clock"));
+    public static final CustomPacketPayload.Type<SyncRedstoneClockPacket> TYPE = new CustomPacketPayload.Type<>(Utility.identifier("sync_redstone_clock"));
 
     public static final IPayloadHandler<SyncRedstoneClockPacket> HANDLER = (packet, context) -> {
 

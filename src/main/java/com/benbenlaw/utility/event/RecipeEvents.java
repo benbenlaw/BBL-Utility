@@ -24,6 +24,7 @@ public class RecipeEvents {
     public static void onDataPackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(UtilityRecipeTypes.DRYING_TABLE_TYPE.get());
         event.sendRecipes(UtilityRecipeTypes.RESOURCE_GENERATOR_TYPE.get());
+        event.sendRecipes(UtilityRecipeTypes.FLUID_GENERATOR_TYPE.get());
     }
 
     @SubscribeEvent

@@ -57,7 +57,7 @@ public class Utility {
         eventBus.addListener(this::registerNetworking);
     }
 
-    public static Identifier rl(String path) {
+    public static Identifier identifier(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 

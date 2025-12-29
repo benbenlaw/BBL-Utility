@@ -59,7 +59,7 @@ public class DryingTableRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(@NotNull RecipeOutput recipeOutput, @NotNull String id) {
-        save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.rl("drying_table/" + id)));
+        save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.identifier("drying_table/" + id)));
     }
 
     @Override

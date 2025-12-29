@@ -5,12 +5,11 @@
   "key": {
     "A": "#c:ingots/iron",
     "B": "#c:ingots/gold",
-    "C": "minecraft:bucket",
-    "D": "#c:chests/wooden"
+    "C": "minecraft:bucket"
   },
   "pattern": [
     "ABA",
-    "DCD",
+    "CCC",
     "ABA"
   ],
   "result": {

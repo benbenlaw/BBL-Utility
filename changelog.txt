@@ -2,6 +2,15 @@ Changelog BBL Utility
 
 Requires a lot of textures for the blocks as part of the refresh
 
+1.4.1
+- Resource Generator now works if fluids are inverted in the block gui
+- Fixed Chest recipe
+- Fixed and tweaked some recipes
+- Fixed Drying Table drying recipe not working
+- JEI bookmarks now show again
+- Fluid Generator recipes now sync correctly with JEI
+- Added world gen data gen, Ender Ore now spawn in the overworld
+
 1.4.0
 - Reverted versioning
 - Added Item Collector block, collects items in front of it into an internal inventory, can be filtered, redstone controlled, size and offset can be configured in the gui

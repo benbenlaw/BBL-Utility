@@ -40,7 +40,7 @@ public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterlogg
 
     public DryingTableBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(RUNNING, false).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(RUNNING, true).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
     @Override
@@ -76,9 +76,9 @@ public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterlogg
         Direction direction = context.getHorizontalDirection().getOpposite();
 
         if (blockState.is(Blocks.WATER)) {
-            return this.defaultBlockState().setValue(WATERLOGGED, true).setValue(FACING, direction).setValue(RUNNING, false);
+            return this.defaultBlockState().setValue(WATERLOGGED, true).setValue(FACING, direction).setValue(RUNNING, true);
         } else {
-            return this.defaultBlockState().setValue(WATERLOGGED, false).setValue(FACING, direction).setValue(RUNNING, false);
+            return this.defaultBlockState().setValue(WATERLOGGED, false).setValue(FACING, direction).setValue(RUNNING, true);
         }
     }
 

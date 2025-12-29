@@ -25,13 +25,14 @@ public class UtilityDataGenerator {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         generator.addProvider(true, new UtilityBlockTags(packOutput, lookupProvider));
+        generator.addProvider(true, new UtilityItemTags(packOutput, lookupProvider));
         generator.addProvider(true, new UtilityLangProvider(packOutput));
         generator.addProvider(true, new UtilityDataMapsProvider(packOutput, lookupProvider));
         generator.addProvider(true, new LootTableProvider(packOutput, Collections.emptySet(),
                 List.of(new LootTableProvider.SubProviderEntry(UtilityLootTableProvider::new, LootContextParamSets.BLOCK)), lookupProvider));
         generator.addProvider(true, new UtilityModelProvider(packOutput));
         generator.addProvider(true, new UtilityRecipeProvider.Runner (packOutput, lookupProvider));
-
+        generator.addProvider(true, new UtilityWorldGenProvider(packOutput, lookupProvider));
 
 
     }

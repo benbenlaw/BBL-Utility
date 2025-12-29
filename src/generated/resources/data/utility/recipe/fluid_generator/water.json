@@ -1,8 +1,8 @@
 {
   "type": "utility:fluid_generator",
-  "input": "minecraft:water",
+  "input": "water",
   "output": {
-    "amount": 10,
+    "amount": 100,
     "id": "minecraft:water"
   }
 }

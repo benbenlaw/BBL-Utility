@@ -28,7 +28,7 @@
   "jei.utility.consumed": "Fluid Consumed",
   "jei.utility.drying_table": "Drying Table",
   "jei.utility.fluid_generator": "Fluid Generator",
-  "jei.utility.fluid_generator_recipe": "Any Item that holds fluids like buckets containing %s can be used here",
+  "jei.utility.fluid_generator_recipe": "Any item that holds %s can be used here (like a Bucket)",
   "jei.utility.resource_generator": "Resource Generator",
   "jei.utility.soaking": "Drying Table must be Waterlogged",
   "tooltip.animal_net.animal_mobs": "- Animal Mobs",

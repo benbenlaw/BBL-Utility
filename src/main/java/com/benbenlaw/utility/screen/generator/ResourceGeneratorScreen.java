@@ -1,8 +1,9 @@
 package com.benbenlaw.utility.screen.generator;
 
+import com.benbenlaw.core.Core;
+import com.benbenlaw.core.screen.util.DurationTooltip;
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
 import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,8 +13,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class ResourceGeneratorScreen extends AbstractContainerScreen<ResourceGeneratorMenu> {
-    private static final Identifier TEXTURE = Utility.rl("textures/gui/resource_generator_gui.png");
-    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.identifier("textures/gui/resource_generator_gui.png");
+    private static final Identifier PROGRESS_ARROW = Core.identifier("progress_arrow");
 
     public ResourceGeneratorScreen(ResourceGeneratorMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -41,6 +42,7 @@ public class ResourceGeneratorScreen extends AbstractContainerScreen<ResourceGen
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTanks(guiGraphics, x, y, mouseX, mouseY);
         renderTooltip(guiGraphics, mouseX, mouseY);
+        DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
     }
 
     private void renderTanks(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {

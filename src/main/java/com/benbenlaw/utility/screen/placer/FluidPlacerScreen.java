@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.screen.placer;
 
+import com.benbenlaw.core.Core;
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.entity.FluidPlacerBlockEntity;
@@ -11,8 +12,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class FluidPlacerScreen extends AbstractContainerScreen<FluidPlacerMenu> {
-    private static final Identifier TEXTURE = Utility.rl("textures/gui/fluid_placer_gui.png");
-    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.identifier("textures/gui/fluid_placer_gui.png");
+    private static final Identifier PROGRESS_ARROW = Core.identifier("progress_arrow");
 
     public FluidPlacerScreen(FluidPlacerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

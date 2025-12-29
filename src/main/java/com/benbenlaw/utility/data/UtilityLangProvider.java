@@ -86,7 +86,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("jei.utility.consumed", "Fluid Consumed");
 
         add("jei.utility.fluid_generator", "Fluid Generator");
-        add("jei.utility.fluid_generator_recipe", "Any Item that holds fluids like buckets containing %s can be used here");
+        add("jei.utility.fluid_generator_recipe", "Any item that holds %s can be used here (like a Bucket)");
     }
 
     @Override

@@ -1,26 +1,22 @@
 package com.benbenlaw.utility.screen.collector;
 
+import com.benbenlaw.core.Core;
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.core.screen.util.button.WhitelistButton;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.entity.FluidCollectorBlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.AtlasManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
 public class FluidCollectorScreen extends AbstractContainerScreen<FluidCollectorMenu> {
-    private static final Identifier TEXTURE = Utility.rl("textures/gui/fluid_collector_gui.png");
-    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.identifier("textures/gui/fluid_collector_gui.png");
+    private static final Identifier PROGRESS_ARROW = Core.identifier("progress_arrow");
 
     public FluidCollectorScreen(FluidCollectorMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

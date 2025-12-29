@@ -57,6 +57,6 @@ public class UtilityItems {
 
 
     public static ResourceKey<Item> createID(String name) {
-        return ResourceKey.create(Registries.ITEM, Utility.rl(name));
+        return ResourceKey.create(Registries.ITEM, Utility.identifier(name));
     }
 }

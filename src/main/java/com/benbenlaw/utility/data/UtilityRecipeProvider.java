@@ -3,6 +3,7 @@ package com.benbenlaw.utility.data;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.data.custom.DryingTableRecipeBuilder;
+import com.benbenlaw.utility.data.custom.FluidGeneratorRecipeBuilder;
 import com.benbenlaw.utility.data.custom.ResourceGeneratorRecipeBuilder;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.recipe.DryingTableRecipeType;
@@ -124,12 +125,11 @@ public class UtilityRecipeProvider extends RecipeProvider {
         //Fluid Generator
         shaped(RecipeCategory.MISC, UtilityBlocks.FLUID_GENERATOR.get())
                 .pattern("ABA")
-                .pattern("DCD")
+                .pattern("CCC")
                 .pattern("ABA")
                 .define('A', Tags.Items.INGOTS_IRON)
                 .define('B', Tags.Items.INGOTS_GOLD)
                 .define('C', Items.BUCKET)
-                .define('D', Tags.Items.CHESTS_WOODEN)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.BUCKET))
                 .save(output);
@@ -149,11 +149,12 @@ public class UtilityRecipeProvider extends RecipeProvider {
         //Fluid Collector
         shaped(RecipeCategory.MISC, UtilityBlocks.FLUID_COLLECTOR.get())
                 .pattern("ABA")
-                .pattern("C C")
+                .pattern("CDC")
                 .pattern("ABA")
                 .define('A', Tags.Items.INGOTS_IRON)
                 .define('B', Tags.Items.INGOTS_GOLD)
                 .define('C', Items.BUCKET)
+                .define('D', Tags.Items.GLASS_BLOCKS)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.BUCKET))
                 .save(output);
@@ -198,7 +199,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .requires(UtilityItems.MINI_COAL, 8)
                 .unlockedBy("has_item", has(UtilityItems.MINI_COAL))
                 .group("utility")
-                .save(output, String.valueOf(Utility.rl("coal")));
+                .save(output, String.valueOf(Utility.identifier("coal")));
 
         //Mini Coal
         shapeless(RecipeCategory.MISC, UtilityItems.MINI_COAL.get(), 8)
@@ -211,7 +212,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .requires(UtilityItems.MINI_CHARCOAL, 8)
                 .unlockedBy("has_item", has(UtilityItems.MINI_CHARCOAL))
                 .group("utility")
-                .save(output, String.valueOf(Utility.rl("charcoal")));
+                .save(output, String.valueOf(Utility.identifier("charcoal")));
 
         //Mini Charcoal
         shapeless(RecipeCategory.MISC, UtilityItems.MINI_CHARCOAL.get(), 8)
@@ -221,14 +222,14 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .save(output);
 
         //Chest
-        shaped(RecipeCategory.MISC, Items.CHEST)
+        shaped(RecipeCategory.MISC, Items.CHEST, 4)
                 .pattern("AAA")
                 .pattern("A A")
                 .pattern("AAA")
                 .define('A', ItemTags.LOGS)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.CHEST))
-                .save(output, String.valueOf(Utility.rl("chests")));
+                .save(output, String.valueOf(Utility.identifier("chests")));
 
         //Crook
         shaped(RecipeCategory.TOOLS, UtilityItems.CROOK.get())
@@ -248,7 +249,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('B', Items.LEATHER_HORSE_ARMOR)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.IRON_INGOT))
-                .save(output, String.valueOf(Utility.rl("iron_horse_armor")));
+                .save(output, String.valueOf(Utility.identifier("iron_horse_armor")));
 
         //Gold Horse Armor
         shaped(RecipeCategory.MISC, Items.GOLDEN_HORSE_ARMOR)
@@ -258,7 +259,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('B', Items.LEATHER_HORSE_ARMOR)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.GOLD_INGOT))
-                .save(output, String.valueOf(Utility.rl("gold_horse_armor")));
+                .save(output, String.valueOf(Utility.identifier("gold_horse_armor")));
 
         //Diamond Horse Armor
         shaped(RecipeCategory.MISC, Items.DIAMOND_HORSE_ARMOR)
@@ -268,14 +269,14 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('B', Items.LEATHER_HORSE_ARMOR)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.DIAMOND))
-                .save(output, String.valueOf(Utility.rl("diamond_horse_armor")));
+                .save(output, String.valueOf(Utility.identifier("diamond_horse_armor")));
 
         //Ender Pearl
         shapeless(RecipeCategory.MISC, Items.ENDER_PEARL)
                 .requires(UtilityItems.ENDER_PEARL_FRAGMENT, 8)
                 .unlockedBy("has_item", has(UtilityItems.ENDER_PEARL_FRAGMENT))
                 .group("utility")
-                .save(output, String.valueOf(Utility.rl("ender_pearl")));
+                .save(output, String.valueOf(Utility.identifier("ender_pearl")));
 
         //Ender Pearl Fragment
         shapeless(RecipeCategory.MISC, UtilityItems.ENDER_PEARL_FRAGMENT.get(), 8)
@@ -301,7 +302,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('A', UtilityItems.LEAFY_STRING)
                 .group("utility")
                 .unlockedBy("has_item", has(UtilityItems.LEAFY_STRING))
-                .save(output, String.valueOf(Utility.rl("green_wool")));
+                .save(output, String.valueOf(Utility.identifier("green_wool")));
 
         //Leafy String
         shaped(RecipeCategory.MISC, UtilityItems.LEAFY_STRING.get())
@@ -330,7 +331,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('B', Items.PAPER)
                 .group("utility")
                 .unlockedBy("has_item", has(Items.PAPER))
-                .save(output, String.valueOf(Utility.rl("name_tag")));
+                .save(output, String.valueOf(Utility.identifier("name_tag")));
 
         //Sapling Grower
         shaped(RecipeCategory.MISC, UtilityItems.SAPLING_GROWER.get())
@@ -350,7 +351,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('A', ItemTags.LOGS)
                 .group("utility")
                 .unlockedBy("has_item", has(UtilityItems.LOG_SHEET.get()))
-                .save(output, String.valueOf(Utility.rl("sticks")));
+                .save(output, String.valueOf(Utility.identifier("sticks")));
 
         //Wooden Shears
         shaped(RecipeCategory.TOOLS, UtilityItems.WOODEN_SHEARS.get())
@@ -442,6 +443,9 @@ public class UtilityRecipeProvider extends RecipeProvider {
                         new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
                 .save(output, "netherrack");
 
+        //Fluid Generator
+        FluidGeneratorRecipeBuilder.fluidGenerator("water", new FluidStack(Fluids.WATER, 100)).save(output, "water");
+        FluidGeneratorRecipeBuilder.fluidGenerator("lava", new FluidStack(Fluids.LAVA, 50)).save(output, "lava");
 
 
     }
@@ -452,7 +456,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
 
     protected <T extends AbstractCookingRecipe> void oreCooking(RecipeSerializer<T> p_251817_, AbstractCookingRecipe.Factory<T> p_312707_, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String p_249236_) {
         for(ItemLike itemlike : p_249619_) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, p_251817_, p_312707_).group(p_251450_).unlockedBy(getHasName(itemlike), this.has(itemlike)).save(this.output, String.valueOf(Utility.rl(getItemName(p_250066_) + p_249236_ + "_" + getItemName(itemlike))));
+            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, p_251817_, p_312707_).group(p_251450_).unlockedBy(getHasName(itemlike), this.has(itemlike)).save(this.output, String.valueOf(Utility.identifier(getItemName(p_250066_) + p_249236_ + "_" + getItemName(itemlike))));
         }
 
     }

@@ -82,10 +82,9 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    //JEI
-    //implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
-    //BBL Core
-    implementation("curse.maven:bblcore-1135181:7335770")
+
+    implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
+    implementation("curse.maven:bblcore-1135181:7391910")
 }
 
 tasks.withType(ProcessResources).configureEach {

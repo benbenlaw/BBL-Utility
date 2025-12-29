@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.screen.placer;
 
+import com.benbenlaw.core.Core;
 import com.benbenlaw.utility.Utility;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,8 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class BlockPlacerScreen extends AbstractContainerScreen<BlockPlacerMenu> {
-    private static final Identifier TEXTURE = Utility.rl("textures/gui/block_placer_gui.png");
-    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.identifier("textures/gui/block_placer_gui.png");
+    private static final Identifier PROGRESS_ARROW = Core.identifier("progress_arrow");
 
     public BlockPlacerScreen(BlockPlacerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

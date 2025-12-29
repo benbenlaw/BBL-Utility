@@ -1,5 +1,7 @@
 package com.benbenlaw.utility.screen.collector;
 
+import com.benbenlaw.core.Core;
+import com.benbenlaw.core.screen.util.DurationTooltip;
 import com.benbenlaw.core.screen.util.button.WhitelistButton;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.network.packets.SyncItemCollectorPacket;
@@ -23,8 +25,8 @@ import java.util.List;
 
 
 public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMenu> {
-    private static final Identifier TEXTURE = Utility.rl("textures/gui/item_collector_gui.png");
-    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.identifier("textures/gui/item_collector_gui.png");
+    private static final Identifier PROGRESS_ARROW = Core.identifier("progress_arrow");
 
     private EditBox leftRightOffset;
     private EditBox upDownOffset;
@@ -134,6 +136,10 @@ public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMe
         } else if (this.depthSize != null && this.depthSize.isMouseOver(mouseX, mouseY)) {
             renderTooltip(guiGraphics, "tooltip.item_collector.depth", mouseX, mouseY);
         }
+
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+        DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
     }
 
     private void renderTooltip(GuiGraphics guiGraphics, String text, int mouseX, int mouseY) {

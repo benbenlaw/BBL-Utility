@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record SyncItemCollectorPacket(BlockPos pos, int offsetXPos, int offsetYPos, int offsetZPos, int xSize, int ySize, int zSize) implements CustomPacketPayload {
 
-    public static final Type<SyncItemCollectorPacket> TYPE = new Type<>(Utility.rl("sync_item_collector"));
+    public static final Type<SyncItemCollectorPacket> TYPE = new Type<>(Utility.identifier("sync_item_collector"));
 
     public static final IPayloadHandler<SyncItemCollectorPacket> HANDLER = (packet, context) -> {
 

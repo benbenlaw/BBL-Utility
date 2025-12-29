@@ -1,5 +1,7 @@
 package com.benbenlaw.utility.screen.clock;
 
+import com.benbenlaw.core.Core;
+import com.benbenlaw.core.screen.util.DurationTooltip;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.network.packets.SyncRedstoneClockPacket;
 import net.minecraft.client.Minecraft;
@@ -22,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMenu> {
-    private static final Identifier TEXTURE = Utility.rl("textures/gui/redstone_clock_gui.png");
-    private static final Identifier PROGRESS_ARROW = Utility.rl("progress_arrow");
+    private static final Identifier TEXTURE = Utility.identifier("textures/gui/redstone_clock_gui.png");
+    private static final Identifier PROGRESS_ARROW = Core.identifier("progress_arrow");
     private EditBox maxProgressBox;
     private EditBox onTime;
     private EditBox signalStrength;
@@ -94,6 +96,11 @@ public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMe
         } else if (this.signalStrength != null && this.signalStrength.isMouseOver(mouseX, mouseY)) {
             renderTooltip(guiGraphics, "tooltip.redstone_clock.signal_strength", mouseX, mouseY);
         }
+
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+        DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
+
     }
 
     private void renderTooltip(GuiGraphics guiGraphics, String text, int mouseX, int mouseY) {

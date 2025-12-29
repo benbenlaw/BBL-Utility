@@ -1,4 +1,4 @@
-// 1.21.11	2025-12-15T17:40:29.8723386	utility Recipes
+// 1.21.11	2025-12-29T12:30:24.7380345	utility Recipes
 73b5546cf27f021bc6df91331d9be01b9568b60d data/utility/advancement/recipes/drying_table/drying_table/drying/cracked_stone_bricks.json
 5e44addfc78033c81f450d8791f450ed02cb6eba data/utility/advancement/recipes/drying_table/drying_table/drying/dead_bush.json
 09e9222b960ab94bf15bd667453d8148b52646bf data/utility/advancement/recipes/drying_table/drying_table/drying/paper.json
@@ -6,6 +6,8 @@ eb37c07134f9e3cf3378ce9df8ce2ce57cc210a3 data/utility/advancement/recipes/drying
 e79c308ca0a8cc0e0473278e78d3e0e302a405e1 data/utility/advancement/recipes/drying_table/drying_table/soaking/soaked_paper.json
 744ac16d5ad73f167eb125ddbe996a389f444807 data/utility/advancement/recipes/drying_table/drying_table/soaking/soaked_paper_from_log_sheet.json
 d207324a428b0a9f9c0d46df36c30fe70368b366 data/utility/advancement/recipes/drying_table/drying_table/soaking/wet_sponge.json
+d852edd5f402bb6c50197e27a51312993d070e6c data/utility/advancement/recipes/fluid_generator/fluid_generator/lava.json
+7ced2d85f2fec67bb731f99fb746c1a2f7ce8aaf data/utility/advancement/recipes/fluid_generator/fluid_generator/water.json
 a96de3d68426d6f4b3a2499161d34a44e035b9f9 data/utility/advancement/recipes/misc/animal_net.json
 399b726988e736ce2de3b7ebed136a4eb21475b4 data/utility/advancement/recipes/misc/block_breaker.json
 e266cb9158815b61b5f40bcd25ad508782352dc4 data/utility/advancement/recipes/misc/block_placer.json
@@ -54,7 +56,7 @@ ebe1a6c4e66961da187363eea8147a8ee7e86f7b data/utility/advancement/recipes/tools/
 0e1bc798a1e1d65ec4834696136d060078bff29d data/utility/recipe/block_breaker.json
 5214a28d0ba1fe6a481da1a15d8e53d9eff19a4c data/utility/recipe/block_placer.json
 7bb8c1fadb3b5b0aba952d329f182661b45067d0 data/utility/recipe/charcoal.json
-875faf0ba84351b8644a45f7ba5068d3eb5deb13 data/utility/recipe/chests.json
+cf408969dba17ea1059fcf28fb98e026980c0dac data/utility/recipe/chests.json
 20d7130b0615a2c97aeff7d7d9bf7fadbf1918e6 data/utility/recipe/coal.json
 4f375b6e7fe669cb643209cae8362448481f83a6 data/utility/recipe/crook.json
 0ca57af909208fa9208374e41d54f26b37bbbe6c data/utility/recipe/diamond_horse_armor.json
@@ -71,8 +73,10 @@ e3f0b875c485bfa58f39e7e723577d7e5519ba97 data/utility/recipe/drying_table/soakin
 8f16da70e57ea2c8207b08b4d52a68f439015efc data/utility/recipe/ender_pearl_fragment_from_smelting_deepslate_ender_ore.json
 d3663438beef44c02c31cede823b7a843d75018f data/utility/recipe/ender_pearl_fragment_from_smelting_ender_ore.json
 7273b65ba5041dde4a30371e4056c242ab29deba data/utility/recipe/floater.json
-2836e44de8ffe3912d0c669e2c17efcee27feb1c data/utility/recipe/fluid_collector.json
-2f15683356a55c81252ae8089d7d96b87c171d3f data/utility/recipe/fluid_generator.json
+16e7f3816d65923b032b6f853ece7192858e899a data/utility/recipe/fluid_collector.json
+8825dbb82ce569560d7ced9ffb0d656fea1abfbc data/utility/recipe/fluid_generator.json
+f8a3a754d7c5a53db51821647ceed098c6606e32 data/utility/recipe/fluid_generator/lava.json
+91c7054d93137522ba56a132000feafa33c1d563 data/utility/recipe/fluid_generator/water.json
 3287a097cd646adc0c86eea7f35ed097f9a5799b data/utility/recipe/fluid_placer.json
 1aa045881257245d596f15181f1104a556856c8b data/utility/recipe/gold_horse_armor.json
 efe4d52635f875f6206df322755ab2833bdb7393 data/utility/recipe/green_wool.json

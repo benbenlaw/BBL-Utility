@@ -21,7 +21,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,8 +74,8 @@ public class UtilityModelProvider extends ModelProvider {
 
     //This is a great method for any SyncableBlocks that we use in the future in either Utility or other mods
     public void createMachineBlock(Block block, Consumer<BlockModelDefinitionGenerator> blockStateOutput, BiConsumer<Identifier, ModelInstance> modelOutput) {
-        TextureMapping idleTextureMapping = (new TextureMapping()).put(TextureSlot.TOP, (Utility.rl("block/machine_top"))).put(TextureSlot.SIDE, Utility.rl("block/machine_side_idle")).put(TextureSlot.FRONT, TextureMapping.getBlockTexture(block, "_front"));
-        TextureMapping workingTextureMapping = (new TextureMapping()).put(TextureSlot.TOP, (Utility.rl("block/machine_top"))).put(TextureSlot.SIDE, Utility.rl("block/machine_side_working")).put(TextureSlot.FRONT, TextureMapping.getBlockTexture(block, "_front"));
+        TextureMapping idleTextureMapping = (new TextureMapping()).put(TextureSlot.TOP, (Utility.identifier("block/machine_top"))).put(TextureSlot.SIDE, Utility.identifier("block/machine_side_idle")).put(TextureSlot.FRONT, TextureMapping.getBlockTexture(block, "_front"));
+        TextureMapping workingTextureMapping = (new TextureMapping()).put(TextureSlot.TOP, (Utility.identifier("block/machine_top"))).put(TextureSlot.SIDE, Utility.identifier("block/machine_side_working")).put(TextureSlot.FRONT, TextureMapping.getBlockTexture(block, "_front"));
 
         MultiVariant multivariant = plainVariant(ModelTemplates.CUBE_ORIENTABLE.create(block, idleTextureMapping, modelOutput));
         MultiVariant multivariant1 = plainVariant(ModelTemplates.CUBE_ORIENTABLE_VERTICAL.create(block, idleTextureMapping, modelOutput));

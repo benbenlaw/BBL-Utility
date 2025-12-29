@@ -64,7 +64,7 @@ public class ResourceGeneratorRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(@NotNull RecipeOutput recipeOutput, @NotNull String id) {
-        save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.rl("resource_generator/" + id)));
+        save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.identifier("resource_generator/" + id)));
     }
 
     @Override

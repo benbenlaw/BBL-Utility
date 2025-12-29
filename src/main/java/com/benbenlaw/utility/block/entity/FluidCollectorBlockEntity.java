@@ -42,10 +42,8 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     private int progress = 0;
 
     private final OutputFluidHandler outputFluidHandler = new OutputFluidHandler(this,1,16000, i -> i == TANK_SLOT);
-
     public static final int TANK_SLOT = 0;
-
-    private boolean whitelist = true; // block entity owns it
+    private boolean whitelist = true;
     private FilterFluidHandler filterFluidHandler = new FilterFluidHandler(this, 1);
 
     public FluidCollectorBlockEntity(BlockPos pos, BlockState state) {

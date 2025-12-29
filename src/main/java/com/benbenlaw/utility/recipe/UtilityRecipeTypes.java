@@ -29,11 +29,10 @@ public class UtilityRecipeTypes {
     public static final Supplier<RecipeType<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_TYPE =
             TYPES.register("resource_generator", () -> ResourceGeneratorRecipe.Type.INSTANCE);
 
-    public static final Supplier<RecipeType<FluidGeneratorRecipe>> FLUID_GENERATOR_TYPE =
-            TYPES.register("fluid_generator", () -> FluidGeneratorRecipe.Type.INSTANCE);
-
     public static final Supplier<RecipeSerializer<FluidGeneratorRecipe>> FLUID_GENERATOR_SERIALIZER =
             SERIALIZER.register("fluid_generator", () -> FluidGeneratorRecipe.Serializer.INSTANCE);
 
+    public static final Supplier<RecipeType<FluidGeneratorRecipe>> FLUID_GENERATOR_TYPE =
+            TYPES.register("fluid_generator", () -> FluidGeneratorRecipe.Type.INSTANCE);
 
 }
