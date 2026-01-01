@@ -44,12 +44,12 @@ public class UtilityLangProvider extends LanguageProvider {
         add("item.utility.log_sheet", "Log Sheet");
         add("item.utility.ender_pearl_fragment", "Ender Pearl Fragment");
 
-        //Tooltips - Info
-        add("tooltip.crook.info", "Breaks leaves faster and increase leaves drops rates");
-        add("tooltip.sapling_grower.info", "Used to grow saplings instantly");
-        add("tooltip.animal_net.info", "Used to catch and release mobs");
-        add("tooltip.death_stone.info", "Given upon death, right click to return to your death location");
-        add("tooltip.floater.info", "When in your off hand allows you to place a block in your main hand in the air or water");
+        //Tooltips
+        add("tooltip.utility.crook", "Breaks leaves faster and increase leaves drops rates");
+        add("tooltip.utility.sapling_grower", "Used to grow saplings instantly");
+        add("tooltip.utility.animal_net", "Used to catch and release mobs");
+        add("tooltip.utility.death_stone", "Given upon death, right click to return to your death location");
+        add("tooltip.utility.floater", "When in your off hand allows you to place a block in your main hand in the air or water");
 
         //Animal Net Tooltips
         add("tooltip.animal_net.mob_types", "Can Catch:");

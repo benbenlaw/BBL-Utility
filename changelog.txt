@@ -11,6 +11,9 @@ Requires a lot of textures for the blocks as part of the refresh
 - Fluid Generator recipes now sync correctly with JEI
 - Added world gen data gen, Ender Ore now spawn in the overworld
 
+1.4.2
+- Updated tooltips to event system
+
 1.4.0
 - Reverted versioning
 - Added Item Collector block, collects items in front of it into an internal inventory, can be filtered, redstone controlled, size and offset can be configured in the gui

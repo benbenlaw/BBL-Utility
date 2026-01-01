@@ -57,15 +57,5 @@ public class CrookItem extends Item {
         }
         return super.getDestroySpeed(stack, state);
     }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display, @NotNull Consumer<Component> consumer, TooltipFlag flag) {
-        if (Minecraft.getInstance().hasShiftDown()) {
-            consumer.accept(Component.translatable("tooltip.crook.info").withStyle(ChatFormatting.BLUE));
-        } else {
-            consumer.accept(Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW));
-        }
-    }
 }
 

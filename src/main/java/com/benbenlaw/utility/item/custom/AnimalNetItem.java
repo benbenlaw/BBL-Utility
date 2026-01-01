@@ -128,11 +128,12 @@ public class AnimalNetItem extends Item {
     }
 
     @SuppressWarnings("deprecation")
+    @Deprecated(forRemoval = true, since = "1.21.11, need a better tooltip util to show more info")
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display, @NotNull Consumer<Component> consumer, TooltipFlag flag) {
 
         if (Minecraft.getInstance().hasShiftDown()) {
-            consumer.accept(Component.translatable("tooltip.animal_net.info").withStyle(ChatFormatting.BLUE));
+            consumer.accept(Component.translatable("tooltip.utility.animal_net").withStyle(ChatFormatting.BLUE));
 
             if (stack.get(UtilityDataComponents.ENTITY_TYPE.get()) != null) {
 

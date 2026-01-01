@@ -44,14 +44,4 @@ public class FloaterItem extends Item {
         }
         return InteractionResult.FAIL;
     }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display, @NotNull Consumer<Component> consumer, TooltipFlag flag) {
-        if (Minecraft.getInstance().hasShiftDown()) {
-            consumer.accept(Component.translatable("tooltip.floater.info").withStyle(ChatFormatting.BLUE));
-        } else {
-            consumer.accept(Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW));
-        }
-    }
 }
