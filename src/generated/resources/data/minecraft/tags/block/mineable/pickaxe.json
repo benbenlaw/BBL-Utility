@@ -10,6 +10,7 @@
     "utility:fluid_generator",
     "utility:item_collector",
     "utility:item_repairer",
-    "utility:redstone_clock"
+    "utility:redstone_clock",
+    "utility:summoning_block"
   ]
 }

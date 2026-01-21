@@ -40,6 +40,7 @@ public class UtilityBlockTags extends BlockTagsProvider {
                 .add(UtilityBlocks.ITEM_COLLECTOR.get())
                 .add(UtilityBlocks.ITEM_REPAIRER.get())
                 .add(UtilityBlocks.REDSTONE_CLOCK.get())
+                .add(UtilityBlocks.SUMMONING_BLOCK.get())
         ;
 
         //Axe

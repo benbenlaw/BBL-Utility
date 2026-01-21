@@ -3,6 +3,8 @@ package com.benbenlaw.utility;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.block.UtilityCapabilities;
+import com.benbenlaw.utility.block.entity.renderer.DryingTableBlockEntityRenderer;
+import com.benbenlaw.utility.block.entity.renderer.SummoningBlockEntityRenderer;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.item.UtilityCreativeTab;
 import com.benbenlaw.utility.item.UtilityDataComponents;
@@ -20,7 +22,10 @@ import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
 import com.benbenlaw.utility.screen.placer.BlockPlacerScreen;
 import com.benbenlaw.utility.screen.placer.FluidPlacerScreen;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerScreen;
+import com.benbenlaw.utility.screen.summoning.SummoningBlockScreen;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -29,7 +34,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
@@ -75,7 +82,22 @@ public class Utility {
             event.register(UtilityMenuTypes.FLUID_GENERATOR_MENU.get(), FluidGeneratorScreen::new);
             event.register(UtilityMenuTypes.REDSTONE_CLOCK_MENU.get(), RedstoneClockScreen::new);
             event.register(UtilityMenuTypes.ITEM_COLLECTOR_MENU.get(), ItemCollectorScreen::new);
+            event.register(UtilityMenuTypes.SUMMONING_MENU.get(), SummoningBlockScreen::new);
         }
+
+        @SubscribeEvent
+        private static void onClientSetup(final FMLCommonSetupEvent event) {
+
+            //Not sure what the correct way of doing this is but this works for the current version of Minecraft
+            ItemBlockRenderTypes.setRenderLayer(UtilityBlocks.DRYING_TABLE.get(), ChunkSectionLayer.CUTOUT);
+        }
+
+        @SubscribeEvent
+        private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(UtilityBlockEntities.DRYING_TABLE_BLOCK_ENTITY.get(), DryingTableBlockEntityRenderer::new);
+            event.registerBlockEntityRenderer(UtilityBlockEntities.SUMMONING_BLOCK_ENTITY.get(), SummoningBlockEntityRenderer::new);
+        }
+
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

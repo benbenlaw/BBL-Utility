@@ -41,6 +41,7 @@ public class UtilityLootTableProvider extends VanillaBlockLoot {
         this.dropSelf(UtilityBlocks.FLUID_GENERATOR.get());
         this.dropSelf(UtilityBlocks.REDSTONE_CLOCK.get());
         this.dropSelf(UtilityBlocks.ITEM_COLLECTOR.get());
+        this.dropSelf(UtilityBlocks.SUMMONING_BLOCK.get());
 
     }
 

@@ -7,8 +7,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -20,10 +25,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,19 +50,6 @@ public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterlogg
     public DryingTableBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(RUNNING, true).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
-    }
-
-    @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
-        if (!level.isClientSide()) {
-            BlockEntity entity = level.getBlockEntity(pos);
-            if (entity instanceof DryingTableBlockEntity entity1) {
-                player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
-            } else {
-                throw new IllegalStateException("Our Container provider is missing!");
-            }
-        }
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -81,6 +77,34 @@ public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterlogg
             return this.defaultBlockState().setValue(WATERLOGGED, false).setValue(FACING, direction).setValue(RUNNING, true);
         }
     }
+
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+        if (!level.isClientSide()) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            ItemStack itemStack = player.getItemInHand(player.getUsedItemHand());
+
+            //Not happy about the waterlogging as vanilla change prevent shift clicking to waterlog blocks, it works but probably not a permanent solution
+            if (itemStack.is(Items.WATER_BUCKET) && !state.getValue(WATERLOGGED)) {
+                this.placeLiquid(level, pos, state, Fluids.WATER.defaultFluidState());
+                player.setItemInHand(player.getUsedItemHand(), Items.BUCKET.getDefaultInstance());
+                return InteractionResult.PASS;
+            }
+
+            if (itemStack.is(Items.BUCKET) && state.getValue(WATERLOGGED)) {
+                player.setItemInHand(player.getUsedItemHand(), this.pickupBlock(player, level, pos, state));
+                return InteractionResult.PASS;
+            }
+
+            if (entity instanceof DryingTableBlockEntity entity1) {
+                player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
+            } else {
+                throw new IllegalStateException("Our Container provider is missing!");
+            }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
 
     @Override
     public @NotNull BlockState rotate(BlockState blockState, @NotNull LevelAccessor level, @NotNull BlockPos blockPos, Rotation direction) {

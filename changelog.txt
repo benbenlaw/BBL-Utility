@@ -1,6 +1,19 @@
 Changelog BBL Utility
 
-Requires a lot of textures for the blocks as part of the refresh
+Soaking table working for other fluids in the future???
+
+1.5.0
+- Added Summoning Block, uses a block below and a item inside to summon an entity, can be redstone controlled
+- Entity can be fully tweaked with NBT data inside the recipe json
+- Added support for most passive mobs recipes wip
+
+1.4.2
+- Bumped core version to 1.21.11-1.11.12
+- JEI dragging integration moved to core
+- Fluid Collector now allows for fluids to be dragged from JEI into its filter slot
+- Added Drying Table model and textures
+- Drying Table now shows the items being dried/soaked in world
+- Drying Table can now be waterlogged by using a water bucket on it, not shift clicking
 
 1.4.1
 - Resource Generator now works if fluids are inverted in the block gui

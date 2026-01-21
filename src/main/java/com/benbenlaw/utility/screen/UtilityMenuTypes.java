@@ -11,6 +11,7 @@ import com.benbenlaw.utility.screen.generator.ResourceGeneratorMenu;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
 import com.benbenlaw.utility.screen.placer.FluidPlacerMenu;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerMenu;
+import com.benbenlaw.utility.screen.summoning.SummoningBlockMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -50,6 +51,9 @@ public class UtilityMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<ItemCollectorMenu>> ITEM_COLLECTOR_MENU = MENUS.register("item_collector_menu",
             () -> IMenuTypeExtension.create(ItemCollectorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<SummoningBlockMenu>> SUMMONING_MENU = MENUS.register("summoning_block_menu",
+            () -> IMenuTypeExtension.create(SummoningBlockMenu::new));
 
 }
 

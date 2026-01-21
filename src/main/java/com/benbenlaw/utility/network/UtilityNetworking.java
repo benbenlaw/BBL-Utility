@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.network;
 
+import com.benbenlaw.core.network.packets.UpdateFilterFluidSlotsPacket;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.network.packets.SyncItemCollectorPacket;
 import com.benbenlaw.utility.network.packets.SyncRedstoneClockPacket;
@@ -14,7 +15,5 @@ public class UtilityNetworking {
 
         registrar.playToServer(SyncRedstoneClockPacket.TYPE, SyncRedstoneClockPacket.STREAM_CODEC, SyncRedstoneClockPacket.HANDLER);
         registrar.playToServer(SyncItemCollectorPacket.TYPE, SyncItemCollectorPacket.STREAM_CODEC, SyncItemCollectorPacket.HANDLER);
-
-
     }
 }

@@ -5,6 +5,7 @@ import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
+import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
@@ -25,6 +26,7 @@ public class RecipeEvents {
         event.sendRecipes(UtilityRecipeTypes.DRYING_TABLE_TYPE.get());
         event.sendRecipes(UtilityRecipeTypes.RESOURCE_GENERATOR_TYPE.get());
         event.sendRecipes(UtilityRecipeTypes.FLUID_GENERATOR_TYPE.get());
+        event.sendRecipes(UtilityRecipeTypes.SUMMONING_TYPE.get());
     }
 
     @SubscribeEvent
@@ -58,5 +60,15 @@ public class RecipeEvents {
             fluidGeneratorRecipeMap.put(holder.id().identifier(), holder.value());
         }
         ClientRecipeCache.setCachedFluidGeneratorRecipes(fluidGeneratorRecipeMap);
+
+        //Summoning Recipes
+        Collection<RecipeHolder<SummoningRecipe>> summoningRecipes = recipeMap.byType(UtilityRecipeTypes.SUMMONING_TYPE.get());
+        Map<Identifier, SummoningRecipe> summoningRecipeMap = new HashMap<>();
+
+        for (RecipeHolder<SummoningRecipe> holder : summoningRecipes) {
+            summoningRecipeMap.put(holder.id().identifier(), holder.value());
+        }
+        ClientRecipeCache.setCachedSummoningRecipes(summoningRecipeMap);
+
     }
 }

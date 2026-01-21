@@ -69,6 +69,10 @@ public class UtilityBlocks {
             () -> new ItemCollectorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                     .noOcclusion().setId(createID("item_collector"))));
 
+    public static final DeferredBlock<Block> SUMMONING_BLOCK = registerBlock("summoning_block",
+            () -> new SummoningBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .noOcclusion().setId(createID("summoning_block"))));
+
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

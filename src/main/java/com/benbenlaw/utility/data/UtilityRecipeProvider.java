@@ -1,20 +1,31 @@
 package com.benbenlaw.utility.data;
 
+import com.benbenlaw.core.util.ColorUtils;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.data.custom.DryingTableRecipeBuilder;
 import com.benbenlaw.utility.data.custom.FluidGeneratorRecipeBuilder;
 import com.benbenlaw.utility.data.custom.ResourceGeneratorRecipeBuilder;
+import com.benbenlaw.utility.data.custom.SummoningRecipeBuilder;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.recipe.DryingTableRecipeType;
+import com.benbenlaw.utility.util.BlockTarget;
+import com.benbenlaw.utility.util.TemperatureValues;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.TemperatureVariants;
+import net.minecraft.world.entity.animal.cow.CowVariants;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -22,6 +33,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
@@ -29,6 +41,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class UtilityRecipeProvider extends RecipeProvider {
@@ -58,6 +71,19 @@ public class UtilityRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes() {
+
+        //Summoning Block
+        shaped(RecipeCategory.MISC, UtilityBlocks.SUMMONING_BLOCK.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Items.ENDER_EYE)
+                .define('D', Items.GLOWSTONE)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.GLOWSTONE))
+                .save(output);
 
         //Item Collector
         shaped(RecipeCategory.MISC, UtilityBlocks.ITEM_COLLECTOR.get())
@@ -446,6 +472,179 @@ public class UtilityRecipeProvider extends RecipeProvider {
         //Fluid Generator
         FluidGeneratorRecipeBuilder.fluidGenerator("water", new FluidStack(Fluids.WATER, 100)).save(output, "water");
         FluidGeneratorRecipeBuilder.fluidGenerator("lava", new FluidStack(Fluids.LAVA, 50)).save(output, "lava");
+
+        //Summoning
+        CompoundTag warmEntityData = new CompoundTag();
+        warmEntityData.putString("variant", TemperatureVariants.WARM.toString());
+
+        CompoundTag coldEntityData = new CompoundTag();
+        coldEntityData.putString("variant", TemperatureVariants.COLD.toString());
+
+        CompoundTag temperateEntityData = new CompoundTag();
+        temperateEntityData.putString("variant", TemperatureVariants.TEMPERATE.toString());
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.LEATHER), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.COW, Optional.of(warmEntityData), Optional.of(TemperatureValues.WARM)).save(output, "cows/warm");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.LEATHER), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.COW, Optional.of(coldEntityData), Optional.of(TemperatureValues.COLD)).save(output, "cows/cold");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.LEATHER), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.COW, Optional.of(temperateEntityData), Optional.of(TemperatureValues.TEMPERATE)).save(output, "cows/temperate");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.CHICKEN), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.CHICKEN, Optional.of(temperateEntityData), Optional.of(TemperatureValues.WARM)).save(output, "chicken/warm");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.CHICKEN), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.CHICKEN, Optional.of(coldEntityData), Optional.of(TemperatureValues.COLD)).save(output, "chicken/cold");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.CHICKEN), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.CHICKEN, Optional.of(temperateEntityData), Optional.of(TemperatureValues.TEMPERATE)).save(output, "chicken/temperate");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.PORKCHOP), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.PIG, Optional.of(temperateEntityData), Optional.of(TemperatureValues.TEMPERATE)).save(output, "pig/temperate");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.PORKCHOP), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.PIG, Optional.of(warmEntityData), Optional.of(TemperatureValues.WARM)).save(output, "pig/warm");
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.PORKCHOP), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.PIG, Optional.of(coldEntityData), Optional.of(TemperatureValues.TEMPERATE)).save(output, "pig/cold");
+
+        //Sheep
+        for (ColorUtils color : ColorUtils.values()) {
+            CompoundTag colorData = new CompoundTag();
+            colorData.putInt("Color", color.getDyeColor().getId());
+            Ingredient woolIngredient = Ingredient.of(BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace(color.toString().toLowerCase() + "_wool")));
+            SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(woolIngredient, 1), new BlockTarget.Tag(BlockTags.DIRT),
+                    EntityType.SHEEP, Optional.of(colorData), Optional.empty()).save(output, "sheep/" + color.toString().toLowerCase());
+        }
+
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(tag(ItemTags.WOOL_CARPETS), 1), new BlockTarget.Tag(BlockTags.SAND),
+                EntityType.CAMEL, Optional.empty(), Optional.empty()).save(output, "camel");
+
+        //Donkey
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.BREAD), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.DONKEY, Optional.empty(), Optional.empty()).save(output, "donkey");
+
+        //Horse
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.HAY_BLOCK), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.HORSE, Optional.empty(), Optional.empty()).save(output, "horse");
+
+        //Mule
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.HAY_BLOCK), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.MULE, Optional.empty(), Optional.empty()).save(output, "mule");
+
+        //Cat
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(tag(ItemTags.FISHES), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.CAT, Optional.empty(), Optional.empty()).save(output, "cat");
+
+        //Parrot
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(tag(Tags.Items.SEEDS), 1), new BlockTarget.Tag(BlockTags.LEAVES),
+                EntityType.PARROT, Optional.empty(), Optional.empty()).save(output, "parrot");
+
+        //Wolf
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.BONE), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.WOLF, Optional.empty(), Optional.empty()).save(output, "wolf");
+
+        //Armadillo
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.ARMADILLO_SCUTE), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.ARMADILLO, Optional.empty(), Optional.empty()).save(output, "armadillo");
+
+        //Bat
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.FIREFLY_BUSH), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.BAT, Optional.empty(), Optional.empty()).save(output, "bat");
+
+        //Bee
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(tag(Tags.Items.FLOWERS), 1), new BlockTarget.Single(Blocks.BEEHIVE.defaultBlockState()),
+                EntityType.BEE, Optional.empty(), Optional.empty()).save(output, "bee");
+
+        //Fox
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SWEET_BERRIES), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.FOX, Optional.empty(), Optional.empty()).save(output, "fox");
+
+        //Goat
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.WHEAT), 1), new BlockTarget.Tag(Tags.Blocks.STONES),
+                EntityType.GOAT, Optional.empty(), Optional.empty()).save(output, "goat");
+
+        //Llama
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.HAY_BLOCK), 1), new BlockTarget.Tag(Tags.Blocks.STONES),
+                EntityType.LLAMA, Optional.empty(), Optional.empty()).save(output, "llama");
+
+        //Ocelot
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(tag(ItemTags.FISHES), 1), new BlockTarget.Tag(BlockTags.JUNGLE_LOGS),
+                EntityType.OCELOT, Optional.empty(), Optional.empty()).save(output, "ocelot");
+
+        //Panda
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.BAMBOO), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.PANDA, Optional.empty(), Optional.empty()).save(output, "panda");
+
+        //Polar Bear
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SALMON), 1), new BlockTarget.Single(Blocks.ICE.defaultBlockState()),
+                EntityType.POLAR_BEAR, Optional.empty(), Optional.empty()).save(output, "polar_bear");
+
+        //Rabbit
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.CARROT), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.RABBIT, Optional.empty(), Optional.empty()).save(output, "rabbit");
+
+        //Axolotl
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.TROPICAL_FISH), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.AXOLOTL, Optional.empty(), Optional.empty()).save(output, "axolotl");
+
+        //Cod
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.BREAD), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.COD, Optional.empty(), Optional.empty()).save(output, "cod");
+
+        //Dolphin
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.COD), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.DOLPHIN, Optional.empty(), Optional.empty()).save(output, "dolphin");
+
+        //Frog
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SLIME_BALL), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.FROG, Optional.empty(), Optional.empty()).save(output, "frog");
+
+        //Glow Squid
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.GLOW_INK_SAC), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.GLOW_SQUID, Optional.empty(), Optional.empty()).save(output, "glow_squid");
+
+        //Nautilus
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.PRISMARINE_SHARD), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.NAUTILUS, Optional.empty(), Optional.empty()).save(output, "nautilus");
+
+        //Pufferfish
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SEAGRASS), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.PUFFERFISH, Optional.empty(), Optional.empty()).save(output, "pufferfish");
+
+        //Salmon
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SEAGRASS), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.SALMON, Optional.empty(), Optional.empty()).save(output, "salmon");
+
+        //Squid
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.INK_SAC), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.SQUID, Optional.empty(), Optional.empty()).save(output, "squid");
+
+        //Tadpole
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SLIME_BALL), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.TADPOLE, Optional.empty(), Optional.empty()).save(output, "tadpole");
+
+        //Tropical Fish
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.SEAGRASS), 1), new BlockTarget.Single(Blocks.WATER.defaultBlockState()),
+                EntityType.TROPICAL_FISH, Optional.empty(), Optional.empty()).save(output, "tropical_fish");
+
+        //Turtle
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.TURTLE_SCUTE), 1), new BlockTarget.Single(Blocks.SAND.defaultBlockState()),
+                EntityType.TURTLE, Optional.empty(), Optional.empty()).save(output, "turtle");
+
+        //Allay
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.DIAMOND_BLOCK), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.ALLAY, Optional.empty(), Optional.empty()).save(output, "allay");
+
+        //Mooshroom
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.MUSHROOM_STEW), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.MOOSHROOM, Optional.empty(), Optional.empty()).save(output, "mooshroom");
+
+        //Sniffer
+        SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.PITCHER_POD), 1), new BlockTarget.Tag(BlockTags.DIRT),
+                EntityType.SNIFFER, Optional.empty(), Optional.empty()).save(output, "sniffer");
 
 
     }

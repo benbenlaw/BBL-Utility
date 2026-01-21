@@ -24,7 +24,6 @@ public class UtilityDataMapsProvider extends DataMapProvider {
         burnable.add(UtilityItems.MINI_COAL, new FurnaceFuel(200), false);
         burnable.add(UtilityItems.MINI_CHARCOAL, new FurnaceFuel(200), false);
 
-
     }
 
     @Override

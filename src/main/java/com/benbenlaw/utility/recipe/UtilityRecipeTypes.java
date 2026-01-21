@@ -4,6 +4,7 @@ import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
+import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -29,10 +30,21 @@ public class UtilityRecipeTypes {
     public static final Supplier<RecipeType<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_TYPE =
             TYPES.register("resource_generator", () -> ResourceGeneratorRecipe.Type.INSTANCE);
 
+
     public static final Supplier<RecipeSerializer<FluidGeneratorRecipe>> FLUID_GENERATOR_SERIALIZER =
             SERIALIZER.register("fluid_generator", () -> FluidGeneratorRecipe.Serializer.INSTANCE);
 
     public static final Supplier<RecipeType<FluidGeneratorRecipe>> FLUID_GENERATOR_TYPE =
             TYPES.register("fluid_generator", () -> FluidGeneratorRecipe.Type.INSTANCE);
+
+
+    public static final Supplier<RecipeSerializer<SummoningRecipe>> SUMMONING_SERIALIZER =
+            SERIALIZER.register("summoning", () -> SummoningRecipe.Serializer.INSTANCE);
+
+    public static final Supplier<RecipeType<SummoningRecipe>> SUMMONING_TYPE =
+            TYPES.register("summoning", () -> SummoningRecipe.Type.INSTANCE);
+
+
+
 
 }

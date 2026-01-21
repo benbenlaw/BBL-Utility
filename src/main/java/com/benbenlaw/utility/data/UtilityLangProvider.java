@@ -29,6 +29,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("block.utility.fluid_generator", "Fluid Generator");
         add("block.utility.item_repairer", "Item Repairer");
         add("block.utility.item_collector", "Item Collector");
+        add("block.utility.summoning_block", "Summoning Block");
 
         //Items
         add("item.utility.crook", "Crook");
@@ -84,8 +85,14 @@ public class UtilityLangProvider extends LanguageProvider {
         add("jei.utility.soaking", "Drying Table must be Waterlogged");
         add("jei.utility.resource_generator", "Resource Generator");
         add("jei.utility.consumed", "Fluid Consumed");
-
         add("jei.utility.fluid_generator", "Fluid Generator");
+        add("jei.utility.summoning", "Summoning");
+        add("jei.utility.summoned_entity", "Summons %s");
+        add("jei.utility.summoning_block_below_block", "Place below");
+        add("jei.utility.summoning_requirement_temperate", "Must have no Hot or Cold Blocks around it");
+        add("jei.utility.summoning_requirement_warm", "Must have Hot Blocks like Lava around it");
+        add("jei.utility.summoning_requirement_cold", "Must have Cold Blocks like Ice around it");
+
         add("jei.utility.fluid_generator_recipe", "Any item that holds %s can be used here (like a Bucket)");
     }
 

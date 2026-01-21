@@ -1,4 +1,4 @@
-// 1.21.11	2025-12-15T12:19:47.8892008	utility Models
+// 1.21.11	2026-01-20T13:01:46.6101235	utility Models
 7b478f6fe076b3dd01e19bd9af4c462234d4b866 assets/utility/blockstates/block_breaker.json
 9393e9a041dc32ae873931a80bfe2ea3a3fa0505 assets/utility/blockstates/block_placer.json
 24e85a681138e6d4534934d26d5defd3d7ccc990 assets/utility/blockstates/deepslate_ender_ore.json
@@ -10,6 +10,7 @@ d10963ea3d630694a3a4b9671197b35743284dfb assets/utility/blockstates/item_collect
 85bce713c232031ce45aaad97c084d649eb703de assets/utility/blockstates/item_repairer.json
 09e1c8b8ec065b99aa23709d9494d221cb85bf38 assets/utility/blockstates/redstone_clock.json
 3d534d3ffc9056a34748cf7f6d67631b82d384c7 assets/utility/blockstates/resource_generator.json
+40d74b1dc61e8a480873fe5dc7db23051e733dd6 assets/utility/blockstates/summoning_block.json
 9206eec1fe9f71d09debfd8ed9dcafce178bb289 assets/utility/items/animal_net.json
 bf92ff024d8153b2a9374c4599f690dac2d87408 assets/utility/items/block_breaker.json
 829c1d68b5b0dafb15ced0785aec990327298177 assets/utility/items/block_placer.json
@@ -33,6 +34,7 @@ dbd20b835b391ecf93103642c865fcb406195a34 assets/utility/items/mini_coal.json
 f0b4a5aae010f61ae07765757b4b70d48875d019 assets/utility/items/resource_generator.json
 6e50c4db434a98982dc750047918b0a29d3b470e assets/utility/items/sapling_grower.json
 661614adc3c1b76c4023a108a1c71a5f55c669bf assets/utility/items/soaked_paper.json
+41418c1e18bea5fbb87415ec3bd4fe7ce3aefcb2 assets/utility/items/summoning_block.json
 dbf065b248d482f0bf3cf8a246932ce914d6e3f8 assets/utility/items/wooden_shears.json
 b0bc2cd9d2e0b82e7d760b0d5733e7ae5aba5e18 assets/utility/models/block/block_breaker.json
 e103d11b3258fb712c4897f7202c4485faebab30 assets/utility/models/block/block_breaker_vertical.json
@@ -72,6 +74,10 @@ dc3d235aaceb3e2346450e9f583f126b9e557e36 assets/utility/models/block/redstone_cl
 def004e08ab329cf41f5c4fda86d855651946745 assets/utility/models/block/resource_generator_vertical.json
 9604990b69475fc8e767be555d417d1b3401183c assets/utility/models/block/resource_generator_working.json
 6a03ff78c61aadaf5dbc51a51e1a8aaa9c4a4146 assets/utility/models/block/resource_generator_working_vertical.json
+e548ab09e646abc58d67d647cb7cce8739498675 assets/utility/models/block/summoning_block.json
+3939f452bdeb1e8fb01b54381edf76f29e61f0b0 assets/utility/models/block/summoning_block_vertical.json
+3e0e4fbff7063a3f055ec08360fb7fad4e45ea29 assets/utility/models/block/summoning_block_working.json
+2b48a94cea11a4eec9c82f4ca3daceaf050abc7c assets/utility/models/block/summoning_block_working_vertical.json
 cf9f46bd664a4017797bbd2e6e75bb4d9254ee09 assets/utility/models/item/animal_net.json
 34f5379406ee83f6d121ee35f4dda21097f87b92 assets/utility/models/item/crook.json
 bd0a538a7087b31689131b77632cc99597996c2d assets/utility/models/item/death_stone.json
