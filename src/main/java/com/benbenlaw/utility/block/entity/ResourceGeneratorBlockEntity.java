@@ -98,7 +98,7 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
                 return;
             }
 
-            if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
+            if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output().create())) {
                 progress++;
                 if (progress >= maxProgress) {
                     craftItem();
@@ -113,7 +113,7 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
         if (cachedRecipe != null) {
             var recipe = cachedRecipe.value();
 
-            ItemStack output = recipe.output().copy();
+            ItemStack output = recipe.output().create().copy();
 
             try (Transaction tx = Transaction.open(null)) {
                 outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(output), output.getCount(), tx);

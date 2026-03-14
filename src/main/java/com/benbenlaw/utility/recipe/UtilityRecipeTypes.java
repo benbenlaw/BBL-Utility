@@ -18,31 +18,31 @@ public class UtilityRecipeTypes {
     public static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, Utility.MOD_ID);
 
     public static final Supplier<RecipeSerializer<DryingTableRecipe>> DRYING_TABLE_SERIALIZER =
-            SERIALIZER.register("drying_table", () -> DryingTableRecipe.Serializer.INSTANCE);
+            SERIALIZER.register("drying_table", () -> DryingTableRecipe.SERIALIZER);
 
     public static final Supplier<RecipeType<DryingTableRecipe>> DRYING_TABLE_TYPE =
-            TYPES.register("drying_table", () -> DryingTableRecipe.Type.INSTANCE);
+            TYPES.register("drying_table", () -> DryingTableRecipe.TYPE);
 
 
     public static final Supplier<RecipeSerializer<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_SERIALIZER =
-            SERIALIZER.register("resource_generator", () -> ResourceGeneratorRecipe.Serializer.INSTANCE);
+            SERIALIZER.register("resource_generator", () -> ResourceGeneratorRecipe.SERIALIZER);
 
     public static final Supplier<RecipeType<ResourceGeneratorRecipe>> RESOURCE_GENERATOR_TYPE =
-            TYPES.register("resource_generator", () -> ResourceGeneratorRecipe.Type.INSTANCE);
+            TYPES.register("resource_generator", () -> ResourceGeneratorRecipe.TYPE);
 
 
     public static final Supplier<RecipeSerializer<FluidGeneratorRecipe>> FLUID_GENERATOR_SERIALIZER =
-            SERIALIZER.register("fluid_generator", () -> FluidGeneratorRecipe.Serializer.INSTANCE);
+            SERIALIZER.register("fluid_generator", () -> FluidGeneratorRecipe.SERIALIZER);
 
     public static final Supplier<RecipeType<FluidGeneratorRecipe>> FLUID_GENERATOR_TYPE =
-            TYPES.register("fluid_generator", () -> FluidGeneratorRecipe.Type.INSTANCE);
+            TYPES.register("fluid_generator", () -> FluidGeneratorRecipe.TYPE);
 
 
     public static final Supplier<RecipeSerializer<SummoningRecipe>> SUMMONING_SERIALIZER =
-            SERIALIZER.register("summoning", () -> SummoningRecipe.Serializer.INSTANCE);
+            SERIALIZER.register("summoning", () -> SummoningRecipe.SERIALIZER);
 
     public static final Supplier<RecipeType<SummoningRecipe>> SUMMONING_TYPE =
-            TYPES.register("summoning", () -> SummoningRecipe.Type.INSTANCE);
+            TYPES.register("summoning", () -> SummoningRecipe.TYPE);
 
 
 

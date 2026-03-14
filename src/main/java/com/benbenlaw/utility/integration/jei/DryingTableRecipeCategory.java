@@ -88,7 +88,7 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
     public void setRecipe(IRecipeLayoutBuilder builder, DryingTableRecipe recipe, @NotNull IFocusGroup focuses) {
 
         builder.addSlot(RecipeIngredientRole.INPUT, 2, 2).add(recipe.input().ingredient());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 48, 2).add(recipe.output());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 48, 2).add(recipe.output().create());
 
     }
 

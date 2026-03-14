@@ -24,6 +24,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class ResourceGeneratorRecipeCategory implements IRecipeCategory<Resource
     private final IDrawable icon;
 
     @Override
-    public @Nullable Identifier getIdentifier(ResourceGeneratorRecipe recipe) {
+    public @Nullable Identifier getIdentifier(@NonNull ResourceGeneratorRecipe recipe) {
         return ClientRecipeCache.getCachedResourceGeneratorRecipes().stream()
                 .filter(r -> r.equals(recipe))
                 .findFirst()
@@ -93,7 +94,7 @@ public class ResourceGeneratorRecipeCategory implements IRecipeCategory<Resource
                     }
                 }
         );
-        builder.addSlot(RecipeIngredientRole.INPUT, 21, 2).add(recipe.input());
+        builder.addSlot(RecipeIngredientRole.INPUT, 21, 2).add(recipe.input().create());
         builder.addSlot(RecipeIngredientRole.INPUT, 40, 2).add(recipe.rightFluid().getFluid()).addRichTooltipCallback(
                 (ingredients, tooltip) -> {
                     tooltip.add(Component.literal(recipe.leftFluid().getAmount() + "mb").withStyle(ChatFormatting.GOLD));
@@ -102,7 +103,7 @@ public class ResourceGeneratorRecipeCategory implements IRecipeCategory<Resource
                     }
                 }
         );
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 86, 2).add(recipe.output());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 86, 2).add(recipe.output().create());
     }
 
     @Override

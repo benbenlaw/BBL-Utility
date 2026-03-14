@@ -59,6 +59,6 @@ public class SaplingGrowerItem extends Item {
     public void doGrow(Level level, BlockPos pos) {
         BlockState blockState = level.getBlockState(pos);
         if (!level.isClientSide() && blockState.getBlock() instanceof BonemealableBlock bonemealableBlock)
-            bonemealableBlock.performBonemeal((ServerLevel) level, level.random, pos, blockState);
+            bonemealableBlock.performBonemeal((ServerLevel) level, level.getRandom(), pos, blockState);
     }
 }

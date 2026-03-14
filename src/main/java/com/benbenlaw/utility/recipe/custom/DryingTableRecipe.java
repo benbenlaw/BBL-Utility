@@ -6,16 +6,46 @@ import com.benbenlaw.utility.recipe.DryingTableRecipeType;
 import com.benbenlaw.utility.recipe.DryingTableRecipeTypeCodec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-public record DryingTableRecipe(SizedIngredient input, ItemStack output, DryingTableRecipeType recipeType) implements Recipe<DryingTableRecipeInput> {
+public record DryingTableRecipe(SizedIngredient input, ItemStackTemplate output, DryingTableRecipeType recipeType) implements Recipe<DryingTableRecipeInput> {
+
+    public static final MapCodec<DryingTableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    SizedIngredient.NESTED_CODEC.fieldOf("input").forGetter(DryingTableRecipe::input),
+                    ItemStackTemplate.CODEC.fieldOf("output").forGetter(DryingTableRecipe::output),
+                    DryingTableRecipeTypeCodec.CODEC.fieldOf("recipe_type").forGetter(DryingTableRecipe::recipeType)
+            ).apply(instance, DryingTableRecipe::new)
+    );
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, DryingTableRecipe> STREAM_CODEC = StreamCodec.of(
+            DryingTableRecipe::write, DryingTableRecipe::read);
+
+    public static final RecipeType<DryingTableRecipe> TYPE = new RecipeType<>() {};
+
+    public static final RecipeSerializer<DryingTableRecipe> SERIALIZER =
+            new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+    private static DryingTableRecipe read(RegistryFriendlyByteBuf buffer) {
+        SizedIngredient input = SizedIngredient.STREAM_CODEC.decode(buffer);
+        ItemStackTemplate output = ItemStackTemplate.STREAM_CODEC.decode(buffer);
+        DryingTableRecipeType type = DryingTableRecipeTypeCodec.readFromBuffer(buffer);
+        return new DryingTableRecipe(input, output, type);
+    }
+
+    private static void write(RegistryFriendlyByteBuf buffer, DryingTableRecipe recipe) {
+        SizedIngredient.STREAM_CODEC.encode(buffer, recipe.input);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.output);
+        DryingTableRecipeTypeCodec.writeToBuffer(buffer, recipe.recipeType);
+    }
 
     @Override
     public boolean matches(@NotNull DryingTableRecipeInput recipeInput, Level level) {
@@ -35,20 +65,20 @@ public record DryingTableRecipe(SizedIngredient input, ItemStack output, DryingT
         return false;
     }
 
-
+    //Boiler Plate
     @Override
-    public @NotNull ItemStack assemble(@NotNull DryingTableRecipeInput recipeInput, HolderLookup.@NotNull Provider provider) {
-        return output.copy();
+    public @NonNull ItemStack assemble(DryingTableRecipeInput recipeInput) {
+        return output.create().copy();
     }
 
     @Override
     public @NotNull RecipeSerializer<? extends Recipe<DryingTableRecipeInput>> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
     @Override
     public @NotNull RecipeType<? extends Recipe<DryingTableRecipeInput>> getType() {
-        return Type.INSTANCE;
+        return TYPE;
     }
 
     @Override
@@ -66,48 +96,13 @@ public record DryingTableRecipe(SizedIngredient input, ItemStack output, DryingT
         return true;
     }
 
-    public static class Type implements RecipeType<DryingTableRecipe> {
-        private Type() {
-        }
-
-        public static final DryingTableRecipe.Type INSTANCE = new DryingTableRecipe.Type();
+    @Override
+    public boolean showNotification() {
+        return false;
     }
 
-    public static class Serializer implements RecipeSerializer<DryingTableRecipe> {
-        public static final DryingTableRecipe.Serializer INSTANCE = new DryingTableRecipe.Serializer();
-
-        public final MapCodec<DryingTableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
-                instance.group(
-                        SizedIngredient.NESTED_CODEC.fieldOf("input").forGetter(DryingTableRecipe::input),
-                        ItemStack.CODEC.fieldOf("output").forGetter(DryingTableRecipe::output),
-                        DryingTableRecipeTypeCodec.CODEC.fieldOf("recipe_type").forGetter(DryingTableRecipe::recipeType)
-                ).apply(instance, DryingTableRecipe::new)
-        );
-
-        private static final StreamCodec<RegistryFriendlyByteBuf, DryingTableRecipe> STREAM_CODEC = StreamCodec.of(
-                DryingTableRecipe.Serializer::write, DryingTableRecipe.Serializer::read);
-
-        @Override
-        public @NotNull MapCodec<DryingTableRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public @NotNull StreamCodec<RegistryFriendlyByteBuf, DryingTableRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        private static DryingTableRecipe read(RegistryFriendlyByteBuf buffer) {
-            SizedIngredient input = SizedIngredient.STREAM_CODEC.decode(buffer);
-            ItemStack output = ItemStack.STREAM_CODEC.decode(buffer);
-            DryingTableRecipeType type = DryingTableRecipeTypeCodec.readFromBuffer(buffer);
-            return new DryingTableRecipe(input, output, type);
-        }
-
-        private static void write(RegistryFriendlyByteBuf buffer, DryingTableRecipe recipe) {
-            SizedIngredient.STREAM_CODEC.encode(buffer, recipe.input);
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.output);
-            DryingTableRecipeTypeCodec.writeToBuffer(buffer, recipe.recipeType);
-        }
+    @Override
+    public @NonNull String group() {
+        return "";
     }
 }

@@ -32,15 +32,15 @@ public record SyncItemCollectorPacket(BlockPos pos, int offsetXPos, int offsetYP
         }
     };
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, SyncItemCollectorPacket> STREAM_CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, SyncItemCollectorPacket::pos,
-            ByteBufCodecs.INT, SyncItemCollectorPacket::offsetXPos,
-            ByteBufCodecs.INT, SyncItemCollectorPacket::offsetYPos,
-            ByteBufCodecs.INT, SyncItemCollectorPacket::offsetZPos,
-            ByteBufCodecs.INT, SyncItemCollectorPacket::xSize,
-            ByteBufCodecs.INT, SyncItemCollectorPacket::ySize,
-            ByteBufCodecs.INT, SyncItemCollectorPacket::zSize,
-            SyncItemCollectorPacket::new
+    public static final StreamCodec<RegistryFriendlyByteBuf, SyncItemCollectorPacket> STREAM_CODEC = StreamCodec.composite(
+        BlockPos.STREAM_CODEC, SyncItemCollectorPacket::pos,
+        ByteBufCodecs.INT, SyncItemCollectorPacket::offsetXPos,
+        ByteBufCodecs.INT, SyncItemCollectorPacket::offsetYPos,
+        ByteBufCodecs.INT, SyncItemCollectorPacket::offsetZPos,
+        ByteBufCodecs.INT, SyncItemCollectorPacket::xSize,
+        ByteBufCodecs.INT, SyncItemCollectorPacket::ySize,
+        ByteBufCodecs.INT, SyncItemCollectorPacket::zSize,
+        SyncItemCollectorPacket::new
     );
 
 

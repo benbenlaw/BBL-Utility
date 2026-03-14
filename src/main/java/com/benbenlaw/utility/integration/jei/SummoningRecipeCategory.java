@@ -109,7 +109,9 @@ public class SummoningRecipeCategory implements IRecipeCategory<SummoningRecipe>
     public void setRecipe(IRecipeLayoutBuilder builder, SummoningRecipe recipe, @NotNull IFocusGroup focuses) {
 
         EntityType<?> entityType = recipe.summonedEntity();
-        ItemStack spawnEgg = Objects.requireNonNull(SpawnEggItem.byId(entityType)).getDefaultInstance();
+        ItemStack spawnEgg = Objects.requireNonNull(SpawnEggItem.byId(entityType)).isPresent()
+                ? new ItemStack(SpawnEggItem.byId(entityType).get())
+                : ItemStack.EMPTY;
 
         Optional<TagKey<Block>> tagTarget = recipe.belowBlock().getTag();
         Optional<Block> blockTarget = recipe.belowBlock().getBlock();

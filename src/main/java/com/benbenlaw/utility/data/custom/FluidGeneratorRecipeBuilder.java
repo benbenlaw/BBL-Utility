@@ -50,10 +50,13 @@ public class FluidGeneratorRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public @NotNull Item getResult() {
-        return ItemStack.EMPTY.getItem();
+    public ResourceKey<Recipe<?>> defaultId() {
+        FluidStack stack = output.copy();
+        return ResourceKey.create(
+                Registries.RECIPE,
+                Utility.identifier("fluid_generator/" + stack.getFluid().builtInRegistryHolder().key().identifier().getPath())
+        );
     }
-
     @Override
     public void save(@NotNull RecipeOutput recipeOutput, @NotNull String id) {
         save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.identifier("fluid_generator/" + id)));

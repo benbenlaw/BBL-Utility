@@ -1,7 +1,6 @@
 package com.benbenlaw.utility.block.entity.renderer;
 
 import com.benbenlaw.utility.screen.summoning.SummoningBlockScreen;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
@@ -31,16 +30,9 @@ public class SummoningBlockRenderState extends BlockEntityRenderState {
         this.entityRenderState.y = pos.getY() + 0.5;
         this.entityRenderState.z = pos.getZ() + 0.5;
         this.entityRenderState.ageInTicks = 0;
-        this.entityRenderState.lightCoords = getLightLevel(level, pos);
+        this.entityRenderState.lightCoords = blockEntityLevel.getLightEmission(pos);
         this.lightPosition = pos;
         this.blockEntityLevel = level;
         this.growthProgress = growthProgress;
     }
-
-    private int getLightLevel(Level level, BlockPos pos) {
-        int bLight = level.getBrightness(LightLayer.BLOCK, pos);
-        int sLight = level.getBrightness(LightLayer.SKY, pos);
-        return LightTexture.pack(bLight, sLight);
-    }
-
 }

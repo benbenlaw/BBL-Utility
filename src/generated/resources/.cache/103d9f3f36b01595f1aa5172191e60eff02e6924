@@ -1,4 +1,4 @@
-// 1.21.11	2025-12-29T13:45:06.6462205	Registries
+// 26.1-snapshot-6	2026-03-14T17:29:17.6352794	Registries
 d86dfc10566730198feb55a3653d61d52e30dd5a data/utility/neoforge/biome_modifier/add_overworld_ender_ore.json
 8a2db035d268b8ddd670cee8c732bfe089e04892 data/utility/worldgen/configured_feature/overworld_ender_ore.json
 f6a93d4dcd04adc580977b68a916b796ab4e288b data/utility/worldgen/placed_feature/overworld_ender_ore_placed.json

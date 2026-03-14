@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.recipe.custom;
 
 import com.benbenlaw.utility.block.entity.FluidGeneratorBlockEntity;
+import com.benbenlaw.utility.recipe.DryingTableRecipeInput;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -22,10 +23,37 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
 public record FluidGeneratorRecipe(String input, FluidStack output) implements Recipe<RecipeInput> {
+
+    public static final MapCodec<FluidGeneratorRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    Codec.STRING.fieldOf("input").forGetter(FluidGeneratorRecipe::input),
+                    FluidStack.CODEC.fieldOf("output").forGetter(FluidGeneratorRecipe::output)
+            ).apply(instance, FluidGeneratorRecipe::new)
+    );
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, FluidGeneratorRecipe> STREAM_CODEC = StreamCodec.of(
+            FluidGeneratorRecipe::write, FluidGeneratorRecipe::read);
+
+    public static final RecipeType<FluidGeneratorRecipe> TYPE = new RecipeType<>() {};
+
+    public static final RecipeSerializer<FluidGeneratorRecipe> SERIALIZER =
+            new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+    private static FluidGeneratorRecipe read(RegistryFriendlyByteBuf buffer) {
+        String input = ByteBufCodecs.STRING_UTF8.decode(buffer);
+        FluidStack output = FluidStack.STREAM_CODEC.decode(buffer);
+        return new FluidGeneratorRecipe(input, output);
+    }
+
+    private static void write(RegistryFriendlyByteBuf buffer, FluidGeneratorRecipe recipe) {
+        ByteBufCodecs.STRING_UTF8.encode(buffer, recipe.input);
+        FluidStack.STREAM_CODEC.encode(buffer, recipe.output);
+    }
 
     @Override
     public boolean matches(@NotNull RecipeInput recipeInput, Level level) {
@@ -42,19 +70,20 @@ public record FluidGeneratorRecipe(String input, FluidStack output) implements R
 
     }
 
+    //Boiler Plate
     @Override
-    public @NotNull ItemStack assemble(@NotNull RecipeInput recipeInput, HolderLookup.@NotNull Provider provider) {
+    public @NonNull ItemStack assemble(RecipeInput recipeInput) {
         return ItemStack.EMPTY;
     }
 
     @Override
     public @NotNull RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
     @Override
     public @NotNull RecipeType<? extends Recipe<RecipeInput>> getType() {
-        return Type.INSTANCE;
+        return TYPE;
     }
 
     @Override
@@ -72,45 +101,13 @@ public record FluidGeneratorRecipe(String input, FluidStack output) implements R
         return true;
     }
 
-    public static class Type implements RecipeType<FluidGeneratorRecipe> {
-        private Type() {
-        }
-
-        public static final FluidGeneratorRecipe.Type INSTANCE = new FluidGeneratorRecipe.Type();
+    @Override
+    public boolean showNotification() {
+        return false;
     }
 
-    public static class Serializer implements RecipeSerializer<FluidGeneratorRecipe> {
-        public static final FluidGeneratorRecipe.Serializer INSTANCE = new FluidGeneratorRecipe.Serializer();
-
-        public final MapCodec<FluidGeneratorRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
-                instance.group(
-                        Codec.STRING.fieldOf("input").forGetter(FluidGeneratorRecipe::input),
-                        FluidStack.CODEC.fieldOf("output").forGetter(FluidGeneratorRecipe::output)
-                ).apply(instance, FluidGeneratorRecipe::new)
-        );
-
-        private static final StreamCodec<RegistryFriendlyByteBuf, FluidGeneratorRecipe> STREAM_CODEC = StreamCodec.of(
-                FluidGeneratorRecipe.Serializer::write, FluidGeneratorRecipe.Serializer::read);
-
-        @Override
-        public @NotNull MapCodec<FluidGeneratorRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public @NotNull StreamCodec<RegistryFriendlyByteBuf, FluidGeneratorRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        private static FluidGeneratorRecipe read(RegistryFriendlyByteBuf buffer) {
-            String input = ByteBufCodecs.STRING_UTF8.decode(buffer);
-            FluidStack output = FluidStack.STREAM_CODEC.decode(buffer);
-            return new FluidGeneratorRecipe(input, output);
-        }
-
-        private static void write(RegistryFriendlyByteBuf buffer, FluidGeneratorRecipe recipe) {
-            ByteBufCodecs.STRING_UTF8.encode(buffer, recipe.input);
-            FluidStack.STREAM_CODEC.encode(buffer, recipe.output);
-        }
+    @Override
+    public @NonNull String group() {
+        return "";
     }
 }

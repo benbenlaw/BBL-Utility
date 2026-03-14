@@ -97,7 +97,7 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
             updateCachedRecipe();
         }
 
-        if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
+        if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output().create())) {
             progress++;
             if (progress >= maxProgress) craftItem();
         } else {
@@ -112,7 +112,7 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
             var recipe = cachedRecipe.value();
             try (Transaction tx = Transaction.open(null)) {
                 inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), recipe.input().count(), tx);
-                outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(recipe.output()), recipe.output().getCount(), tx);
+                outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(recipe.output()), recipe.output().create().getCount(), tx);
                 tx.commit();
             }
 

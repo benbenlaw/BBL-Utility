@@ -1,12 +1,11 @@
 {
   "type": "minecraft:smelting",
-  "category": "misc",
+  "category": "blocks",
   "cookingtime": 200,
   "experience": 0.7,
-  "group": "ender",
+  "group": "smelting/ender",
   "ingredient": "utility:ender_ore",
   "result": {
-    "count": 1,
     "id": "utility:ender_pearl_fragment"
   }
 }

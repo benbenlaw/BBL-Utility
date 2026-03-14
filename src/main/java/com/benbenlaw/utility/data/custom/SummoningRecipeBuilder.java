@@ -15,6 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -65,8 +66,12 @@ public class SummoningRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public @NotNull Item getResult() {
-        return ItemStack.EMPTY.getItem();
+    public ResourceKey<Recipe<?>> defaultId() {
+        Identifier entity = EntityType.getKey(summonedEntity);
+        return ResourceKey.create(
+                Registries.RECIPE,
+                Utility.identifier("summoning/" + entity.getPath())
+        );
     }
 
     @Override

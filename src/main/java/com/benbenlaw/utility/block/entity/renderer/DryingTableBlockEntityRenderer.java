@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.HashCommon;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.Lightmap;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -73,16 +74,14 @@ public class DryingTableBlockEntityRenderer implements BlockEntityRenderer<@NotN
         poseStack.scale(0.5f, 0.5f, 0.5f);
         poseStack.mulPose(Axis.YP.rotationDegrees(renderState.rotation));
 
-        renderState.itemStackRenderState.submit(poseStack, submitNodeCollector, getLightLevel(renderState.blockEntityLevel,
-                renderState.lightPosition), OverlayTexture.NO_OVERLAY, 0);
+        renderState.itemStackRenderState.submit(poseStack, submitNodeCollector, renderState.blockEntityLevel.getLightEmission(renderState.blockPos),
+                renderState.lightCoords, OverlayTexture.NO_OVERLAY);
 
         poseStack.popPose();
     }
 
-    private int getLightLevel(Level level, BlockPos pos) {
-        int bLight = level.getBrightness(LightLayer.BLOCK, pos);
-        int sLight = level.getBrightness(LightLayer.SKY, pos);
-        return LightTexture.pack(bLight, sLight);
+    private float getLightLevel(Level level, BlockPos pos) {
+        return Lightmap.getBrightness(level.dimensionType(), level.getLightEmission(pos));
     }
 
     public float getRenderingRotation() {

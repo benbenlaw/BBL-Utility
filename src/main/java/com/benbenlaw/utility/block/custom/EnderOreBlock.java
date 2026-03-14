@@ -100,7 +100,7 @@ public class EnderOreBlock extends Block {
     }
 
     private static void spawnParticles(Level level, BlockPos pos) {
-        RandomSource randomsource = level.random;
+        RandomSource randomsource = level.getRandom();
 
         for(Direction direction : Direction.values()) {
             BlockPos blockpos = pos.relative(direction);

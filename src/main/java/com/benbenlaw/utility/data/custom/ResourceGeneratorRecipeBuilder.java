@@ -13,6 +13,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -24,15 +25,15 @@ import java.util.Map;
 public class ResourceGeneratorRecipeBuilder implements RecipeBuilder {
 
     protected String group;
-    protected ItemStack input;
-    protected ItemStack output;
+    protected ItemStackTemplate input;
+    protected ItemStackTemplate output;
     protected FluidStack leftFluid;
     protected FluidStack rightFluid;
     protected boolean consumeLeft;
     protected boolean consumeRight;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public ResourceGeneratorRecipeBuilder(ItemStack input, ItemStack output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) {
+    public ResourceGeneratorRecipeBuilder(ItemStackTemplate input, ItemStackTemplate output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) {
         this.input = input;
         this.output = output;
         this.leftFluid = leftFluid;
@@ -41,7 +42,7 @@ public class ResourceGeneratorRecipeBuilder implements RecipeBuilder {
         this.consumeRight = consumeRight;
     }
 
-    public static ResourceGeneratorRecipeBuilder resourceGenerator(ItemStack input, ItemStack output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) {
+    public static ResourceGeneratorRecipeBuilder resourceGenerator(ItemStackTemplate input, ItemStackTemplate output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) {
         return new ResourceGeneratorRecipeBuilder(input, output, leftFluid, rightFluid, consumeLeft, consumeRight);
     }
 
@@ -58,10 +59,13 @@ public class ResourceGeneratorRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public @NotNull Item getResult() {
-        return output.getItem();
+    public ResourceKey<Recipe<?>> defaultId() {
+        ItemStack stack = output.create();
+        return ResourceKey.create(
+                Registries.RECIPE,
+                Utility.identifier("resource_generator/" + stack.getItem().builtInRegistryHolder().key().identifier().getPath())
+        );
     }
-
     @Override
     public void save(@NotNull RecipeOutput recipeOutput, @NotNull String id) {
         save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.identifier("resource_generator/" + id)));

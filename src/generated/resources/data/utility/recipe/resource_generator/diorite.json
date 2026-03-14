@@ -3,7 +3,6 @@
   "consume_left": false,
   "consume_right": false,
   "input": {
-    "count": 1,
     "id": "minecraft:diorite"
   },
   "left_fluid": {
@@ -11,7 +10,6 @@
     "id": "minecraft:water"
   },
   "output": {
-    "count": 1,
     "id": "minecraft:diorite"
   },
   "right_fluid": {

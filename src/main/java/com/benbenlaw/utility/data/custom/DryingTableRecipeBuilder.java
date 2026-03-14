@@ -14,6 +14,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import org.jetbrains.annotations.NotNull;
@@ -26,17 +27,17 @@ public class DryingTableRecipeBuilder implements RecipeBuilder {
 
     protected String group;
     protected SizedIngredient input;
-    protected ItemStack output;
+    protected ItemStackTemplate output;
     protected DryingTableRecipeType recipeType;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public DryingTableRecipeBuilder(SizedIngredient input, ItemStack output, DryingTableRecipeType recipeType) {
+    public DryingTableRecipeBuilder(SizedIngredient input, ItemStackTemplate output, DryingTableRecipeType recipeType) {
         this.input = input;
         this.output = output;
         this.recipeType = recipeType;
     }
 
-    public static DryingTableRecipeBuilder dryingTable(SizedIngredient input, ItemStack output, DryingTableRecipeType recipeType) {
+    public static DryingTableRecipeBuilder dryingTable(SizedIngredient input, ItemStackTemplate output, DryingTableRecipeType recipeType) {
         return new DryingTableRecipeBuilder(input, output, recipeType);
     }
 
@@ -53,10 +54,13 @@ public class DryingTableRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public @NotNull Item getResult() {
-        return output.getItem();
+    public ResourceKey<Recipe<?>> defaultId() {
+        ItemStack stack = output.create();
+        return ResourceKey.create(
+                Registries.RECIPE,
+                Utility.identifier("drying_table/" + stack.getItem().builtInRegistryHolder().key().identifier().getPath())
+        );
     }
-
     @Override
     public void save(@NotNull RecipeOutput recipeOutput, @NotNull String id) {
         save(recipeOutput, ResourceKey.create(Registries.RECIPE, Utility.identifier("drying_table/" + id)));

@@ -5,7 +5,6 @@
     "ingredient": "utility:log_sheet"
   },
   "output": {
-    "count": 1,
     "id": "utility:soaked_paper"
   },
   "recipe_type": "SOAKING"

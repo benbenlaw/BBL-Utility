@@ -23,10 +23,66 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
 public record SummoningRecipe(SizedIngredient input, BlockTarget belowBlock, EntityType<?> summonedEntity, Optional<CompoundTag> entityData, Optional<TemperatureValues> temperatureVariant) implements Recipe<SummoningRecipeInput> {
+
+    public static final MapCodec<SummoningRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    SizedIngredient.NESTED_CODEC.fieldOf("input").forGetter(SummoningRecipe::input),
+                    BlockTargetCodec.CODEC.fieldOf("below_block").forGetter(SummoningRecipe::belowBlock),
+                    EntityType.CODEC.fieldOf("entity").forGetter(recipe -> recipe.summonedEntity),
+                    CompoundTag.CODEC.optionalFieldOf("entity_data").forGetter(SummoningRecipe::entityData),
+                    TemperatureValues.CODEC.optionalFieldOf("temperature_variant").forGetter(SummoningRecipe::temperatureVariant)
+            ).apply(instance, SummoningRecipe::new)
+    );
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, SummoningRecipe> STREAM_CODEC = StreamCodec.of(
+            SummoningRecipe::write, SummoningRecipe::read);
+
+    public static final RecipeType<SummoningRecipe> TYPE = new RecipeType<>() {};
+
+    public static final RecipeSerializer<SummoningRecipe> SERIALIZER =
+            new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+    private static SummoningRecipe read(RegistryFriendlyByteBuf buffer) {
+        SizedIngredient input = SizedIngredient.STREAM_CODEC.decode(buffer);
+
+        boolean isTag = buffer.readBoolean();
+        BlockTarget blockTarget;
+        if (isTag) {
+            Identifier tagId = buffer.readIdentifier();
+            blockTarget = new BlockTarget.Tag(TagKey.create(Registries.BLOCK, tagId));
+        } else {
+            BlockState blockState = Block.stateById(buffer.readInt());
+            blockTarget = new BlockTarget.Single(blockState);
+        }
+
+        EntityType<?> entityType = buffer.readById(BuiltInRegistries.ENTITY_TYPE::byId);
+        Optional<CompoundTag> entityData = buffer.readOptional(RegistryFriendlyByteBuf::readNbt);
+        Optional<TemperatureValues> temperatureVariant = buffer.readOptional(TemperatureValues::readFromBuffer);
+
+        return new SummoningRecipe(input, blockTarget, entityType, entityData, temperatureVariant);
+    }
+
+    private static void write(RegistryFriendlyByteBuf buffer, SummoningRecipe recipe) {
+        SizedIngredient.STREAM_CODEC.encode(buffer, recipe.input);
+
+        if (recipe.belowBlock instanceof BlockTarget.Tag(TagKey<Block> tag)) {
+            buffer.writeBoolean(true);
+            buffer.writeIdentifier(tag.location());
+        } else if (recipe.belowBlock instanceof BlockTarget.Single(BlockState blockState)) {
+            buffer.writeBoolean(false);
+            buffer.writeInt(Block.getId(blockState));
+        }
+
+        buffer.writeById(BuiltInRegistries.ENTITY_TYPE::getId, recipe.summonedEntity);
+        buffer.writeOptional(recipe.entityData, RegistryFriendlyByteBuf::writeNbt);
+        buffer.writeOptional(recipe.temperatureVariant, TemperatureValues::writeToBuffer);
+
+    }
 
     @Override
     public boolean matches(@NotNull SummoningRecipeInput recipeInput, Level level) {
@@ -53,20 +109,20 @@ public record SummoningRecipe(SizedIngredient input, BlockTarget belowBlock, Ent
         return false;
     }
 
-
+    //Boiler Plate
     @Override
-    public @NotNull ItemStack assemble(@NotNull SummoningRecipeInput recipeInput, HolderLookup.@NotNull Provider provider) {
+    public @NotNull ItemStack assemble(@NotNull SummoningRecipeInput recipeInput) {
         return ItemStack.EMPTY;
     }
 
     @Override
     public @NotNull RecipeSerializer<? extends Recipe<SummoningRecipeInput>> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
     @Override
     public @NotNull RecipeType<? extends Recipe<SummoningRecipeInput>> getType() {
-        return Type.INSTANCE;
+        return TYPE;
     }
 
     @Override
@@ -84,74 +140,13 @@ public record SummoningRecipe(SizedIngredient input, BlockTarget belowBlock, Ent
         return true;
     }
 
-    public static class Type implements RecipeType<SummoningRecipe> {
-        private Type() {
-        }
-
-        public static final Type INSTANCE = new Type();
+    @Override
+    public boolean showNotification() {
+        return false;
     }
 
-    public static class Serializer implements RecipeSerializer<SummoningRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-
-        public final MapCodec<SummoningRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
-                instance.group(
-                        SizedIngredient.NESTED_CODEC.fieldOf("input").forGetter(SummoningRecipe::input),
-                        BlockTargetCodec.CODEC.fieldOf("below_block").forGetter(SummoningRecipe::belowBlock),
-                        EntityType.CODEC.fieldOf("entity").forGetter(recipe -> recipe.summonedEntity),
-                        CompoundTag.CODEC.optionalFieldOf("entity_data").forGetter(SummoningRecipe::entityData),
-                        TemperatureValues.CODEC.optionalFieldOf("temperature_variant").forGetter(SummoningRecipe::temperatureVariant)
-                ).apply(instance, SummoningRecipe::new)
-        );
-
-        private static final StreamCodec<RegistryFriendlyByteBuf, SummoningRecipe> STREAM_CODEC = StreamCodec.of(
-                Serializer::write, Serializer::read);
-
-        @Override
-        public @NotNull MapCodec<SummoningRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public @NotNull StreamCodec<RegistryFriendlyByteBuf, SummoningRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        private static SummoningRecipe read(RegistryFriendlyByteBuf buffer) {
-            SizedIngredient input = SizedIngredient.STREAM_CODEC.decode(buffer);
-
-            boolean isTag = buffer.readBoolean();
-            BlockTarget blockTarget;
-            if (isTag) {
-                Identifier tagId = buffer.readIdentifier();
-                blockTarget = new BlockTarget.Tag(TagKey.create(Registries.BLOCK, tagId));
-            } else {
-                BlockState blockState = Block.stateById(buffer.readInt());
-                blockTarget = new BlockTarget.Single(blockState);
-            }
-
-            EntityType<?> entityType = buffer.readById(BuiltInRegistries.ENTITY_TYPE::byId);
-            Optional<CompoundTag> entityData = buffer.readOptional(RegistryFriendlyByteBuf::readNbt);
-            Optional<TemperatureValues> temperatureVariant = buffer.readOptional(TemperatureValues::readFromBuffer);
-
-            return new SummoningRecipe(input, blockTarget, entityType, entityData, temperatureVariant);
-        }
-
-        private static void write(RegistryFriendlyByteBuf buffer, SummoningRecipe recipe) {
-            SizedIngredient.STREAM_CODEC.encode(buffer, recipe.input);
-
-            if (recipe.belowBlock instanceof BlockTarget.Tag(TagKey<Block> tag)) {
-                buffer.writeBoolean(true);
-                buffer.writeIdentifier(tag.location());
-            } else if (recipe.belowBlock instanceof BlockTarget.Single(BlockState blockState)) {
-                buffer.writeBoolean(false);
-                buffer.writeInt(Block.getId(blockState));
-            }
-
-            buffer.writeById(BuiltInRegistries.ENTITY_TYPE::getId, recipe.summonedEntity);
-            buffer.writeOptional(recipe.entityData, RegistryFriendlyByteBuf::writeNbt);
-            buffer.writeOptional(recipe.temperatureVariant, TemperatureValues::writeToBuffer);
-
-        }
+    @Override
+    public @NonNull String group() {
+        return "";
     }
 }

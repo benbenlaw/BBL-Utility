@@ -3,7 +3,6 @@
   "consume_left": true,
   "consume_right": true,
   "input": {
-    "count": 1,
     "id": "minecraft:netherrack"
   },
   "left_fluid": {
@@ -11,7 +10,6 @@
     "id": "minecraft:water"
   },
   "output": {
-    "count": 1,
     "id": "minecraft:netherrack"
   },
   "right_fluid": {

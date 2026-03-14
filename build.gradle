@@ -5,8 +5,8 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.110'
-    id 'net.darkhax.curseforgegradle' version '1.1.25'
+    id 'net.neoforged.moddev' version '2.0.140'
+    id 'net.darkhax.curseforgegradle' version '1.1.24'
     id "com.modrinth.minotaur" version "2.+"
 }
 
@@ -23,6 +23,7 @@ repositories {
             includeGroup("curse.maven")
         }
     }
+
     maven {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
@@ -36,18 +37,10 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-
-
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     version = project.neo_version
-
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
 
     runs {
         configureEach {
@@ -83,8 +76,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
 
-    implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
-    implementation("curse.maven:bblcore-1135181:7442167")
+    //JEI
+    implementation("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
+    //BBL Core
+    implementation("curse.maven:bblcore-1135181:${core_version}")
 }
 
 tasks.withType(ProcessResources).configureEach {

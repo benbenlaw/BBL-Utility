@@ -26,12 +26,11 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.TemperatureVariants;
 import net.minecraft.world.entity.animal.cow.CowVariants;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
@@ -395,77 +394,77 @@ public class UtilityRecipeProvider extends RecipeProvider {
 
         //Dead Bush
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(this.tag(ItemTags.SAPLINGS).getValues()), 1),
-                new ItemStack(Items.DEAD_BUSH), DryingTableRecipeType.DRYING).save(output, "drying/dead_bush");
+                new ItemStackTemplate(Items.DEAD_BUSH), DryingTableRecipeType.DRYING).save(output, "drying/dead_bush");
 
         //Cracked Stone Bricks
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.STONE_BRICKS), 1),
-                new ItemStack(Items.CRACKED_STONE_BRICKS), DryingTableRecipeType.DRYING).save(output, "drying/cracked_stone_bricks");
+                new ItemStackTemplate(Items.CRACKED_STONE_BRICKS), DryingTableRecipeType.DRYING).save(output, "drying/cracked_stone_bricks");
 
         //Paper
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(UtilityItems.SOAKED_PAPER), 1),
-                new ItemStack(Items.PAPER), DryingTableRecipeType.DRYING).save(output, "drying/paper");
+                new ItemStackTemplate(Items.PAPER), DryingTableRecipeType.DRYING).save(output, "drying/paper");
 
         //Soaked Paper
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.PAPER), 1),
-                new ItemStack(UtilityItems.SOAKED_PAPER.get()), DryingTableRecipeType.SOAKING).save(output, "soaking/soaked_paper");
+                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), DryingTableRecipeType.SOAKING).save(output, "soaking/soaked_paper");
 
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(UtilityItems.LOG_SHEET), 1),
-                new ItemStack(UtilityItems.SOAKED_PAPER.get()), DryingTableRecipeType.SOAKING).save(output, "soaking/soaked_paper_from_log_sheet");
+                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), DryingTableRecipeType.SOAKING).save(output, "soaking/soaked_paper_from_log_sheet");
 
         //Sponge
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.WET_SPONGE), 1),
-                new ItemStack(Items.SPONGE), DryingTableRecipeType.DRYING).save(output, "drying/sponge");
+                new ItemStackTemplate(Items.SPONGE), DryingTableRecipeType.DRYING).save(output, "drying/sponge");
 
         //Dry Sponge
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.SPONGE), 1),
-                new ItemStack(Items.WET_SPONGE), DryingTableRecipeType.SOAKING).save(output, "soaking/wet_sponge");
+                new ItemStackTemplate(Items.WET_SPONGE), DryingTableRecipeType.SOAKING).save(output, "soaking/wet_sponge");
 
         //Resource Generator
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.COBBLESTONE.getDefaultInstance(), Items.COBBLESTONE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.COBBLESTONE), new ItemStackTemplate(Items.COBBLESTONE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "cobblestone");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.STONE.getDefaultInstance(), Items.STONE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.STONE), new ItemStackTemplate(Items.STONE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "stone");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.ANDESITE.getDefaultInstance(), Items.ANDESITE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.ANDESITE), new ItemStackTemplate(Items.ANDESITE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "andesite");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.DIORITE.getDefaultInstance(), Items.DIORITE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.DIORITE), new ItemStackTemplate(Items.DIORITE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "diorite");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.GRANITE.getDefaultInstance(), Items.GRANITE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.GRANITE), new ItemStackTemplate(Items.GRANITE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "granite");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.DEEPSLATE.getDefaultInstance(), Items.DEEPSLATE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.DEEPSLATE), new ItemStackTemplate(Items.DEEPSLATE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "deepslate");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.COBBLED_DEEPSLATE.getDefaultInstance(), Items.COBBLED_DEEPSLATE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.COBBLED_DEEPSLATE), new ItemStackTemplate(Items.COBBLED_DEEPSLATE),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "cobbled_deepslate");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.TUFF.getDefaultInstance(), Items.TUFF.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.TUFF), new ItemStackTemplate(Items.TUFF),
                 new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
                 .save(output, "tuff");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.OBSIDIAN.getDefaultInstance(), Items.OBSIDIAN.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.OBSIDIAN), new ItemStackTemplate(Items.OBSIDIAN),
                         new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, true)
                 .save(output, "obsidian");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.BASALT.getDefaultInstance(), Items.BASALT.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.BASALT), new ItemStackTemplate(Items.BASALT),
                         new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
                 .save(output, "basalt");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.BLACKSTONE.getDefaultInstance(), Items.BLACKSTONE.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.BLACKSTONE), new ItemStackTemplate(Items.BLACKSTONE),
                         new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
                 .save(output, "blackstone");
 
-        ResourceGeneratorRecipeBuilder.resourceGenerator(Items.NETHERRACK.getDefaultInstance(), Items.NETHERRACK.getDefaultInstance(),
+        ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.NETHERRACK), new ItemStackTemplate(Items.NETHERRACK),
                         new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
                 .save(output, "netherrack");
 
@@ -650,12 +649,12 @@ public class UtilityRecipeProvider extends RecipeProvider {
     }
 
     protected void oreSmelting(List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
-        this.oreCooking(RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_smelting");
+        this.oreCooking(SmeltingRecipe::new, p_250172_, p_250588_, CookingBookCategory.BLOCKS, p_251868_, p_250789_, p_252144_, "smelting/" + p_251687_, "_from");
     }
 
-    protected <T extends AbstractCookingRecipe> void oreCooking(RecipeSerializer<T> p_251817_, AbstractCookingRecipe.Factory<T> p_312707_, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String p_249236_) {
-        for(ItemLike itemlike : p_249619_) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, p_251817_, p_312707_).group(p_251450_).unlockedBy(getHasName(itemlike), this.has(itemlike)).save(this.output, String.valueOf(Utility.identifier(getItemName(p_250066_) + p_249236_ + "_" + getItemName(itemlike))));
+    protected <T extends AbstractCookingRecipe> void oreCooking(AbstractCookingRecipe.Factory<T> factory, List<ItemLike> smeltables, RecipeCategory craftingCategory, CookingBookCategory cookingCategory, ItemLike result, float experience, int cookingTime, String group, String fromDesc) {
+        for(ItemLike item : smeltables) {
+            SimpleCookingRecipeBuilder.generic(Ingredient.of(item), craftingCategory, cookingCategory, result, experience, cookingTime, factory).group(group).unlockedBy(getHasName(item), this.has(item)).save(this.output, getItemName(result) + fromDesc + "_" + getItemName(item));
         }
 
     }

@@ -3,6 +3,7 @@ package com.benbenlaw.utility.recipe;
 import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
+import org.jspecify.annotations.NonNull;
 
 public class DryingTableRecipeInput implements RecipeInput {
 
@@ -15,7 +16,7 @@ public class DryingTableRecipeInput implements RecipeInput {
     }
 
     @Override
-    public ItemStack getItem(int i) {
+    public @NonNull ItemStack getItem(int i) {
         return handler.getResource(i).toStack();
     }
 
