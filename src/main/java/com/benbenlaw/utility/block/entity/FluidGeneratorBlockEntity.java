@@ -78,6 +78,7 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
         if (!level.isClientSide()) {
 
             if (!level.getBlockState(worldPosition).getValue(FluidGeneratorBlock.RUNNING)) return;
+            if (cachedRecipe == null) return;
 
             ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
 
@@ -92,9 +93,9 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
                 updateCachedRecipe();
             }
 
-            if (!hasEnoughSpace(cachedRecipe.value().output())) return;
+            if (!hasEnoughSpace(cachedRecipe.value().output().create())) return;
 
-            if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output())) {
+            if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output().create())) {
                 progress++;
                 if (progress >= maxProgress) {
                     craftItem();
@@ -114,7 +115,7 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
         if (cachedRecipe != null) {
             var recipe = cachedRecipe.value();
             try (Transaction tx = Transaction.open(null)) {
-                outputFluidHandler.insertInternal(TANK_SLOT, FluidResource.of(recipe.output()), recipe.output().getAmount(), tx);
+                outputFluidHandler.insertInternal(TANK_SLOT, FluidResource.of(recipe.output()), recipe.output().amount(), tx);
                 tx.commit();
             }
             progress = 0;

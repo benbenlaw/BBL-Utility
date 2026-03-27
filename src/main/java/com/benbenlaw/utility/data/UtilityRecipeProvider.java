@@ -37,6 +37,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -421,56 +422,56 @@ public class UtilityRecipeProvider extends RecipeProvider {
 
         //Resource Generator
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.COBBLESTONE), new ItemStackTemplate(Items.COBBLESTONE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "cobblestone");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.STONE), new ItemStackTemplate(Items.STONE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "stone");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.ANDESITE), new ItemStackTemplate(Items.ANDESITE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "andesite");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.DIORITE), new ItemStackTemplate(Items.DIORITE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "diorite");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.GRANITE), new ItemStackTemplate(Items.GRANITE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "granite");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.DEEPSLATE), new ItemStackTemplate(Items.DEEPSLATE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "deepslate");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.COBBLED_DEEPSLATE), new ItemStackTemplate(Items.COBBLED_DEEPSLATE),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "cobbled_deepslate");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.TUFF), new ItemStackTemplate(Items.TUFF),
-                new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, false)
+                new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, false)
                 .save(output, "tuff");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.OBSIDIAN), new ItemStackTemplate(Items.OBSIDIAN),
-                        new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.LAVA, 1000), false, true)
+                        new FluidStackTemplate(Fluids.WATER, 1000), new FluidStackTemplate(Fluids.LAVA, 1000), false, true)
                 .save(output, "obsidian");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.BASALT), new ItemStackTemplate(Items.BASALT),
-                        new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
+                        new FluidStackTemplate(Fluids.WATER, 25), new FluidStackTemplate(Fluids.LAVA, 25), true, true)
                 .save(output, "basalt");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.BLACKSTONE), new ItemStackTemplate(Items.BLACKSTONE),
-                        new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
+                        new FluidStackTemplate(Fluids.WATER, 25), new FluidStackTemplate(Fluids.LAVA, 25), true, true)
                 .save(output, "blackstone");
 
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.NETHERRACK), new ItemStackTemplate(Items.NETHERRACK),
-                        new FluidStack(Fluids.WATER, 25), new FluidStack(Fluids.LAVA, 25), true, true)
+                        new FluidStackTemplate(Fluids.WATER, 25), new FluidStackTemplate(Fluids.LAVA, 25), true, true)
                 .save(output, "netherrack");
 
         //Fluid Generator
-        FluidGeneratorRecipeBuilder.fluidGenerator("water", new FluidStack(Fluids.WATER, 100)).save(output, "water");
-        FluidGeneratorRecipeBuilder.fluidGenerator("lava", new FluidStack(Fluids.LAVA, 50)).save(output, "lava");
+        FluidGeneratorRecipeBuilder.fluidGenerator("water", new FluidStackTemplate(Fluids.WATER, 100)).save(output, "water");
+        FluidGeneratorRecipeBuilder.fluidGenerator("lava", new FluidStackTemplate(Fluids.LAVA, 50)).save(output, "lava");
 
         //Summoning
         CompoundTag warmEntityData = new CompoundTag();

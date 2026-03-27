@@ -1,0 +1,14 @@
+{
+  "type": "utility:summoning",
+  "below_block": "#minecraft:dirt",
+  "entity": "minecraft:slime",
+  "entity_data": {
+    "DeathLootTable": "minecraft:blocks/diamond_ore",
+    "CustomName": "Diamond Slime",
+    "Size": 255
+  },
+  "input": {
+    "count": 1,
+    "ingredient": "minecraft:diamond"
+  }
+}

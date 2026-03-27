@@ -41,10 +41,10 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     private int maxProgress = 200;
     private int progress = 0;
 
-    private final InputItemHandler inputHandler = new SingleInputItemHandler(this, 1, (index, stack) -> true);
+    private final InputItemHandler inputHandler = new SingleInputItemHandler(this, 3, (index, stack) -> true);
     private final OutputItemHandler outputHandler = new OutputItemHandler(this,1, i -> i == OUTPUT_SLOT);
-    private final InputFluidHandler inputFluidHandlerLeft = new InputFluidHandler(this,2,16000, (i, stack) -> i == LEFT_TANK_SLOT);
-    private final InputFluidHandler inputFluidHandlerRight = new InputFluidHandler(this,2,16000, (i, stack) -> i == RIGHT_TANK_SLOT);
+    private final InputFluidHandler inputFluidHandlerLeft = new InputFluidHandler(this,1,16000, (i, stack) -> i == LEFT_TANK_SLOT);
+    private final InputFluidHandler inputFluidHandlerRight = new InputFluidHandler(this,1,16000, (i, stack) -> i == RIGHT_TANK_SLOT);
 
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 0;
@@ -119,10 +119,10 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
                 outputHandler.insertInternal(OUTPUT_SLOT, ItemResource.of(output), output.getCount(), tx);
 
                 if (recipe.consumeLeft()) {
-                    inputFluidHandlerLeft.extractInternal(LEFT_TANK_SLOT, FluidResource.of(recipe.leftFluid()), recipe.leftFluid().getAmount(), tx);
+                    inputFluidHandlerLeft.extractInternal(LEFT_TANK_SLOT, FluidResource.of(recipe.leftFluid()), recipe.leftFluid().amount(), tx);
                 }
                 if (recipe.consumeRight()) {
-                    inputFluidHandlerRight.extractInternal(RIGHT_TANK_SLOT, FluidResource.of(recipe.rightFluid()), recipe.rightFluid().getAmount(), tx);
+                    inputFluidHandlerRight.extractInternal(RIGHT_TANK_SLOT, FluidResource.of(recipe.rightFluid()), recipe.rightFluid().amount(), tx);
                 }
                 tx.commit();
             }

@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.event;
 
 import com.benbenlaw.utility.Utility;
+import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
@@ -34,7 +35,6 @@ public class RecipeEvents {
         RecipeMap recipeMap = event.getRecipeMap();
 
         //Drying Table Recipes
-
         Collection<RecipeHolder<DryingTableRecipe>> dryingTableRecipes = recipeMap.byType(UtilityRecipeTypes.DRYING_TABLE_TYPE.get());
         Map<Identifier, DryingTableRecipe> dryingTableRecipeMap = new HashMap<>();
 

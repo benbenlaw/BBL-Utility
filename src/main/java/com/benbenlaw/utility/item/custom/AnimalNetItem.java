@@ -65,13 +65,13 @@ public class AnimalNetItem extends Item {
                 stack.set(UtilityDataComponents.ENTITY_DATA.get(), nbt);
 
                 String mobName = interactionTarget.getName().getString();
-                player.displayClientMessage(Component.translatable("tooltip.animal_net.mob_caught", mobName).withStyle(ChatFormatting.GREEN), false);
+                player.sendSystemMessage(Component.translatable("tooltip.animal_net.mob_caught", mobName).withStyle(ChatFormatting.GREEN));
                 level.playSound(null, interactionTarget.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS);
 
                 interactionTarget.remove(Entity.RemovalReason.DISCARDED);
 
             } else {
-                player.displayClientMessage(Component.translatable("tooltip.animal_net.mob_cannot_be_caught").withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.translatable("tooltip.animal_net.mob_cannot_be_caught").withStyle(ChatFormatting.RED));
             }
             return InteractionResult.SUCCESS;
 
@@ -118,7 +118,7 @@ public class AnimalNetItem extends Item {
                     }
 
                 } else {
-                    player.displayClientMessage(Component.translatable("tooltip.animal_net.could_not_release").withStyle(ChatFormatting.RED), false);
+                    player.sendSystemMessage(Component.translatable("tooltip.animal_net.could_not_release").withStyle(ChatFormatting.RED));
                 }
 
                 return InteractionResult.SUCCESS;

@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,15 +26,15 @@ public class FluidGeneratorRecipeBuilder implements RecipeBuilder {
 
     protected String group;
     protected String input;
-    protected FluidStack output;
+    protected FluidStackTemplate output;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public FluidGeneratorRecipeBuilder(String input, FluidStack output) {
+    public FluidGeneratorRecipeBuilder(String input, FluidStackTemplate output) {
         this.input = input;
         this.output = output;
     }
 
-    public static FluidGeneratorRecipeBuilder fluidGenerator(String input, FluidStack output) {
+    public static FluidGeneratorRecipeBuilder fluidGenerator(String input, FluidStackTemplate output) {
         return new FluidGeneratorRecipeBuilder(input, output);
     }
 
@@ -51,7 +52,7 @@ public class FluidGeneratorRecipeBuilder implements RecipeBuilder {
 
     @Override
     public ResourceKey<Recipe<?>> defaultId() {
-        FluidStack stack = output.copy();
+        FluidStack stack = output.create().copy();
         return ResourceKey.create(
                 Registries.RECIPE,
                 Utility.identifier("fluid_generator/" + stack.getFluid().builtInRegistryHolder().key().identifier().getPath())

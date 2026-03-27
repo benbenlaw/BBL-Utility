@@ -5,7 +5,7 @@ import com.benbenlaw.core.screen.util.DurationTooltip;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.network.packets.SyncRedstoneClockPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -69,7 +69,9 @@ public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMe
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, a);
+
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -81,13 +83,12 @@ public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMe
     }
 
     @Override
-    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
-        if (this.maxProgressBox != null) this.maxProgressBox.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.onTime != null) this.onTime.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.signalStrength != null) this.signalStrength.render(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.maxProgressBox != null) this.maxProgressBox.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.onTime != null) this.onTime.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.signalStrength != null) this.signalStrength.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         if (this.maxProgressBox != null && this.maxProgressBox.isMouseOver(mouseX, mouseY)) {
             renderTooltip(guiGraphics, "tooltip.redstone_clock.max_progress", mouseX, mouseY);
@@ -103,10 +104,10 @@ public class RedstoneClockScreen extends AbstractContainerScreen<RedstoneClockMe
 
     }
 
-    private void renderTooltip(GuiGraphics guiGraphics, String text, int mouseX, int mouseY) {
+    private void renderTooltip(GuiGraphicsExtractor GuiGraphicsExtractor, String text, int mouseX, int mouseY) {
         List<ClientTooltipComponent> components =
                 Collections.singletonList(ClientTooltipComponent.create(Component.translatable(text).getVisualOrderText()));
-        guiGraphics.renderTooltip(Minecraft.getInstance().font, components, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+        GuiGraphicsExtractor.tooltip(Minecraft.getInstance().font, components, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
     }
 
     @Override

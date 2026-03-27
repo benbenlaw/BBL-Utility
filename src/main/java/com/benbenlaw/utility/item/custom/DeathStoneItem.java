@@ -50,7 +50,7 @@ public class DeathStoneItem extends Item {
 
             stack.shrink(1);
             player.playSound(SoundEvents.PORTAL_TRAVEL, 0.2f, 1);
-            player.displayClientMessage(Component.translatable("tooltip.death_stone.returning").withStyle(ChatFormatting.GREEN), false);
+            player.sendSystemMessage(Component.translatable("tooltip.death_stone.returning").withStyle(ChatFormatting.GREEN));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;

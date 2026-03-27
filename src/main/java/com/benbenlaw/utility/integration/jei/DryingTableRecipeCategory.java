@@ -4,7 +4,7 @@ import com.benbenlaw.core.util.MouseUtil;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
-import com.benbenlaw.utility.event.ClientRecipeCache;
+import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.recipe.DryingTableRecipeType;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import mezz.jei.api.constants.VanillaTypes;
@@ -18,7 +18,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -32,7 +32,7 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
 
     public static final Identifier TEXTURE = Utility.identifier("textures/gui/drying_table_jei.png");
     public static final Identifier WATERLOGGED = Utility.identifier("textures/gui/sprites/waterlogged_progress_arrow.png");
-    public static final IRecipeType<DryingTableRecipe> RECIPE_TYPE = IRecipeType.create(Utility.MOD_ID, "drying_table", DryingTableRecipe.class);
+    public static final IRecipeType<DryingTableRecipe> RECIPE_TYPE = IRecipeType.create(Utility.identifier("drying_table"), DryingTableRecipe.class);
 
     private final int width = 66;
     private final int height = 20;
@@ -96,16 +96,15 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
     public void getTooltip(ITooltipBuilder tooltip, DryingTableRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (MouseUtil.isMouseAboveArea((int) mouseX, (int) mouseY, 19, 1, 0, 0, 28, 18)) {
             tooltip.add(Component.translatable("tooltip.core.ticks", UtilityStartUpConfig.dryingTableMaxDuration.get()));
-
         }
     }
 
     @Override
-    public void draw(DryingTableRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
+    public void draw(DryingTableRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor GuiGraphicsExtractor, double mouseX, double mouseY) {
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
 
         if (recipe.recipeType() == DryingTableRecipeType.SOAKING) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, WATERLOGGED, 21, 1, 0, 0, 24, 16, 24, 16);
+            GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, WATERLOGGED, 21, 1, 0, 0, 24, 16, 24, 16);
         }
     }
 

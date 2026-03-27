@@ -1,4 +1,4 @@
-package com.benbenlaw.utility.event;
+package com.benbenlaw.utility.event.client;
 
 import com.benbenlaw.core.util.TooltipUtil;
 import com.benbenlaw.utility.Utility;

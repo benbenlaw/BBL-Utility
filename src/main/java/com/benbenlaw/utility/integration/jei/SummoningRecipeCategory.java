@@ -3,10 +3,8 @@ package com.benbenlaw.utility.integration.jei;
 import com.benbenlaw.core.util.MouseUtil;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
-import com.benbenlaw.utility.event.ClientRecipeCache;
-import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
+import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
-import com.benbenlaw.utility.util.BlockTarget;
 import com.benbenlaw.utility.util.TemperatureValues;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -21,7 +19,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,7 +29,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,7 +41,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.Map;
 import java.util.Objects;
@@ -175,7 +171,7 @@ public class SummoningRecipeCategory implements IRecipeCategory<SummoningRecipe>
     }
 
     @Override
-    public void draw(SummoningRecipe recipe, IRecipeSlotsView view, GuiGraphics gg, double mouseX, double mouseY) {
+    public void draw(SummoningRecipe recipe, IRecipeSlotsView view, GuiGraphicsExtractor gg, double mouseX, double mouseY) {
         gg.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
 
         Minecraft mc = Minecraft.getInstance();
@@ -224,7 +220,7 @@ public class SummoningRecipeCategory implements IRecipeCategory<SummoningRecipe>
         int screenMouseX = (int) (mouseX + guiLeft);
         int screenMouseY = (int) (mouseY + guiTop);
 
-        InventoryScreen.renderEntityInInventoryFollowsMouse(
+        InventoryScreen.extractEntityInInventoryFollowsMouse(
                 gg,
                 x1, y1, x2, y2,
                 (int) scale,

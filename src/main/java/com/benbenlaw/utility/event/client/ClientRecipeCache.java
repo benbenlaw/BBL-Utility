@@ -1,6 +1,5 @@
-package com.benbenlaw.utility.event;
+package com.benbenlaw.utility.event.client;
 
-import com.benbenlaw.utility.recipe.SummoningRecipeInput;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;

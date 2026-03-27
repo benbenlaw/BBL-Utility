@@ -14,17 +14,18 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
-public record ResourceGeneratorRecipe(ItemStackTemplate input, ItemStackTemplate output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) implements Recipe<ResourceGeneratorRecipeInput> {
+public record ResourceGeneratorRecipe(ItemStackTemplate input, ItemStackTemplate output, FluidStackTemplate leftFluid, FluidStackTemplate rightFluid, boolean consumeLeft, boolean consumeRight) implements Recipe<ResourceGeneratorRecipeInput> {
 
     public static final MapCodec<ResourceGeneratorRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     ItemStackTemplate.CODEC.fieldOf("input").forGetter(ResourceGeneratorRecipe::input),
                     ItemStackTemplate.CODEC.fieldOf("output").forGetter(ResourceGeneratorRecipe::output),
-                    FluidStack.CODEC.fieldOf("left_fluid").forGetter(ResourceGeneratorRecipe::leftFluid),
-                    FluidStack.CODEC.fieldOf("right_fluid").forGetter(ResourceGeneratorRecipe::rightFluid),
+                    FluidStackTemplate.CODEC.fieldOf("left_fluid").forGetter(ResourceGeneratorRecipe::leftFluid),
+                    FluidStackTemplate.CODEC.fieldOf("right_fluid").forGetter(ResourceGeneratorRecipe::rightFluid),
                     Codec.BOOL.fieldOf("consume_left").forGetter(ResourceGeneratorRecipe::consumeLeft),
                     Codec.BOOL.fieldOf("consume_right").forGetter(ResourceGeneratorRecipe::consumeRight)
             ).apply(instance, ResourceGeneratorRecipe::new)
@@ -41,8 +42,8 @@ public record ResourceGeneratorRecipe(ItemStackTemplate input, ItemStackTemplate
     private static ResourceGeneratorRecipe read(RegistryFriendlyByteBuf buffer) {
         ItemStackTemplate input = ItemStackTemplate.STREAM_CODEC.decode(buffer);
         ItemStackTemplate output = ItemStackTemplate.STREAM_CODEC.decode(buffer);
-        FluidStack leftFluid = FluidStack.STREAM_CODEC.decode(buffer);
-        FluidStack rightFluid = FluidStack.STREAM_CODEC.decode(buffer);
+        FluidStackTemplate leftFluid = FluidStackTemplate.STREAM_CODEC.decode(buffer);
+        FluidStackTemplate rightFluid = FluidStackTemplate.STREAM_CODEC.decode(buffer);
         boolean consumeLeft = buffer.readBoolean();
         boolean consumeRight = buffer.readBoolean();
         return new ResourceGeneratorRecipe(input, output, leftFluid, rightFluid, consumeLeft, consumeRight);
@@ -51,8 +52,8 @@ public record ResourceGeneratorRecipe(ItemStackTemplate input, ItemStackTemplate
     private static void write(RegistryFriendlyByteBuf buffer, ResourceGeneratorRecipe recipe) {
         ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.input);
         ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.output);
-        FluidStack.STREAM_CODEC.encode(buffer, recipe.leftFluid);
-        FluidStack.STREAM_CODEC.encode(buffer, recipe.rightFluid);
+        FluidStackTemplate.STREAM_CODEC.encode(buffer, recipe.leftFluid);
+        FluidStackTemplate.STREAM_CODEC.encode(buffer, recipe.rightFluid);
         buffer.writeBoolean(recipe.consumeLeft);
         buffer.writeBoolean(recipe.consumeRight);;
     }
@@ -66,8 +67,8 @@ public record ResourceGeneratorRecipe(ItemStackTemplate input, ItemStackTemplate
         var leftTank = recipeInput.getLeftFluid();
         var rightTank = recipeInput.getRightFluid();
 
-        boolean defaultOrder = leftFluid.is(leftTank.getFluid()) && leftFluid.getAmount() <= leftTank.getAmount() && rightFluid.is(rightTank.getFluid()) && rightFluid.getAmount() <= rightTank.getAmount();
-        boolean swappedOrder = leftFluid.is(rightTank.getFluid()) && leftFluid.getAmount() <= rightTank.getAmount() && rightFluid.is(leftTank.getFluid()) && rightFluid.getAmount() <= leftTank.getAmount();
+        boolean defaultOrder = leftFluid.is(leftTank.getFluid()) && leftFluid.amount() <= leftTank.getAmount() && rightFluid.is(rightTank.getFluid()) && rightFluid.amount() <= rightTank.getAmount();
+        boolean swappedOrder = leftFluid.is(rightTank.getFluid()) && leftFluid.amount() <= rightTank.getAmount() && rightFluid.is(leftTank.getFluid()) && rightFluid.amount() <= leftTank.getAmount();
 
         return inputMatches && (defaultOrder || swappedOrder);
     }

@@ -4,7 +4,7 @@ import com.benbenlaw.core.Core;
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.entity.FluidPlacerBlockEntity;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,9 @@ public class FluidPlacerScreen extends AbstractContainerScreen<FluidPlacerMenu> 
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, a);
+
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -32,18 +34,16 @@ public class FluidPlacerScreen extends AbstractContainerScreen<FluidPlacerMenu> 
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTanks(guiGraphics, x, y, mouseX, mouseY);
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
-    private void renderTanks(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getInputFluidHandler(), FluidPlacerBlockEntity.TANK_SLOT, x, y, 60, 20, 47, 16, mouseX, mouseY);
+    private void renderTanks(GuiGraphicsExtractor GuiGraphicsExtractor, int x, int y, int mouseX, int mouseY) {
+        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getInputFluidHandler(), FluidPlacerBlockEntity.TANK_SLOT, x, y, 60, 20, 47, 16, mouseX, mouseY);
     }
 }

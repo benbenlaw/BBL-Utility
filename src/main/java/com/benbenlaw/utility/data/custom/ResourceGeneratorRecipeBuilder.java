@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,13 +28,13 @@ public class ResourceGeneratorRecipeBuilder implements RecipeBuilder {
     protected String group;
     protected ItemStackTemplate input;
     protected ItemStackTemplate output;
-    protected FluidStack leftFluid;
-    protected FluidStack rightFluid;
+    protected FluidStackTemplate leftFluid;
+    protected FluidStackTemplate rightFluid;
     protected boolean consumeLeft;
     protected boolean consumeRight;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public ResourceGeneratorRecipeBuilder(ItemStackTemplate input, ItemStackTemplate output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) {
+    public ResourceGeneratorRecipeBuilder(ItemStackTemplate input, ItemStackTemplate output, FluidStackTemplate leftFluid, FluidStackTemplate rightFluid, boolean consumeLeft, boolean consumeRight) {
         this.input = input;
         this.output = output;
         this.leftFluid = leftFluid;
@@ -42,7 +43,7 @@ public class ResourceGeneratorRecipeBuilder implements RecipeBuilder {
         this.consumeRight = consumeRight;
     }
 
-    public static ResourceGeneratorRecipeBuilder resourceGenerator(ItemStackTemplate input, ItemStackTemplate output, FluidStack leftFluid, FluidStack rightFluid, boolean consumeLeft, boolean consumeRight) {
+    public static ResourceGeneratorRecipeBuilder resourceGenerator(ItemStackTemplate input, ItemStackTemplate output, FluidStackTemplate leftFluid, FluidStackTemplate rightFluid, boolean consumeLeft, boolean consumeRight) {
         return new ResourceGeneratorRecipeBuilder(input, output, leftFluid, rightFluid, consumeLeft, consumeRight);
     }
 

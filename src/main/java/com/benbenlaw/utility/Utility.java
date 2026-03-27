@@ -24,7 +24,6 @@ import com.benbenlaw.utility.screen.placer.FluidPlacerScreen;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerScreen;
 import com.benbenlaw.utility.screen.summoning.SummoningBlockScreen;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
@@ -89,7 +88,7 @@ public class Utility {
         private static void onClientSetup(final FMLCommonSetupEvent event) {
 
             //Not sure what the correct way of doing this is but this works for the current version of Minecraft
-            ItemBlockRenderTypes.setRenderLayer(UtilityBlocks.DRYING_TABLE.get(), ChunkSectionLayer.CUTOUT);
+            //ItemBlockRenderTypes.setRenderLayer(UtilityBlocks.DRYING_TABLE.get(), ChunkSectionLayer.CUTOUT);
         }
 
         @SubscribeEvent

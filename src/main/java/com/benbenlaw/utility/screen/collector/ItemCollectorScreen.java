@@ -6,7 +6,7 @@ import com.benbenlaw.core.screen.util.button.WhitelistButton;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.network.packets.SyncItemCollectorPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -96,7 +96,9 @@ public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMe
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, a);
+
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -105,23 +107,20 @@ public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMe
         /** Render Progress Arrow - correctly disabled as not sure its really needed*/
 
         //if (menu.isCrafting()) {
-        //    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, PROGRESS_ARROW, 24, 16, 0, 0, x + 140, y + 35, menu.getScaledProgress() + 1, 16);
+        //    GuiGraphicsExtractor.blitSprite(RenderPipelines.GUI_TEXTURED, PROGRESS_ARROW, 24, 16, 0, 0, x + 140, y + 35, menu.getScaledProgress() + 1, 16);
         //}
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
-        renderTooltip(guiGraphics, mouseX, mouseY);
-
-        if (this.leftRightOffset != null) this.leftRightOffset.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.upDownOffset != null) this.upDownOffset.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.forwardBackOffset != null) this.forwardBackOffset.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.widthSize != null) this.widthSize.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.heightSize != null) this.heightSize.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.depthSize != null) this.depthSize.render(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.leftRightOffset != null) this.leftRightOffset.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.upDownOffset != null) this.upDownOffset.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.forwardBackOffset != null) this.forwardBackOffset.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.widthSize != null) this.widthSize.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.heightSize != null) this.heightSize.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        if (this.depthSize != null) this.depthSize.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         if (this.leftRightOffset != null && this.leftRightOffset.isMouseOver(mouseX, mouseY)) {
             renderTooltip(guiGraphics, "tooltip.item_collector.left_right", mouseX, mouseY);
@@ -142,10 +141,10 @@ public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMe
         DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
     }
 
-    private void renderTooltip(GuiGraphics guiGraphics, String text, int mouseX, int mouseY) {
+    private void renderTooltip(GuiGraphicsExtractor guiGraphics, String text, int mouseX, int mouseY) {
         List<ClientTooltipComponent> components =
                 Collections.singletonList(ClientTooltipComponent.create(Component.translatable(text).getVisualOrderText()));
-        guiGraphics.renderTooltip(Minecraft.getInstance().font, components, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+        guiGraphics.tooltip(Minecraft.getInstance().font, components, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
     }
 
     @Override

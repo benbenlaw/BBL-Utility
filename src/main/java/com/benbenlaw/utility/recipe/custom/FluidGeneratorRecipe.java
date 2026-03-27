@@ -20,6 +20,7 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.NotNull;
@@ -27,12 +28,12 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
-public record FluidGeneratorRecipe(String input, FluidStack output) implements Recipe<RecipeInput> {
+public record FluidGeneratorRecipe(String input, FluidStackTemplate output) implements Recipe<RecipeInput> {
 
     public static final MapCodec<FluidGeneratorRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     Codec.STRING.fieldOf("input").forGetter(FluidGeneratorRecipe::input),
-                    FluidStack.CODEC.fieldOf("output").forGetter(FluidGeneratorRecipe::output)
+                    FluidStackTemplate.CODEC.fieldOf("output").forGetter(FluidGeneratorRecipe::output)
             ).apply(instance, FluidGeneratorRecipe::new)
     );
 
@@ -46,13 +47,13 @@ public record FluidGeneratorRecipe(String input, FluidStack output) implements R
 
     private static FluidGeneratorRecipe read(RegistryFriendlyByteBuf buffer) {
         String input = ByteBufCodecs.STRING_UTF8.decode(buffer);
-        FluidStack output = FluidStack.STREAM_CODEC.decode(buffer);
+        FluidStackTemplate output = FluidStackTemplate.STREAM_CODEC.decode(buffer);
         return new FluidGeneratorRecipe(input, output);
     }
 
     private static void write(RegistryFriendlyByteBuf buffer, FluidGeneratorRecipe recipe) {
         ByteBufCodecs.STRING_UTF8.encode(buffer, recipe.input);
-        FluidStack.STREAM_CODEC.encode(buffer, recipe.output);
+        FluidStackTemplate.STREAM_CODEC.encode(buffer, recipe.output);
     }
 
     @Override

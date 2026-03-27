@@ -12,7 +12,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class UtilityItemTags extends ItemTagsProvider {
 
-
     public UtilityItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, Utility.MOD_ID);
     }

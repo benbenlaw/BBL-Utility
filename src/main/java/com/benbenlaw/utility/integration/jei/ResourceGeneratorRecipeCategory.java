@@ -3,7 +3,7 @@ package com.benbenlaw.utility.integration.jei;
 import com.benbenlaw.core.util.MouseUtil;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
-import com.benbenlaw.utility.event.ClientRecipeCache;
+import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -17,7 +17,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -86,18 +86,18 @@ public class ResourceGeneratorRecipeCategory implements IRecipeCategory<Resource
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ResourceGeneratorRecipe recipe, @NotNull IFocusGroup focuses) {
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 2).add(recipe.leftFluid().getFluid()).addRichTooltipCallback(
+        builder.addSlot(RecipeIngredientRole.INPUT, 2, 2).add(recipe.leftFluid().fluid().value()).addRichTooltipCallback(
                 (ingredients, tooltip) -> {
-                    tooltip.add(Component.literal(recipe.leftFluid().getAmount() + "mb").withStyle(ChatFormatting.GOLD));
+                    tooltip.add(Component.literal(recipe.leftFluid().amount() + "mb").withStyle(ChatFormatting.GOLD));
                     if (recipe.consumeLeft()) {
                         tooltip.add(Component.translatable("jei.utility.consumed").withStyle(ChatFormatting.RED));
                     }
                 }
         );
         builder.addSlot(RecipeIngredientRole.INPUT, 21, 2).add(recipe.input().create());
-        builder.addSlot(RecipeIngredientRole.INPUT, 40, 2).add(recipe.rightFluid().getFluid()).addRichTooltipCallback(
+        builder.addSlot(RecipeIngredientRole.INPUT, 40, 2).add(recipe.rightFluid().fluid().value()).addRichTooltipCallback(
                 (ingredients, tooltip) -> {
-                    tooltip.add(Component.literal(recipe.leftFluid().getAmount() + "mb").withStyle(ChatFormatting.GOLD));
+                    tooltip.add(Component.literal(recipe.leftFluid().amount() + "mb").withStyle(ChatFormatting.GOLD));
                     if (recipe.consumeRight()) {
                         tooltip.add(Component.translatable("jei.utility.consumed").withStyle(ChatFormatting.RED));
                     }
@@ -114,8 +114,8 @@ public class ResourceGeneratorRecipeCategory implements IRecipeCategory<Resource
     }
 
     @Override
-    public void draw(ResourceGeneratorRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
+    public void draw(ResourceGeneratorRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor GuiGraphicsExtractor, double mouseX, double mouseY) {
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
 
     }
 

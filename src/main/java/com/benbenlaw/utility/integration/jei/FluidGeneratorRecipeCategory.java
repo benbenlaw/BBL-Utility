@@ -3,7 +3,7 @@ package com.benbenlaw.utility.integration.jei;
 import com.benbenlaw.core.util.MouseUtil;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
-import com.benbenlaw.utility.event.ClientRecipeCache;
+import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -17,7 +17,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -95,9 +95,9 @@ public class FluidGeneratorRecipeCategory implements IRecipeCategory<FluidGenera
                     tooltip.add(Component.translatable("jei.utility.fluid_generator_recipe", recipe.input()).withStyle(ChatFormatting.GOLD));
                 }
         );
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 48, 2).add(recipe.output().getFluid()).addRichTooltipCallback(
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 48, 2).add(recipe.output().fluid().value()).addRichTooltipCallback(
                 (ingredients, tooltip) -> {;
-                    tooltip.add(Component.literal(recipe.output().getAmount() + "mb").withStyle(ChatFormatting.GOLD));
+                    tooltip.add(Component.literal(recipe.output().amount() + "mb").withStyle(ChatFormatting.GOLD));
                 }
         );
     }
@@ -111,8 +111,8 @@ public class FluidGeneratorRecipeCategory implements IRecipeCategory<FluidGenera
     }
 
     @Override
-    public void draw(FluidGeneratorRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
+    public void draw(FluidGeneratorRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor GuiGraphicsExtractor, double mouseX, double mouseY) {
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.benbenlaw.utility.screen.repairer;
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.screen.util.DurationTooltip;
 import com.benbenlaw.utility.Utility;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,8 @@ public class ItemRepairerScreen extends AbstractContainerScreen<ItemRepairerMenu
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, a);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -32,12 +33,12 @@ public class ItemRepairerScreen extends AbstractContainerScreen<ItemRepairerMenu
     }
 
     @Override
-    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        renderTooltip(guiGraphics, mouseX, mouseY);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
+
         DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
     }
 }
