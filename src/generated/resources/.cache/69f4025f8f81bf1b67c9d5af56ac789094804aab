@@ -1,4 +1,4 @@
-// 26.1-pre-3	2026-03-23T15:17:09.051624	utility Models
+// 26.1.2	2026-04-12T11:09:01.637589	utility Models
 7b478f6fe076b3dd01e19bd9af4c462234d4b866 assets/utility/blockstates/block_breaker.json
 9393e9a041dc32ae873931a80bfe2ea3a3fa0505 assets/utility/blockstates/block_placer.json
 24e85a681138e6d4534934d26d5defd3d7ccc990 assets/utility/blockstates/deepslate_ender_ore.json
@@ -79,7 +79,7 @@ e548ab09e646abc58d67d647cb7cce8739498675 assets/utility/models/block/summoning_b
 3e0e4fbff7063a3f055ec08360fb7fad4e45ea29 assets/utility/models/block/summoning_block_working.json
 2b48a94cea11a4eec9c82f4ca3daceaf050abc7c assets/utility/models/block/summoning_block_working_vertical.json
 cf9f46bd664a4017797bbd2e6e75bb4d9254ee09 assets/utility/models/item/animal_net.json
-34f5379406ee83f6d121ee35f4dda21097f87b92 assets/utility/models/item/crook.json
+9fd637ba9b66aa6338211b9b82c1bd2f5274c077 assets/utility/models/item/crook.json
 bd0a538a7087b31689131b77632cc99597996c2d assets/utility/models/item/death_stone.json
 6216d889112f6b6fa19b244e9b882343920de9a8 assets/utility/models/item/ender_pearl_fragment.json
 2b8b8c910cdf68cac5abcef4c5fe9b844e37cd84 assets/utility/models/item/floater.json

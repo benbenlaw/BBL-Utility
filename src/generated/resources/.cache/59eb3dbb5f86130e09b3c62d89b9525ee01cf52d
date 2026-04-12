@@ -1,4 +1,4 @@
-// 26.1-pre-3	2026-03-23T15:17:09.0548725	Loot Tables
+// 26.1.2	2026-04-12T11:09:01.6409958	Loot Tables
 d8e3abf1bbd543c916f4b0050a91c8883639ca87 data/utility/loot_table/blocks/block_breaker.json
 9e54278cade735ab2fad4d916750e0c4101fd21b data/utility/loot_table/blocks/block_placer.json
 a62611520d389a80bc1345a1423fe63cde7846e9 data/utility/loot_table/blocks/deepslate_ender_ore.json

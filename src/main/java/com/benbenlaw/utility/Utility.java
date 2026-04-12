@@ -48,6 +48,9 @@ public class Utility {
 
     public Utility(final IEventBus eventBus, final ModContainer modContainer) {
 
+        modContainer.registerConfig(ModConfig.Type.STARTUP, UtilityStartUpConfig.SPEC, "bbl/utility/startup.toml");
+
+
         UtilityBlocks.BLOCKS.register(eventBus);
         UtilityBlockEntities.BLOCK_ENTITIES.register(eventBus);
         UtilityItems.ITEMS.register(eventBus);
@@ -57,7 +60,6 @@ public class Utility {
         UtilityRecipeTypes.SERIALIZER.register(eventBus);
         UtilityRecipeTypes.TYPES.register(eventBus);
 
-        modContainer.registerConfig(ModConfig.Type.STARTUP, UtilityStartUpConfig.SPEC, "bbl/utility/startup.toml");
 
         eventBus.addListener(this::registerCapabilities);
         eventBus.addListener(this::registerNetworking);

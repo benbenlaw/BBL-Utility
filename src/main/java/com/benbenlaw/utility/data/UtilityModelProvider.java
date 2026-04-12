@@ -41,7 +41,7 @@ public class UtilityModelProvider extends ModelProvider {
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
 
         //Items
-        itemModels.generateFlatItem(UtilityItems.CROOK.get(), ModelTemplates.FLAT_HANDHELD_ROD_ITEM);
+        itemModels.generateFlatItem(UtilityItems.CROOK.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(UtilityItems.SAPLING_GROWER.get(), ModelTemplates.FLAT_HANDHELD_ROD_ITEM);
         itemModels.generateFlatItem(UtilityItems.ANIMAL_NET.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(UtilityItems.DEATH_STONE.get(), ModelTemplates.FLAT_ITEM);

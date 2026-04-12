@@ -78,7 +78,6 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
         if (!level.isClientSide()) {
 
             if (!level.getBlockState(worldPosition).getValue(FluidGeneratorBlock.RUNNING)) return;
-            if (cachedRecipe == null) return;
 
             ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
 

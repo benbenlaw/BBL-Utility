@@ -5,6 +5,10 @@ import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -12,9 +16,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -50,12 +56,9 @@ public class CrookItem extends Item {
         return super.mineBlock(stack, level, state, pos, entity);
     }
 
-    @Override
-    public float getDestroySpeed(@NotNull ItemStack stack, BlockState state) {
-        if (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LEAVES)) {
-            return 10f;
-        }
-        return super.getDestroySpeed(stack, state);
+    public static Tool createToolProperties() {
+        HolderGetter<Block> registrationLookup = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+        return new Tool(List.of(Tool.Rule.overrideSpeed(registrationLookup.getOrThrow(BlockTags.LEAVES), 15.0F), Tool.Rule.overrideSpeed(HolderSet.direct(new Holder[]{Blocks.VINE.builtInRegistryHolder(), Blocks.GLOW_LICHEN.builtInRegistryHolder()}), 2.0F)), 1.0F, 1, true);
     }
 }
 
