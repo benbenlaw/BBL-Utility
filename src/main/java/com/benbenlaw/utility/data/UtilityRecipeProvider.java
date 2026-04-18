@@ -508,7 +508,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 EntityType.PIG, Optional.of(warmEntityData), Optional.of(TemperatureValues.WARM)).save(output, "pig/warm");
 
         SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.PORKCHOP), 1), new BlockTarget.Tag(BlockTags.DIRT),
-                EntityType.PIG, Optional.of(coldEntityData), Optional.of(TemperatureValues.TEMPERATE)).save(output, "pig/cold");
+                EntityType.PIG, Optional.of(coldEntityData), Optional.of(TemperatureValues.COLD)).save(output, "pig/cold");
 
         //Sheep
         for (ColorUtils color : ColorUtils.values()) {
