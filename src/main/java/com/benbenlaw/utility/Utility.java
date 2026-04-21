@@ -50,7 +50,6 @@ public class Utility {
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, UtilityStartUpConfig.SPEC, "bbl/utility/startup.toml");
 
-
         UtilityBlocks.BLOCKS.register(eventBus);
         UtilityBlockEntities.BLOCK_ENTITIES.register(eventBus);
         UtilityItems.ITEMS.register(eventBus);
@@ -59,7 +58,6 @@ public class Utility {
         UtilityMenuTypes.MENUS.register(eventBus);
         UtilityRecipeTypes.SERIALIZER.register(eventBus);
         UtilityRecipeTypes.TYPES.register(eventBus);
-
 
         eventBus.addListener(this::registerCapabilities);
         eventBus.addListener(this::registerNetworking);
@@ -88,9 +86,6 @@ public class Utility {
 
         @SubscribeEvent
         private static void onClientSetup(final FMLCommonSetupEvent event) {
-
-            //Not sure what the correct way of doing this is but this works for the current version of Minecraft
-            //ItemBlockRenderTypes.setRenderLayer(UtilityBlocks.DRYING_TABLE.get(), ChunkSectionLayer.CUTOUT);
         }
 
         @SubscribeEvent

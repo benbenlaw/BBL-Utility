@@ -4,8 +4,15 @@ import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.util.UtilityTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
@@ -19,6 +26,23 @@ public class UtilityBlockTags extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+
+        //Hot Blocks
+        tag(UtilityTags.Blocks.HOT_BLOCKS)
+                .add(Blocks.MAGMA_BLOCK)
+                .add(Blocks.LAVA)
+                .addOptionalTag(TagKey.create(Registries.BLOCK, Identifier.parse("c:storage_blocks/uranium")))
+        ;
+
+        //Cold Blocks
+        tag(UtilityTags.Blocks.COLD_BLOCKS)
+                .add(Blocks.ICE)
+                .add(Blocks.PACKED_ICE)
+                .add(Blocks.BLUE_ICE)
+                .add(Blocks.SNOW)
+                .add(Blocks.SNOW_BLOCK)
+                .add(Blocks.POWDER_SNOW)
+        ;
 
         //Sapling Grower
         tag(UtilityTags.Blocks.VALID_FOR_SAPLING_GROWER)

@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:magma_block",
+    "minecraft:lava",
+    {
+      "id": "#c:storage_blocks/uranium",
+      "required": false
+    }
+  ]
+}

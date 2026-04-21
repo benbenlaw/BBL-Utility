@@ -2,8 +2,13 @@ package com.benbenlaw.utility.data;
 
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.item.UtilityItems;
+import com.benbenlaw.utility.util.UtilityTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +23,26 @@ public class UtilityItemTags extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
+
+        //Hot Blocks
+        tag(UtilityTags.Items.HOT_BLOCKS)
+                .add(Items.MAGMA_BLOCK)
+                ;
+
+        //Cold Blocks
+        tag(UtilityTags.Items.COLD_BLOCKS)
+                .add(Items.ICE)
+                .add(Items.PACKED_ICE)
+                .add(Items.BLUE_ICE)
+                .add(Items.SNOW)
+        ;
+
+        //Sapling Grower
+        tag(UtilityTags.Items.VALID_FOR_SAPLING_GROWER)
+                .addTag(ItemTags.SAPLINGS)
+                .add(Items.RED_MUSHROOM)
+                .add(Items.BROWN_MUSHROOM)
+        ;
 
         tag(Tags.Items.TOOLS_SHEAR).add(UtilityItems.WOODEN_SHEARS.get());
         tag(Tags.Items.STRINGS).add(UtilityItems.LEAFY_STRING.get());

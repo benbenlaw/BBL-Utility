@@ -1,104 +1,142 @@
 package com.benbenlaw.utility.block.entity.renderer;
 
 import com.benbenlaw.utility.block.custom.SummoningBlock;
-import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
 import com.benbenlaw.utility.block.entity.SummoningBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.cow.Cow;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
-public class SummoningBlockEntityRenderer implements BlockEntityRenderer<SummoningBlockEntity, SummoningBlockRenderState> {
+import java.util.Objects;
+import java.util.Optional;
 
-    private final EntityRenderDispatcher entityDispatcher;
+public class SummoningBlockEntityRenderer implements BlockEntityRenderer<@NotNull SummoningBlockEntity, @NotNull SummoningBlockRenderState> {
+
+    private final EntityRenderDispatcher entityRenderState;
 
     public SummoningBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-        this.entityDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        entityRenderState = context.entityRenderer();
+
     }
 
     @Override
-    public SummoningBlockRenderState createRenderState() {
+    public @NotNull SummoningBlockRenderState createRenderState() {
         return new SummoningBlockRenderState();
     }
 
     @Override
     public void extractRenderState(SummoningBlockEntity blockEntity, SummoningBlockRenderState renderState,
-                                   float partialTick, @NotNull net.minecraft.world.phys.Vec3 cameraPosition,
-                                   net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay breakProgress) {
-        // Store block position & level in render state
-        renderState.blockEntityLevel = blockEntity.getLevel();
-        renderState.lightPosition = blockEntity.getBlockPos();
-        renderState.growthProgress = 1f; // full size
+                                   float partialTick, Vec3 cameraPosition,
+                                   ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
+
+        if (blockEntity.getLevel() == null) return;
+
+        renderState.renderEntity = blockEntity.getSummonedEntity();
+        renderState.entityTag = blockEntity.getSummonedEntityData().orElse(null);
+        renderState.facing = blockEntity.getBlockState().getValue(SummoningBlock.FACING);
+        renderState.scaledProgress = blockEntity.getScaledProgress();
     }
 
     @Override
-    public void submit(SummoningBlockRenderState renderState, PoseStack poseStack,
-                       SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+    public void submit(@NotNull SummoningBlockRenderState state,
+                       PoseStack poseStack,
+                       SubmitNodeCollector submitNodeCollector,
+                       CameraRenderState cameraRenderState) {
 
-        Level level = renderState.blockEntityLevel;
-        BlockPos pos = renderState.lightPosition;
-        if (level == null || pos == null) return;
-
-        // --- Push pose ---
         poseStack.pushPose();
 
-        // Center the cow on the block
-        poseStack.translate(0.5, 1.0, 0.5);
+        // Center on block
+        poseStack.translate(0.5f, 1.0f, 0.5f);
 
-        // Optional: rotate based on block facing
-        float yaw = 0;
-        Direction facing = level.getBlockState(pos).getValue(SummoningBlock.FACING);
-        switch (facing) {
-            case NORTH -> yaw = 180;
-            case SOUTH -> yaw = 0;
-            case EAST -> yaw = 90;
-            case WEST -> yaw = -90;
-        }
-        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        float scale = state.scaledProgress;
 
-        // Scale based on growth
-        float scale = renderState.growthProgress;
+        // Prevent invalid scale (important to avoid NaNs / invisible rendering)
+        scale = Math.max(0.0001f, scale);
+
+        // Scale entity
         poseStack.scale(scale, scale, scale);
+
+        // Keep entity grounded while scaling
         poseStack.translate(0.0f, -0.5f * (1.0f - scale), 0.0f);
 
-        // --- Render the cow ---
-        Cow cow = new Cow(EntityType.COW, level);
-        cow.setPos(0,0,0); // local block coords
-        cow.tickCount = (int) level.getGameTime();
+        // Facing rotation
+        Direction direction = state.facing;
+        float yaw = switch (direction) {
+            case NORTH -> 180f;
+            case SOUTH -> 0f;
+            case EAST -> 90f;
+            case WEST -> -90f;
+            default -> 0f;
+        };
 
-        var cowState = entityDispatcher.getRenderer(cow).createRenderState(cow, 0.0f);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
 
-        double camX = cowState.x - cameraRenderState.pos.x();
-        double camY = cowState.y - cameraRenderState.pos.y();
-        double camZ = cowState.z - cameraRenderState.pos.z();
+        // Get entity type
+        EntityType<?> type = state.renderEntity;
 
-        entityDispatcher.submit(cowState, cameraRenderState, camX, camY, camZ, poseStack, submitNodeCollector);
+        if (type != null && Minecraft.getInstance().level != null) {
+
+            // Create entity instance
+            Entity entity = type.create(
+                    Minecraft.getInstance().level,
+                    EntitySpawnReason.EVENT
+            );
+
+            if (entity != null) {
+
+                // Apply saved NBT data (THIS is what makes it the "exact mob")
+                if (state.entityTag != null) {
+                    ValueInput input = TagValueInput.create(
+                            ProblemReporter.DISCARDING,
+                            Minecraft.getInstance().level.registryAccess(),
+                            state.entityTag
+                    );
+
+                    entity.load(input);
+                }
+
+                // Extract render state
+                EntityRenderState renderState =
+                        entityRenderState.extractEntity(entity, 0.0f);
+
+                // Submit to renderer
+                entityRenderState.submit(
+                        renderState,
+                        cameraRenderState,
+                        0.0d,
+                        0.0d,
+                        0.0d,
+                        poseStack,
+                        submitNodeCollector
+                );
+            }
+        }
 
         poseStack.popPose();
     }
 
+    @Override
+    public boolean shouldRender(@NotNull SummoningBlockEntity blockEntity, Vec3 cameraPosition) {
+        return true;
+    }
 }

@@ -7,16 +7,20 @@ import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.SummoningBlock;
+import com.benbenlaw.utility.config.UtilityStartUpConfig;
+import com.benbenlaw.utility.network.packets.SyncEntitySummoningBlockPacket;
 import com.benbenlaw.utility.recipe.SummoningRecipeInput;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
 import com.benbenlaw.utility.screen.summoning.SummoningBlockMenu;
 import com.benbenlaw.utility.util.TemperatureValues;
+import com.benbenlaw.utility.util.UtilityTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketDecoder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -47,24 +51,29 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.Objects;
+import java.util.Optional;
 
 public class SummoningBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
     private final ContainerData data;
-    private int maxProgress = 100;
+    private int maxProgress = UtilityStartUpConfig.dryingTableMaxDuration.get();
     private int progress = 0;
     private final InputItemHandler inputHandler = new InputItemHandler(this,1, (i, stack) -> i == INPUT_SLOT);
 
     public static final int INPUT_SLOT = 0;
     private RecipeHolder<SummoningRecipe> cachedRecipe;
     private TemperatureValues temperatureValve = TemperatureValues.TEMPERATE;
+    private EntityType<?> summonedEntity;
+    private Optional<CompoundTag> summonedEntityData = Optional.empty();
 
     public SummoningBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.SUMMONING_BLOCK_ENTITY.get(), pos, state);
@@ -99,7 +108,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
 
             if (!level.getBlockState(worldPosition).getValue(SummoningBlock.RUNNING)) return;
 
-            if (cachedRecipe == null) {
+            if (cachedRecipe == null || !isRecipeStillValid(cachedRecipe)) {
                 updateCachedRecipe();
             }
 
@@ -113,9 +122,13 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
             }
 
             if (cachedRecipe != null) {
+                sync();
+                PacketDistributor.sendToAllPlayers(new SyncEntitySummoningBlockPacket(worldPosition, cachedRecipe.value().summonedEntity(), cachedRecipe.value().entityData().orElse(null)));
                 progress++;
+                summonedEntity = cachedRecipe.value().summonedEntity();
                 if (progress >= maxProgress) {
                     summonMob();
+
                 }
             } else {
                 progress = 0;
@@ -157,7 +170,24 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         if (level != null && level.getServer() != null) {
             cachedRecipe = level.getServer().getRecipeManager().getRecipeFor(UtilityRecipeTypes.SUMMONING_TYPE.get(),
                     new SummoningRecipeInput(inputHandler, level.getBlockState(worldPosition.below()), temperatureValve), level).orElse(null);
+
+            if (cachedRecipe != null) {
+                setSummonedEntity(cachedRecipe.value().summonedEntity());
+            }
+
+
         }
+    }
+
+    private boolean isRecipeStillValid(RecipeHolder<SummoningRecipe> recipeHolder) {
+        if (level == null) return false;
+
+        var recipe = recipeHolder.value();
+
+        return recipe.matches(
+                new SummoningRecipeInput(inputHandler, level.getBlockState(worldPosition.below()), temperatureValve),
+                level
+        );
     }
 
     public void updateTemperatureValve() {
@@ -169,12 +199,12 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
             BlockPos pos = worldPosition.relative(dir);
             BlockState state = level.getBlockState(pos);
 
-            if (state.is(Blocks.LAVA)) {
+            if (state.is(UtilityTags.Blocks.HOT_BLOCKS)) {
                 temperatureValve = TemperatureValues.WARM;
                 return;
             }
 
-            if (state.is(Blocks.ICE) || state.is(Blocks.PACKED_ICE) || state.is(Blocks.BLUE_ICE)) {
+            if (state.is(UtilityTags.Blocks.COLD_BLOCKS)) {
                 foundIce = true;
             }
         }
@@ -186,13 +216,34 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         }
     }
 
-
     public InputItemHandler getInputHandler() {
         return inputHandler;
     }
 
     public ResourceHandler<ItemResource> getItemCapability() {
         return inputHandler;
+    }
+
+    public EntityType<?> getSummonedEntity() {
+        return summonedEntity;
+    }
+
+    public Optional<CompoundTag> getSummonedEntityData() {
+        return summonedEntityData;
+    }
+
+    public void setSummonedEntity(EntityType<?> entity) {
+        this.summonedEntity = entity;
+    }
+
+    public void setSummonedEntityData(Optional<CompoundTag> data) {
+        this.summonedEntityData = data;
+    }
+
+
+    public float getScaledProgress() {
+        float entitySize = 1f;
+        return maxProgress != 0 && progress != 0 ? progress * entitySize / maxProgress : 0;
     }
 
     @Override

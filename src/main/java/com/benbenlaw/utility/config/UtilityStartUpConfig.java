@@ -27,6 +27,10 @@ public class UtilityStartUpConfig {
     public static final ModConfigSpec.ConfigValue<Integer> woodenShearsDurability;
 
     public static final ModConfigSpec.ConfigValue<Integer> dryingTableMaxDuration;
+    public static final ModConfigSpec.ConfigValue<Integer> resourceGeneratorMaxDuration;
+    public static final ModConfigSpec.ConfigValue<Integer> fluidGeneratorMaxDuration;
+    public static final ModConfigSpec.ConfigValue<Integer> summoningBlockDuration;
+
 
 
     static {
@@ -103,12 +107,21 @@ public class UtilityStartUpConfig {
 
         BUILDER.pop();
 
-        //Drying Table
-        BUILDER.comment("Drying Table Configs")
-                .push("Drying Table");
+        //Machines
+        BUILDER.comment("Machine Configs")
+                .push("Machine Configs");
 
-        dryingTableMaxDuration = BUILDER.comment("The number of ticks it takes to dry/soak an item, default = 200 (10 seconds)")
-                .define("Drying Recipe Duration", 200);
+        dryingTableMaxDuration = BUILDER.comment("The number of ticks it takes to dry/soak an item, default = 200 (5 seconds)")
+                .define("Drying Recipe Duration", 100);
+
+        resourceGeneratorMaxDuration = BUILDER.comment("The number of ticks it takes to generate resources, default = 100 (5 seconds)")
+                .define("Resource Generator Recipe Duration", 100);
+
+        fluidGeneratorMaxDuration = BUILDER.comment("The number of ticks it takes to generate fluids, default = 100 (5 seconds)")
+                .define("Fluid Generator Recipe Duration", 100);
+
+        summoningBlockDuration = BUILDER.comment("The number of ticks it takes for the summoning block to summon a mob, default = 100 (5 seconds)")
+                .define("Summoning Block Duration", 100);
 
         BUILDER.pop();
 

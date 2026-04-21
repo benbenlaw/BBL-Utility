@@ -8,6 +8,7 @@ import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
 import com.benbenlaw.core.util.DirectionUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.ResourceGeneratorBlock;
+import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.recipe.ResourceGeneratorRecipeInput;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
@@ -30,6 +31,7 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
     private final ContainerData data;
-    private int maxProgress = 200;
+    private int maxProgress = UtilityStartUpConfig.resourceGeneratorMaxDuration.get();
     private int progress = 0;
 
     private final InputItemHandler inputHandler = new SingleInputItemHandler(this, 3, (index, stack) -> true);
@@ -98,7 +100,15 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
                 return;
             }
 
-            if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output().create())) {
+            if (cachedRecipe != null) {
+                ItemStack result = cachedRecipe.value().output().create();
+
+                if (!canInsertOutput(result)) {
+                    progress = 0;
+                    sync();
+                    return;
+                }
+
                 progress++;
                 if (progress >= maxProgress) {
                     craftItem();
@@ -132,7 +142,7 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     }
 
     private boolean canInsertOutput(ItemStack output) {
-        ItemStack outputSlot = outputHandler.getResource(OUTPUT_SLOT).toStack();
+        ItemStack outputSlot = ItemUtil.getStack(outputHandler, OUTPUT_SLOT);
         if (outputSlot.isEmpty()) {
             return true;
         } else if (!ItemStack.isSameItemSameComponents(outputSlot, output)) {

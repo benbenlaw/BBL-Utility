@@ -86,7 +86,7 @@ public record SummoningRecipe(SizedIngredient input, BlockTarget belowBlock, Ent
 
     @Override
     public boolean matches(@NotNull SummoningRecipeInput recipeInput, Level level) {
-        if (level.isClientSide()) return false;
+        //if (level.isClientSide()) return false;
 
         boolean isBelowBlockMatching = belowBlock.matches(recipeInput.getBelowBlock(), false);
         boolean tempCheck;

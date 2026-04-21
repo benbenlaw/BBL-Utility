@@ -90,8 +90,8 @@ public class UtilityLangProvider extends LanguageProvider {
         add("jei.utility.summoned_entity", "Summons %s");
         add("jei.utility.summoning_block_below_block", "Place below");
         add("jei.utility.summoning_requirement_temperate", "Must have no Hot or Cold Blocks around it");
-        add("jei.utility.summoning_requirement_warm", "Must have Hot Blocks like Lava around it");
-        add("jei.utility.summoning_requirement_cold", "Must have Cold Blocks like Ice around it");
+        add("jei.utility.summoning_requirement_warm", "Requires a Hot Block like Lava or any block tagged as a Hot Block");
+        add("jei.utility.summoning_requirement_cold", "Requires a Cold Block like Ice or any block tagged as a Cold Block");
 
         add("jei.utility.fluid_generator_recipe", "Any item that holds %s can be used here (like a Bucket)");
     }

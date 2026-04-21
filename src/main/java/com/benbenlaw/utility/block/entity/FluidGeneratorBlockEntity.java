@@ -5,6 +5,7 @@ import com.benbenlaw.core.block.entity.handler.fluid.OutputFluidHandler;
 import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidGeneratorBlock;
+import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorMenu;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
     private final ContainerData data;
-    private int maxProgress = 200;
+    private int maxProgress = UtilityStartUpConfig.dryingTableMaxDuration.get();
     private int progress = 0;
     private final InputItemHandler inputHandler = new InputItemHandler(this, 1, (index, stack) -> true);
 
