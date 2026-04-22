@@ -123,7 +123,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
 
             if (cachedRecipe != null) {
                 sync();
-                PacketDistributor.sendToAllPlayers(new SyncEntitySummoningBlockPacket(worldPosition, cachedRecipe.value().summonedEntity(), cachedRecipe.value().entityData().orElse(null)));
+                PacketDistributor.sendToAllPlayers(new SyncEntitySummoningBlockPacket(worldPosition, cachedRecipe.value().summonedEntity(), cachedRecipe.value().entityData()));
                 progress++;
                 summonedEntity = cachedRecipe.value().summonedEntity();
                 if (progress >= maxProgress) {

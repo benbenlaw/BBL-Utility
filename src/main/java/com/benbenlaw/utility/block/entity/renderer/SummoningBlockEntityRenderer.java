@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,28 +60,14 @@ public class SummoningBlockEntityRenderer implements BlockEntityRenderer<@NotNul
     }
 
     @Override
-    public void submit(@NotNull SummoningBlockRenderState state,
-                       PoseStack poseStack,
-                       SubmitNodeCollector submitNodeCollector,
-                       CameraRenderState cameraRenderState) {
+    public void submit(@NotNull SummoningBlockRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
 
         poseStack.pushPose();
-
-        // Center on block
         poseStack.translate(0.5f, 1.0f, 0.5f);
-
         float scale = state.scaledProgress;
-
-        // Prevent invalid scale (important to avoid NaNs / invisible rendering)
         scale = Math.max(0.0001f, scale);
-
-        // Scale entity
         poseStack.scale(scale, scale, scale);
-
-        // Keep entity grounded while scaling
         poseStack.translate(0.0f, -0.5f * (1.0f - scale), 0.0f);
-
-        // Facing rotation
         Direction direction = state.facing;
         float yaw = switch (direction) {
             case NORTH -> 180f;
@@ -91,12 +79,10 @@ public class SummoningBlockEntityRenderer implements BlockEntityRenderer<@NotNul
 
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
 
-        // Get entity type
         EntityType<?> type = state.renderEntity;
 
         if (type != null && Minecraft.getInstance().level != null) {
 
-            // Create entity instance
             Entity entity = type.create(
                     Minecraft.getInstance().level,
                     EntitySpawnReason.EVENT
@@ -104,31 +90,14 @@ public class SummoningBlockEntityRenderer implements BlockEntityRenderer<@NotNul
 
             if (entity != null) {
 
-                // Apply saved NBT data (THIS is what makes it the "exact mob")
                 if (state.entityTag != null) {
-                    ValueInput input = TagValueInput.create(
-                            ProblemReporter.DISCARDING,
-                            Minecraft.getInstance().level.registryAccess(),
-                            state.entityTag
-                    );
-
+                    ValueInput input = TagValueInput.create(ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), state.entityTag);
                     entity.load(input);
                 }
 
-                // Extract render state
-                EntityRenderState renderState =
-                        entityRenderState.extractEntity(entity, 0.0f);
+                EntityRenderState renderState = entityRenderState.extractEntity(entity, 0.0f);
 
-                // Submit to renderer
-                entityRenderState.submit(
-                        renderState,
-                        cameraRenderState,
-                        0.0d,
-                        0.0d,
-                        0.0d,
-                        poseStack,
-                        submitNodeCollector
-                );
+                entityRenderState.submit(renderState, cameraRenderState, 0.0d,0.0d, 0.0d, poseStack, submitNodeCollector);
             }
         }
 
@@ -136,7 +105,8 @@ public class SummoningBlockEntityRenderer implements BlockEntityRenderer<@NotNul
     }
 
     @Override
-    public boolean shouldRender(@NotNull SummoningBlockEntity blockEntity, Vec3 cameraPosition) {
-        return true;
+    public AABB getRenderBoundingBox(SummoningBlockEntity be) {
+        return new AABB(be.getBlockPos().above(1)
+        ).inflate(1.5);
     }
 }

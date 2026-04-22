@@ -133,7 +133,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         }
     }
 
-    private AABB createArea() {
+    public AABB createArea() {
         BlockPos startPos = getOffsetStartPos();
         BlockState state = getBlockState();
         Direction facing = state.getValue(ItemCollectorBlock.FACING);
@@ -254,11 +254,11 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     public void onRightClick() {
         Level level = this.getLevel();
         if (level != null && !level.isClientSide()) {
-            showFlightRangeOutline((ServerLevel) level);
+            showWorkingArea((ServerLevel) level);
         }
     }
 
-    private void showFlightRangeOutline(ServerLevel level) {
+    private void showWorkingArea(ServerLevel level) {
         AABB range = createArea();
 
         int minX = (int) Math.floor(range.minX);

@@ -3,6 +3,7 @@ package com.benbenlaw.utility.block.custom;
 import com.benbenlaw.core.block.SyncableBlock;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.entity.ItemCollectorBlockEntity;
+import com.benbenlaw.utility.block.entity.renderer.ClientRenderState;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,22 +35,25 @@ public class ItemCollectorBlock extends SyncableBlock {
 
     @Override
     protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
-        if (!level.isClientSide()) {
+        if (player.isCrouching()) {
 
-            BlockEntity entity = level.getBlockEntity(pos);
-            if (entity instanceof ItemCollectorBlockEntity entity1) {
-                if (player.isCrouching()) {
-                    entity1.onRightClick();
-                }
-
-                else {
-                    player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
-                }
+            if (level.isClientSide()) {
+                ClientRenderState.toggleCollector(pos);
             }
-            else {
+
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!level.isClientSide()) {
+            BlockEntity entity = level.getBlockEntity(pos);
+
+            if (entity instanceof ItemCollectorBlockEntity entity1) {
+                player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
+            } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }
         }
+
         return InteractionResult.SUCCESS;
     }
 
