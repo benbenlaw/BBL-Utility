@@ -1,9 +1,7 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.item.CombinedItemHandler;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
-import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.ItemRepairerBlock;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerMenu;
@@ -22,6 +20,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,11 +31,13 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
     private int maxProgress = 200;
     private int progress = 0;
 
-    private final InputItemHandler inputHandler = new InputItemHandler(this,1, (i, stack) -> i == INPUT_SLOT);
-    private final OutputItemHandler outputHandler = new OutputItemHandler(this,1, i -> i == OUTPUT_SLOT);
+    private final SyncableItemHandler inventory = new SyncableItemHandler(this, 2,
+            (i, stack) -> i == INPUT_SLOT,
+            i -> i == OUTPUT_SLOT
+    );
 
     public static final int INPUT_SLOT = 0;
-    public static final int OUTPUT_SLOT = 0;
+    public static final int OUTPUT_SLOT = 1;
 
     public ItemRepairerBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.ITEM_REPAIRER_BLOCK_ENTITY.get(), pos, state);
@@ -70,11 +71,11 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
         if (!level.isClientSide()) {
 
             if (!level.getBlockState(worldPosition).getValue(ItemRepairerBlock.RUNNING)) return;
-            if (!outputHandler.getResource(OUTPUT_SLOT).isEmpty()) return;
+            if (!inventory.getResource(OUTPUT_SLOT).isEmpty()) return;
 
-            if (inputHandler.getResource(INPUT_SLOT).toStack().isDamageableItem()) {
+            if (inventory.getResource(INPUT_SLOT).toStack().isDamageableItem()) {
 
-                ItemStack tool = inputHandler.getResource(INPUT_SLOT).toStack();
+                ItemStack tool = inventory.getResource(INPUT_SLOT).toStack();
                 int damage = tool.getDamageValue();
                 int maxDamage = tool.getMaxDamage();
                 maxProgress = maxDamage - damage;
@@ -82,11 +83,15 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
 
                 if (progress >= maxProgress) {
                     tool.setDamageValue(-maxDamage);
-                    outputHandler.set(OUTPUT_SLOT, ItemResource.of(tool.copy()), 1);
-                    try (Transaction tx = Transaction.open(null)) {
-                        inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), 1, tx);
-                        tx.commit();
-                    }
+                    inventory.set(OUTPUT_SLOT, ItemResource.of(tool.copy()), 1);
+
+                    inventory.runInternal(() -> {
+                        try (Transaction tx = Transaction.open(null)) {
+                            inventory.extract(INPUT_SLOT, inventory.getResource(INPUT_SLOT), 1, tx);
+                            tx.commit();
+                        }
+                    });
+
                     level.playSound(null, worldPosition, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.4f, 1.0f);
                     progress = 0;
                     maxProgress = 200;
@@ -97,16 +102,8 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
         }
     }
 
-    public InputItemHandler getInputHandler() {
-        return inputHandler;
-    }
-
-    public OutputItemHandler getOutputHandler() {
-        return outputHandler;
-    }
-
-    public ResourceHandler<ItemResource> getItemCapability() {
-        return new CombinedItemHandler(inputHandler, outputHandler);
+    public ItemStacksResourceHandler getItemHandler() {
+        return inventory;
     }
 
     @Override
@@ -122,8 +119,7 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        inputHandler.serialize(output.child("input"));
-        outputHandler.serialize(output.child("output"));
+        inventory.serialize(output.child("inventory"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -133,8 +129,7 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        inputHandler.deserialize(input.childOrEmpty("input"));
-        outputHandler.deserialize(input.childOrEmpty("output"));
+        inventory.deserialize(input.childOrEmpty("inventory"));
         maxProgress = input.getIntOr("maxProgress", 200);
         progress = input.getIntOr("progress", 0);
 
@@ -143,7 +138,6 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(inputHandler);
-        dropInventoryContents(outputHandler);
+        dropInventoryContents(inventory);
     }
 }

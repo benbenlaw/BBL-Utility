@@ -26,5 +26,13 @@ public class UtilityDataComponents {
             COMPONENTS.register("global_pos", () ->
                     DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<FluidListComponent>> FLUIDS =
+            COMPONENTS.register("fluids", () ->
+                    DataComponentType.<FluidListComponent>builder()
+                            .persistent(FluidListComponent.CODEC)
+                            .networkSynchronized(FluidListComponent.STREAM_CODEC)
+                            .cacheEncoding()
+                            .build());
+
 
 }

@@ -3,16 +3,20 @@ package com.benbenlaw.utility.recipe;
 import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jspecify.annotations.NonNull;
 
 public class DryingTableRecipeInput implements RecipeInput {
 
-    private final InputItemHandler handler;
-    private final boolean isWaterlogged;
+    private final ItemStacksResourceHandler handler;
+    private final FluidStacksResourceHandler fluidHandler;
 
-    public DryingTableRecipeInput(InputItemHandler handler, boolean isWaterlogged) {
+    public DryingTableRecipeInput(ItemStacksResourceHandler handler, FluidStacksResourceHandler fluidHandler) {
         this.handler = handler;
-        this.isWaterlogged = isWaterlogged;
+        this.fluidHandler = fluidHandler;
     }
 
     @Override
@@ -25,8 +29,8 @@ public class DryingTableRecipeInput implements RecipeInput {
         return handler.size();
     }
 
-    public boolean isWaterlogged() {
-        return isWaterlogged;
+    public FluidStack getFluid() {
+        return FluidUtil.getStack(fluidHandler, 0);
     }
 
 

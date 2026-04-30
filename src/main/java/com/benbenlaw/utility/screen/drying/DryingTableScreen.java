@@ -2,8 +2,10 @@ package com.benbenlaw.utility.screen.drying;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.screen.util.DurationTooltip;
+import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.custom.DryingTableBlock;
+import com.benbenlaw.utility.block.entity.FluidPlacerBlockEntity;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -30,13 +32,8 @@ public class DryingTableScreen extends AbstractContainerScreen<DryingTableMenu> 
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
 
         if (menu.isCrafting()) {
-            if (menu.blockEntity.getBlockState().getValue(DryingTableBlock.WATERLOGGED)) {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, WATERLOGGED_PROGRESS_ARROW, 24, 16, 0, 0, x + 76, y + 34, menu.getScaledProgress() + 1, 16);
-            } else {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, PROGRESS_ARROW, 24, 16, 0, 0, x + 76, y + 34, menu.getScaledProgress() + 1, 16);
-            }
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, PROGRESS_ARROW, 24, 16, 0, 0, x + 76, y + 34, menu.getScaledProgress() + 1, 16);
         }
-
     }
 
     @Override
@@ -46,5 +43,11 @@ public class DryingTableScreen extends AbstractContainerScreen<DryingTableMenu> 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
+        renderTanks(guiGraphics, x, y, mouseX, mouseY);
     }
+
+    private void renderTanks(GuiGraphicsExtractor GuiGraphicsExtractor, int x, int y, int mouseX, int mouseY) {
+        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), FluidPlacerBlockEntity.TANK_SLOT, x, y, 17, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+    }
+
 }

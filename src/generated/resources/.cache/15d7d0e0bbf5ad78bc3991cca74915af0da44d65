@@ -1,4 +1,4 @@
-// 26.1.2	2026-04-18T09:37:52.5086992	utility Recipes
+// 26.1.2	2026-04-30T10:35:23.3585693	utility Recipes
 cacec4c017a49450423191309f405f3ffa4bfa8b data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_deepslate_ender_ore.json
 5cf6c9b2d9ac6f4651910eea06a0e02f2f3f9f7e data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_ender_ore.json
 8f8a6d21064f19973e29410b0fe2c9e0f1a5037a data/minecraft/recipe/ender_pearl_fragment_from_deepslate_ender_ore.json
@@ -37,6 +37,11 @@ e83371b89874070dcf1542c9e7f6c3cff3b0885e data/utility/advancement/recipes/misc/l
 5dfda41f9c7d4068e41bcb648ee11666776d4a18 data/utility/advancement/recipes/misc/mini_coal.json
 8bba7726dbbcdd453ff2d9ec9616f79685164096 data/utility/advancement/recipes/misc/name_tag.json
 1e350519ff048ecebec0bd6d792e0cb638aa8dfa data/utility/advancement/recipes/misc/redstone_clock.json
+a58624d579f5839da85f72a61a10b4aea8aea0fd data/utility/advancement/recipes/misc/reset/drying_table.json
+5e106748130e053fe4e2afd9b1a1f4432ff5a6ef data/utility/advancement/recipes/misc/reset/fluid_collector.json
+e34147d1f458c98dcfb56032f2c913c671b5bc1d data/utility/advancement/recipes/misc/reset/fluid_generator.json
+56b3099a9fa81c8c16d9fe053a58c2c28fb4f692 data/utility/advancement/recipes/misc/reset/fluid_placer.json
+ec1d7023087f93cfe2b3a7acb87c64159097793a data/utility/advancement/recipes/misc/reset/resource_generator.json
 60e99dfdfa15f8469533b61249d3a04931ea648c data/utility/advancement/recipes/misc/resource_generator.json
 4ff82ce62f3f51d38edeff1a58453848f14e85ff data/utility/advancement/recipes/misc/sapling_grower.json
 ea078f6130aeb9bb7ff3d14489bf9c6b7ef8170f data/utility/advancement/recipes/misc/sticks.json
@@ -121,13 +126,13 @@ cf408969dba17ea1059fcf28fb98e026980c0dac data/utility/recipe/chests.json
 0225d2a3ac7c35507eab7acfdd165d4933015af7 data/utility/recipe/crook.json
 45b7a1f0678046b63f97587c0e19d7d0cc91471c data/utility/recipe/diamond_horse_armor.json
 8e20831b97da5fd4a0f96a088a28de9691077d10 data/utility/recipe/drying_table.json
-ffd7b649f417baf28c693a2ca0243eaecfe192c1 data/utility/recipe/drying_table/drying/cracked_stone_bricks.json
-9eb2829e1a9a66ce40c35100a02226d015c8b343 data/utility/recipe/drying_table/drying/dead_bush.json
-31b35e60542a471a078d54ba7a0f68f5a58a8c9b data/utility/recipe/drying_table/drying/paper.json
-26573da9b0b63a301332331019b91df60856db0c data/utility/recipe/drying_table/drying/sponge.json
-0bdae7d0475878222f810273eb3531f235b3aa51 data/utility/recipe/drying_table/soaking/soaked_paper.json
-be0b70296931994e49f4e6ff598b23b1676dd358 data/utility/recipe/drying_table/soaking/soaked_paper_from_log_sheet.json
-435b5e4d507529ad2016adb3d71685c1cfd5517f data/utility/recipe/drying_table/soaking/wet_sponge.json
+85159b263cee85061624c958c90f97cbd39bced7 data/utility/recipe/drying_table/drying/cracked_stone_bricks.json
+2bc0623b0dae29eda6c02dacbfedbe3dd49a3546 data/utility/recipe/drying_table/drying/dead_bush.json
+eff3cefb67cd380d8c2ef232af69da0fdc953b23 data/utility/recipe/drying_table/drying/paper.json
+306068acb852f192cfc70c3ed18a09c8c229a2c3 data/utility/recipe/drying_table/drying/sponge.json
+12c0e7b308b77df7e682de219affad9f812412e4 data/utility/recipe/drying_table/soaking/soaked_paper.json
+440dab71c92e2a872a0d3b028131649c8d018077 data/utility/recipe/drying_table/soaking/soaked_paper_from_log_sheet.json
+cfad0de9d2bcf7b5aab97e23d85832953ebeae26 data/utility/recipe/drying_table/soaking/wet_sponge.json
 8602be3a013da24de9e15246d7e55fe1fd51e740 data/utility/recipe/ender_pearl.json
 7d7b828f1d3cc08d06ef4ebe1b810a9ee6a2edfa data/utility/recipe/ender_pearl_fragment.json
 3d9b3b9d62d86dd43eab8de37aafcdf15fe988b3 data/utility/recipe/floater.json
@@ -147,6 +152,11 @@ dbddb46076d507e51e596594fa19f1a156dddd8a data/utility/recipe/mini_charcoal.json
 4f7ebbaf1e52dce1f2416935f1f218fbb9a421b4 data/utility/recipe/mini_coal.json
 fc5acad38ee73588f523707b533da4c599bab464 data/utility/recipe/name_tag.json
 2685c1d45a19756fc425dad7abe11a8d9a3c900c data/utility/recipe/redstone_clock.json
+3cbbf7b0eebb8d35c2ea99501bfe4d39f7599275 data/utility/recipe/reset/drying_table.json
+d4c8f5b59e7173f824dff9f47932a7eaa5b37fda data/utility/recipe/reset/fluid_collector.json
+9e2282010460d20515e90a25771bd31e2bd3b2e8 data/utility/recipe/reset/fluid_generator.json
+45cdd8afb2460949239d9ca56ac187dc1582aeae data/utility/recipe/reset/fluid_placer.json
+5b5405cb6ab063259b72c3affa996570a1896ee5 data/utility/recipe/reset/resource_generator.json
 10ed2a855f259fbbeaf9a5a5a0f97049978583a4 data/utility/recipe/resource_generator.json
 138d387395e13c6cf7ed82a3f715656197903703 data/utility/recipe/resource_generator/andesite.json
 3b97221a0764cc5a7b1843ab8852b0ca2a5da0f3 data/utility/recipe/resource_generator/basalt.json

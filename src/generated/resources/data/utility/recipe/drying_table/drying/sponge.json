@@ -6,6 +6,5 @@
   },
   "output": {
     "id": "minecraft:sponge"
-  },
-  "recipe_type": "DRYING"
+  }
 }

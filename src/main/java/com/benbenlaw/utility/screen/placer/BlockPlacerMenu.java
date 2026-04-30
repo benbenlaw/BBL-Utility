@@ -34,7 +34,7 @@ public class BlockPlacerMenu extends SimpleAbstractContainerMenu {
 
         assert blockEntity != null;
 
-        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+        this.addSlot(new InputSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                 BlockPlacerBlockEntity.INPUT_SLOT, 60, 35));
 
         this.addDataSlots(data);

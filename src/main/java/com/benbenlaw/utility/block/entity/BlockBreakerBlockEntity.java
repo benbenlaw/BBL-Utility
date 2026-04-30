@@ -1,10 +1,9 @@
 package com.benbenlaw.utility.block.entity;
 
-import com.benbenlaw.core.block.entity.FilterableBlockEntity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockBreakerBlock;
@@ -33,8 +32,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,7 +47,8 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     private float maxProgress = 1.0f;
     private float progress = 0f;
     private FakePlayer fakePlayer;
-    private final InputItemHandler inputHandler = new InputItemHandler(this,1, (i, stack) -> i == INPUT_SLOT);
+    private final SyncableItemHandler inventory = new SyncableItemHandler(this, 1,
+            (_, _) -> true, (_) -> false);
 
     private boolean whitelist = true;
     private final FilterItemHandler filterHandler = new FilterItemHandler(this,8);
@@ -88,7 +89,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
                 fakePlayer = FakePlayerUtil.createFakePlayer((ServerLevel) level, "Block_Breaker");
             }
 
-            ItemStack tool = inputHandler.getResource(INPUT_SLOT).toStack();
+            ItemStack tool = ItemUtil.getStack(inventory, INPUT_SLOT);
             fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, tool);
 
             if (!level.getBlockState(worldPosition).getValue(BlockBreakerBlock.RUNNING)) return;
@@ -129,12 +130,14 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
                     if (tool.isDamageableItem()) {
                         int oldDamage = tool.getDamageValue();
                         tool.setDamageValue(oldDamage + 1);
-                        inputHandler.set(INPUT_SLOT, ItemResource.of(tool), 1);
+                        inventory.set(INPUT_SLOT, ItemResource.of(tool), 1);
                         if (tool.getDamageValue() >= tool.getMaxDamage()) {
-                            try (Transaction tx = Transaction.open(null)) {
-                                inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), 1, tx);
-                                tx.commit();
-                            }
+                            inventory.runInternal(() -> {
+                                try (Transaction tx = Transaction.openRoot()) {
+                                    inventory.extract(INPUT_SLOT, inventory.getResource(INPUT_SLOT), 1, tx);
+                                    tx.commit();
+                                }
+                            });
                             level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 1.0f, 1.0f);
                         }
                     }
@@ -148,12 +151,8 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
         }
     }
 
-    public InputItemHandler getInputHandler() {
-        return inputHandler;
-    }
-
-    public ResourceHandler<ItemResource> getItemCapability() {
-        return inputHandler;
+    public ItemStacksResourceHandler getItemHandler() {
+        return inventory;
     }
 
     public FilterItemHandler getFilterHandler() {
@@ -195,7 +194,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        inputHandler.serialize(output.child("input"));
+        inventory.serialize(output.child("inventory"));
         filterHandler.serialize(output.child("filter"));
         output.putFloat("maxProgress", maxProgress);
         output.putFloat("progress", progress);
@@ -207,7 +206,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        inputHandler.deserialize(input.childOrEmpty("input"));
+        inventory.deserialize(input.childOrEmpty("inventory"));
         filterHandler.deserialize(input.childOrEmpty("filter"));
         maxProgress = input.getFloatOr("maxProgress", 1.0f);
         progress = input.getFloatOr("progress", 0);
@@ -218,7 +217,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(inputHandler);
+        dropInventoryContents(inventory);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class ItemCollectorMenu extends SimpleAbstractContainerMenu {
         assert blockEntity != null;
 
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new ResultSlot(blockEntity.getOutputHandler(), blockEntity.getOutputHandler()::set,
+            this.addSlot(new ResultSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                     i, 8 + i * 18, 18));
         }
 

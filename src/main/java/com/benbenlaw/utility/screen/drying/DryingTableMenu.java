@@ -34,9 +34,10 @@ public class DryingTableMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (DryingTableBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+        this.addSlot(new InputSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                 DryingTableBlockEntity.INPUT_SLOT, 44, 35));
-        this.addSlot(new ResultSlot(blockEntity.getOutputHandler(), blockEntity.getOutputHandler()::set,
+
+        this.addSlot(new ResultSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                 DryingTableBlockEntity.OUTPUT_SLOT, 116, 35));
 
         this.addDataSlots(data);

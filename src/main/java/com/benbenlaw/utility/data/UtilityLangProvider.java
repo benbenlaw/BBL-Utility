@@ -2,6 +2,7 @@ package com.benbenlaw.utility.data;
 
 import com.benbenlaw.utility.Utility;
 import net.minecraft.data.PackOutput;
+import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("block.utility.ender_ore", "Ender Ore");
         add("block.utility.deepslate_ender_ore", "Deepslate Ender Ore");
         add("block.utility.drying_table", "Drying Table");
-        add("block.utility.soaking_table", "Soaking Table");
+        add("block.utility.soaking_table", "Soaking Table (%s)");
         add("block.utility.block_placer", "Block Placer");
         add("block.utility.block_breaker", "Block Breaker");
         add("block.utility.resource_generator", "Resource Generator");
@@ -79,6 +80,10 @@ public class UtilityLangProvider extends LanguageProvider {
         add("tooltip.item_collector.width", "Width");
         add("tooltip.item_collector.height", "Height");
         add("tooltip.item_collector.depth", "Depth");
+
+        //Misc
+        add("tooltip.utility.empty", "Empty");
+        add("tooltip.utility.fluids_header", "Fluids:");
 
         //JEI
         add("jei.utility.drying_table", "Drying Table");

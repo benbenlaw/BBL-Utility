@@ -11,7 +11,7 @@
   "block.utility.item_repairer": "Item Repairer",
   "block.utility.redstone_clock": "Redstone Clock",
   "block.utility.resource_generator": "Resource Generator",
-  "block.utility.soaking_table": "Soaking Table",
+  "block.utility.soaking_table": "Soaking Table (%s)",
   "block.utility.summoning_block": "Summoning Block",
   "item.utility.animal_net": "Animal Net",
   "item.utility.crook": "Crook",
@@ -61,6 +61,8 @@
   "tooltip.utility.animal_net": "Used to catch and release mobs",
   "tooltip.utility.crook": "Breaks leaves faster and increase leaves drops rates",
   "tooltip.utility.death_stone": "Given upon death, right click to return to your death location",
+  "tooltip.utility.empty": "Empty",
   "tooltip.utility.floater": "When in your off hand allows you to place a block in your main hand in the air or water",
+  "tooltip.utility.fluids_header": "Fluids:",
   "tooltip.utility.sapling_grower": "Used to grow saplings instantly"
 }

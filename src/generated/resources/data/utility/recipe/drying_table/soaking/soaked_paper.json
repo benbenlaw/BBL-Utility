@@ -1,5 +1,9 @@
 {
   "type": "utility:drying_table",
+  "fluid": {
+    "amount": 1000,
+    "id": "minecraft:water"
+  },
   "input": {
     "count": 1,
     "ingredient": "minecraft:paper"
@@ -7,5 +11,5 @@
   "output": {
     "id": "utility:soaked_paper"
   },
-  "recipe_type": "SOAKING"
+  "consume_amount": 100
 }

@@ -36,7 +36,7 @@ public class BlockBreakerMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (BlockBreakerBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+        this.addSlot(new InputSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                 BlockBreakerBlockEntity.INPUT_SLOT, 60, 23));
 
         for (int i = 0; i < 8; i++) {

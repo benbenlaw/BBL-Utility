@@ -1,16 +1,20 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.fluid.OutputFluidHandler;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.fluid.SyncableFluidHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidGeneratorBlock;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
+import com.benbenlaw.utility.item.FluidListComponent;
+import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -27,8 +31,11 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,9 +45,11 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     private final ContainerData data;
     private int maxProgress = UtilityStartUpConfig.dryingTableMaxDuration.get();
     private int progress = 0;
-    private final InputItemHandler inputHandler = new InputItemHandler(this, 1, (index, stack) -> true);
 
-    private final OutputFluidHandler outputFluidHandler = new OutputFluidHandler(this,1,16000, i -> i == TANK_SLOT);
+    private final SyncableItemHandler inventory = new SyncableItemHandler(this, 1, (_, _) -> true, _ -> false);
+    private final SyncableFluidHandler fluidInventory = new SyncableFluidHandler(this,1,16000,
+            (_, _) -> true,
+            _ -> true);
 
     public static final int INPUT_SLOT = 0;
     public static final int TANK_SLOT = 0;
@@ -76,11 +85,12 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
 
     public void tick() {
         assert level != null;
+
         if (!level.isClientSide()) {
 
             if (!level.getBlockState(worldPosition).getValue(FluidGeneratorBlock.RUNNING)) return;
 
-            ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
+            ItemStack inputStack = ItemUtil.getStack(inventory, INPUT_SLOT);
 
             if (inputStack.isEmpty()) {
                 progress = 0;
@@ -104,62 +114,59 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
                 progress = 0;
             }
         }
+
     }
 
     private boolean hasEnoughSpace(FluidStack stack) {
-        FluidResource current = outputFluidHandler.getResource(TANK_SLOT);
-        return current.isEmpty() || (current.getFluid().isSame(stack.getFluid()) && outputFluidHandler.getAmountAsInt(TANK_SLOT) <= outputFluidHandler.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY) - stack.getAmount());
+        FluidResource current = fluidInventory.getResource(TANK_SLOT);
+        return current.isEmpty() || (current.getFluid().isSame(stack.getFluid()) && fluidInventory.getAmountAsInt(TANK_SLOT) <= fluidInventory.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY) - stack.getAmount());
     }
 
     private void craftItem() {
         if (cachedRecipe != null) {
             var recipe = cachedRecipe.value();
-            try (Transaction tx = Transaction.open(null)) {
-                outputFluidHandler.insertInternal(TANK_SLOT, FluidResource.of(recipe.output()), recipe.output().amount(), tx);
-                tx.commit();
-            }
+
+            fluidInventory.runInternal(() -> {
+                try (Transaction tx = Transaction.openRoot()) {
+                    fluidInventory.insert(TANK_SLOT, FluidResource.of(recipe.output()),
+                            recipe.output().amount(), tx);
+                    tx.commit();
+                }
+            });
             progress = 0;
             sync();
         }
     }
 
     private boolean canInsertOutput(FluidStack output) {
-        FluidStack outputTankFluid = outputFluidHandler.getResource(TANK_SLOT).toStack(TANK_SLOT);
+        FluidStack outputTankFluid = FluidUtil.getStack(fluidInventory, TANK_SLOT);
         if (outputTankFluid.isEmpty()) {
             return true;
         } else if (!FluidStack.isSameFluidSameComponents(outputTankFluid, output)) {
             return false;
         } else {
             int result = outputTankFluid.getAmount() + output.getAmount();
-            return result <= outputFluidHandler.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY);
+            return result <= fluidInventory.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY);
         }
     }
 
     private void updateCachedRecipe() {
         if (level != null && level.getServer() != null) {
             cachedRecipe = level.getServer().getRecipeManager().getRecipeFor(UtilityRecipeTypes.FLUID_GENERATOR_TYPE.get(),
-                    new SingleRecipeInput(inputHandler.getResource(INPUT_SLOT).toStack()), level).orElse(null);
+                    new SingleRecipeInput(inventory.getResource(INPUT_SLOT).toStack()), level).orElse(null);
         }
     }
 
     public boolean onPlayerUse(Player player, InteractionHand hand, Direction direction) {
-        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, outputFluidHandler);
+        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, fluidInventory);
     }
 
-    public InputItemHandler getInputItemHandler() {
-        return inputHandler;
+    public ItemStacksResourceHandler getItemHandler() {
+        return inventory;
     }
 
-    public OutputFluidHandler getOutputFluidHandler() {
-        return outputFluidHandler;
-    }
-
-    public ResourceHandler<ItemResource> getItemCapability() {
-        return inputHandler;
-    }
-
-    public ResourceHandler<FluidResource> getFluidCapability() {
-        return outputFluidHandler;
+    public FluidStacksResourceHandler getFluidHandler() {
+        return fluidInventory;
     }
 
     @Override
@@ -175,8 +182,8 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        inputHandler.serialize(output.child("input"));
-        outputFluidHandler.serialize(output.child("outputFluid"));
+        inventory.serialize(output.child("inventory"));
+        fluidInventory.serialize(output.child("fluidInventory"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -186,8 +193,8 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        inputHandler.deserialize(input.childOrEmpty("input"));
-        outputFluidHandler.deserialize(input.childOrEmpty("outputFluid"));
+        inventory.deserialize(input.childOrEmpty("inventory"));
+        fluidInventory.deserialize(input.childOrEmpty("fluidInventory"));
         maxProgress = input.getIntOr("maxProgress", 200);
         progress = input.getIntOr("progress", 0);
 
@@ -196,6 +203,22 @@ public class FluidGeneratorBlockEntity extends SyncableBlockEntity implements Me
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(inputHandler);
+        dropInventoryContents(inventory);
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        builder.set(UtilityDataComponents.FLUIDS.get(),
+                FluidListComponent.fromHandlers(fluidInventory));
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        FluidListComponent component = components.get(UtilityDataComponents.FLUIDS.get());
+        if (component != null) {
+            component.applyToHandlers(fluidInventory);
+        }
     }
 }

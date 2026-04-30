@@ -1,7 +1,7 @@
 package com.benbenlaw.utility.block.entity;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockPlacerBlock;
 import com.benbenlaw.utility.screen.placer.BlockPlacerMenu;
@@ -19,18 +19,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
     private final ContainerData data;
     private int maxProgress = 20;
     private int progress = 0;
-    private final InputItemHandler inputHandler = new InputItemHandler(this, 1, (i, stack) -> i == INPUT_SLOT);
+    private final SyncableItemHandler inventory = new SyncableItemHandler(this, 1,
+            (_, _) -> true, _ -> false);
 
     public static final int INPUT_SLOT = 0;
 
@@ -67,19 +68,21 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
             if (!level.getBlockState(worldPosition).getValue(BlockPlacerBlock.RUNNING)) return;
 
-            if (inputHandler.getResource(INPUT_SLOT).toStack().getItem() instanceof BlockItem blockItem) {
+            if (inventory.getResource(INPUT_SLOT).toStack().getItem() instanceof BlockItem blockItem) {
 
                 BlockHitResult rayTrace = new BlockHitResult(worldPosition.getCenter(), getBlockState().getValue(BlockPlacerBlock.FACING), worldPosition, false);
-                BlockPlaceContext blockPlaceContext = new BlockPlaceContext(level, null, InteractionHand.MAIN_HAND, inputHandler.getResource(INPUT_SLOT).toStack(), rayTrace);
+                BlockPlaceContext blockPlaceContext = new BlockPlaceContext(level, null, InteractionHand.MAIN_HAND, inventory.getResource(INPUT_SLOT).toStack(), rayTrace);
 
                 if (blockPlaceContext.canPlace()) {
                     progress++;
                     if (progress >= maxProgress) {
                         if (blockItem.place(blockPlaceContext).consumesAction()) {
-                            try (Transaction tx = Transaction.open(null)) {
-                                inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), 1, tx);
-                                tx.commit();
-                            }
+                            inventory.runInternal(() -> {
+                                try (Transaction tx = Transaction.openRoot()) {
+                                    inventory.extract(INPUT_SLOT, inventory.getResource(INPUT_SLOT), 1, tx);
+                                    tx.commit();
+                                }
+                            });
                         }
                         progress = 0;
                         sync();
@@ -92,16 +95,12 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
         }
     }
 
-    public InputItemHandler getInputHandler() {
-        return inputHandler;
-    }
-
-    public ResourceHandler<ItemResource> getItemCapability() {
-        return inputHandler;
+    public ItemStacksResourceHandler getItemHandler() {
+        return inventory;
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int container, Inventory inventory, Player player) {
+    public @Nullable AbstractContainerMenu createMenu(int container, @NonNull Inventory inventory, @NonNull Player player) {
         return new BlockPlacerMenu(container, inventory, this.worldPosition, data);
     }
 
@@ -113,7 +112,7 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        inputHandler.serialize(output.child("input"));
+        inventory.serialize(output.child("inventory"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -123,7 +122,7 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        inputHandler.deserialize(input.childOrEmpty("input"));
+        inventory.deserialize(input.childOrEmpty("inventory"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
 
@@ -132,6 +131,6 @@ public class BlockPlacerBlockEntity extends SyncableBlockEntity implements MenuP
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(inputHandler);
+        dropInventoryContents(inventory);
     }
 }

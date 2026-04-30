@@ -1,34 +1,26 @@
 package com.benbenlaw.utility.block.entity.renderer;
 
+import com.benbenlaw.core.util.FluidRendererUtil;
 import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import it.unimi.dsi.fastutil.HashCommon;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Lightmap;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.ShelfBlock;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.Nullable;
 
 public class DryingTableBlockEntityRenderer implements BlockEntityRenderer<@NotNull DryingTableBlockEntity, @NotNull DryingTableRenderState> {
     private final ItemModelResolver itemModelResolver;
@@ -48,18 +40,21 @@ public class DryingTableBlockEntityRenderer implements BlockEntityRenderer<@NotN
                                    @NotNull Vec3 cameraPosition, ModelFeatureRenderer.CrumblingOverlay breakProgress) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
 
+        renderState.fluidStack = FluidUtil.getStack(blockEntity.getFluidHandler(), 0);
+        renderState.tankCapacity = blockEntity.getFluidHandler().getCapacityAsInt(0, FluidResource.of(renderState.fluidStack));
+
         renderState.lightPosition = blockEntity.getBlockPos();
         renderState.blockEntityLevel = blockEntity.getLevel();
         renderState.rotation = getRenderingRotation();
 
         ItemStack renderItem = ItemStack.EMPTY;
 
-        if (!blockEntity.getOutputHandler().getResource(DryingTableBlockEntity.OUTPUT_SLOT).toStack().isEmpty()) {
-            renderItem = blockEntity.getOutputHandler().getResource(DryingTableBlockEntity.INPUT_SLOT).toStack();
+        if (!blockEntity.getItemHandler().getResource(DryingTableBlockEntity.OUTPUT_SLOT).toStack().isEmpty()) {
+            renderItem = blockEntity.getItemHandler().getResource(DryingTableBlockEntity.INPUT_SLOT).toStack();
         }
 
-        else if (!blockEntity.getInputHandler().getResource(DryingTableBlockEntity.INPUT_SLOT).toStack().isEmpty()) {
-            renderItem = blockEntity.getInputHandler().getResource(DryingTableBlockEntity.INPUT_SLOT).toStack();
+        else if (!blockEntity.getItemHandler().getResource(DryingTableBlockEntity.INPUT_SLOT).toStack().isEmpty()) {
+            renderItem = blockEntity.getItemHandler().getResource(DryingTableBlockEntity.INPUT_SLOT).toStack();
         }
 
         itemModelResolver.updateForTopItem(renderState.itemStackRenderState,
@@ -70,20 +65,30 @@ public class DryingTableBlockEntityRenderer implements BlockEntityRenderer<@NotN
 
     @Override
     public void submit(DryingTableRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
-        poseStack.pushPose();
 
-        poseStack.translate(0.5f, 0.5f, 0.5f);
+        float fillRatio = renderState.tankCapacity == 0
+                ? 0
+                : renderState.fluidStack.getAmount() / (float) renderState.tankCapacity;
+
+        //Item
+        poseStack.pushPose();
+        if (fillRatio <= 0.4) {
+            poseStack.translate(0.5f, 0.2f, 0.5f);
+        }
+        else {
+            poseStack.translate(0.5f, fillRatio - 0.2f, 0.5f);
+        }
         poseStack.scale(0.5f, 0.5f, 0.5f);
         poseStack.mulPose(Axis.YP.rotationDegrees(renderState.rotation));
-
-        renderState.itemStackRenderState.submit(poseStack, submitNodeCollector, renderState.blockEntityLevel.getLightEmission(renderState.blockPos),
-                renderState.lightCoords, OverlayTexture.NO_OVERLAY);
-
+        renderState.itemStackRenderState.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
-    }
 
-    private float getLightLevel(Level level, BlockPos pos) {
-        return Lightmap.getBrightness(level.dimensionType(), level.getLightEmission(pos));
+        //Fluids
+        poseStack.pushPose();
+        poseStack.translate(0, 0.0, 0);
+        FluidRendererUtil.submitFluid(poseStack, Sheets.translucentBlockItemSheet(), submitNodeCollector, renderState.fluidStack, fillRatio, renderState.lightCoords);
+        poseStack.popPose();
+
     }
 
     public float getRenderingRotation() {

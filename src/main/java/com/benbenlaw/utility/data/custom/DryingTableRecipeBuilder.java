@@ -1,7 +1,6 @@
 package com.benbenlaw.utility.data.custom;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.recipe.DryingTableRecipeType;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -12,33 +11,36 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class DryingTableRecipeBuilder implements RecipeBuilder {
 
     protected String group;
     protected SizedIngredient input;
     protected ItemStackTemplate output;
-    protected DryingTableRecipeType recipeType;
+    protected Optional<FluidStackTemplate> fluid;
+    protected Optional<Integer> consumeAmount;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public DryingTableRecipeBuilder(SizedIngredient input, ItemStackTemplate output, DryingTableRecipeType recipeType) {
+    public DryingTableRecipeBuilder(SizedIngredient input, ItemStackTemplate output, Optional<FluidStackTemplate> fluid, Optional<Integer> consumeAmount) {
         this.input = input;
         this.output = output;
-        this.recipeType = recipeType;
+        this.fluid = fluid;
+        this.consumeAmount = consumeAmount;
     }
 
-    public static DryingTableRecipeBuilder dryingTable(SizedIngredient input, ItemStackTemplate output, DryingTableRecipeType recipeType) {
-        return new DryingTableRecipeBuilder(input, output, recipeType);
+    public static DryingTableRecipeBuilder dryingTable(SizedIngredient input, ItemStackTemplate output, Optional<FluidStackTemplate> fluid, Optional<Integer> consumeAmount) {
+        return new DryingTableRecipeBuilder(input, output, fluid, consumeAmount);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class DryingTableRecipeBuilder implements RecipeBuilder {
                 .rewards(AdvancementRewards.Builder.recipe(resourceKey))
                 .requirements(AdvancementRequirements.Strategy.OR);
         this.criteria.forEach(builder::addCriterion);
-        DryingTableRecipe clocheRecipe = new DryingTableRecipe(input, output, recipeType);
-        recipeOutput.accept(resourceKey, clocheRecipe, builder.build(resourceKey.identifier().withPrefix("recipes/drying_table/")));
+        DryingTableRecipe dryingTableRecipe = new DryingTableRecipe(input, output, fluid, consumeAmount);
+        recipeOutput.accept(resourceKey, dryingTableRecipe, builder.build(resourceKey.identifier().withPrefix("recipes/drying_table/")));
     }
 }

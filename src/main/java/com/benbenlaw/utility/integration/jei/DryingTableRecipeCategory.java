@@ -5,7 +5,6 @@ import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.event.client.ClientRecipeCache;
-import com.benbenlaw.utility.recipe.DryingTableRecipeType;
 import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -102,16 +101,10 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
     @Override
     public void draw(DryingTableRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor GuiGraphicsExtractor, double mouseX, double mouseY) {
         GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, 0, 0, width, height, width, height);
-
-        if (recipe.recipeType() == DryingTableRecipeType.SOAKING) {
-            GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, WATERLOGGED, 21, 1, 0, 0, 24, 16, 24, 16);
-        }
     }
 
     @Override
     public void createRecipeExtras(@NotNull IRecipeExtrasBuilder builder, DryingTableRecipe recipe, @NotNull IFocusGroup focuses) {
-        if (recipe.recipeType() == DryingTableRecipeType.DRYING) {
-            builder.addAnimatedRecipeArrow(200).setPosition(22, 1);
-        }
+        builder.addAnimatedRecipeArrow(200).setPosition(22, 1);
     }
 }

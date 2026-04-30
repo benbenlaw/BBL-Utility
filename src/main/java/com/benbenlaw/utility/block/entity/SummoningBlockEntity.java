@@ -1,9 +1,10 @@
 package com.benbenlaw.utility.block.entity;
 
+import com.benbenlaw.core.block.SyncableBlock;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.SummoningBlock;
@@ -27,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -54,6 +56,8 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,7 +71,9 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
     private final ContainerData data;
     private int maxProgress = UtilityStartUpConfig.dryingTableMaxDuration.get();
     private int progress = 0;
-    private final InputItemHandler inputHandler = new InputItemHandler(this,1, (i, stack) -> i == INPUT_SLOT);
+    private final SyncableItemHandler inventory = new SyncableItemHandler(this,1,
+            (i, stack) -> i == INPUT_SLOT,
+            i -> false);
 
     public static final int INPUT_SLOT = 0;
     private RecipeHolder<SummoningRecipe> cachedRecipe;
@@ -107,12 +113,13 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         if (!level.isClientSide()) {
 
             if (!level.getBlockState(worldPosition).getValue(SummoningBlock.RUNNING)) return;
+            if (!level.getBlockState(worldPosition.above()).is(Blocks.AIR)) return;
 
             if (cachedRecipe == null || !isRecipeStillValid(cachedRecipe)) {
                 updateCachedRecipe();
             }
 
-            ItemStack inputStack = inputHandler.getResource(INPUT_SLOT).toStack();
+            ItemStack inputStack = ItemUtil.getStack(inventory, INPUT_SLOT);
 
             if (inputStack.isEmpty()) {
                 progress = 0;
@@ -155,12 +162,20 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         });
 
         entity.setPos(Vec3.atBottomCenterOf(worldPosition.above()));
+
+        float yaw = level.getBlockState(worldPosition).getValue(SyncableBlock.FACING).toYRot();
+        entity.setYBodyRot(yaw);
+        entity.setYHeadRot(yaw);
+        entity.setYRot(yaw);
+
         level.addFreshEntity(entity);
 
-        try (Transaction tx = Transaction.open(null)) {
-            inputHandler.extractInternal(INPUT_SLOT, inputHandler.getResource(INPUT_SLOT), recipe.input().count(), tx);
-            tx.commit();
-        }
+        inventory.runInternal(() -> {
+            try (Transaction tx = Transaction.open(null)) {
+                inventory.extract(INPUT_SLOT, inventory.getResource(INPUT_SLOT), recipe.input().count(), tx);
+                tx.commit();
+            }
+        });
 
         progress = 0;
         sync();
@@ -169,7 +184,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
     private void updateCachedRecipe() {
         if (level != null && level.getServer() != null) {
             cachedRecipe = level.getServer().getRecipeManager().getRecipeFor(UtilityRecipeTypes.SUMMONING_TYPE.get(),
-                    new SummoningRecipeInput(inputHandler, level.getBlockState(worldPosition.below()), temperatureValve), level).orElse(null);
+                    new SummoningRecipeInput(inventory, level.getBlockState(worldPosition.below()), temperatureValve), level).orElse(null);
 
             if (cachedRecipe != null) {
                 setSummonedEntity(cachedRecipe.value().summonedEntity());
@@ -185,7 +200,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         var recipe = recipeHolder.value();
 
         return recipe.matches(
-                new SummoningRecipeInput(inputHandler, level.getBlockState(worldPosition.below()), temperatureValve),
+                new SummoningRecipeInput(inventory, level.getBlockState(worldPosition.below()), temperatureValve),
                 level
         );
     }
@@ -216,12 +231,8 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         }
     }
 
-    public InputItemHandler getInputHandler() {
-        return inputHandler;
-    }
-
-    public ResourceHandler<ItemResource> getItemCapability() {
-        return inputHandler;
+    public ItemStacksResourceHandler getItemHandler() {
+        return inventory;
     }
 
     public EntityType<?> getSummonedEntity() {
@@ -259,7 +270,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        inputHandler.serialize(output.child("input"));
+        inventory.serialize(output.child("inventory"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
 
@@ -269,7 +280,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        inputHandler.deserialize(input.childOrEmpty("input"));
+        inventory.deserialize(input.childOrEmpty("inventory"));
         maxProgress = input.getIntOr("maxProgress", 100);
         progress = input.getIntOr("progress", 0);
 
@@ -278,6 +289,6 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(inputHandler);
+        dropInventoryContents(inventory);
     }
 }

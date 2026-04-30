@@ -1,23 +1,22 @@
 package com.benbenlaw.utility.recipe;
 
-import com.benbenlaw.core.block.entity.handler.fluid.InputFluidHandler;
-import com.benbenlaw.core.block.entity.handler.item.InputItemHandler;
+import com.benbenlaw.core.block.entity.handler.fluid.SyncableFluidHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.entity.ResourceGeneratorBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
 
 public class ResourceGeneratorRecipeInput implements RecipeInput {
 
-    private final InputItemHandler handler;
-    private final InputFluidHandler fluidHandlerLeft;
-    private final InputFluidHandler fluidHandlerRight;
+    private final SyncableItemHandler handler;
+    private final SyncableFluidHandler fluidHandler;
 
-    public ResourceGeneratorRecipeInput(InputItemHandler handler, InputFluidHandler fluidHandlerLeft, InputFluidHandler fluidHandlerRight) {
+    public ResourceGeneratorRecipeInput(SyncableItemHandler handler, SyncableFluidHandler fluidHandlerLeft) {
         this.handler = handler;
-        this.fluidHandlerLeft = fluidHandlerLeft;
-        this.fluidHandlerRight = fluidHandlerRight;
+        this.fluidHandler = fluidHandlerLeft;
     }
 
     @Override
@@ -31,11 +30,11 @@ public class ResourceGeneratorRecipeInput implements RecipeInput {
     }
 
     public FluidStack getLeftFluid() {
-        return fluidHandlerLeft.copyToList().getFirst();
+        return FluidUtil.getStack(fluidHandler, ResourceGeneratorBlockEntity.LEFT_TANK_SLOT);
     }
 
     public FluidStack getRightFluid() {
-        return fluidHandlerRight.copyToList().getFirst();
+        return FluidUtil.getStack(fluidHandler, ResourceGeneratorBlockEntity.RIGHT_TANK_SLOT);
     }
 
 

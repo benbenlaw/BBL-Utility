@@ -33,7 +33,7 @@ public class FluidGeneratorMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (FluidGeneratorBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new InputSlot(blockEntity.getItemCapability(), blockEntity.getInputItemHandler()::set,
+        this.addSlot(new InputSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                 FluidGeneratorBlockEntity.INPUT_SLOT, 44, 35).size(1));
 
         this.addDataSlots(data);

@@ -63,7 +63,7 @@ public class FluidCollectorScreen extends AbstractContainerScreen<FluidCollector
     }
 
     private void renderTankTextures(GuiGraphicsExtractor guiGraphics, int x, int y) {
-        drawTankFluid(guiGraphics, menu.blockEntity.getFluidOutputHandler(), FluidCollectorBlockEntity.TANK_SLOT, x + 60, y + 20, 16, 47);
+        drawTankFluid(guiGraphics, menu.blockEntity.getFluidHandler(), FluidCollectorBlockEntity.TANK_SLOT, x + 60, y + 20, 16, 47);
         drawTankFluid(guiGraphics, menu.blockEntity.getFilterFluidHandler(), FluidCollectorBlockEntity.TANK_SLOT, x + 134, y + 53, 16, 16);
     }
 
@@ -79,7 +79,7 @@ public class FluidCollectorScreen extends AbstractContainerScreen<FluidCollector
     }
 
     private void renderTankTooltips(GuiGraphicsExtractor guiGraphics, int x, int y, int mouseX, int mouseY) {
-        drawTankTooltip(guiGraphics, menu.blockEntity.getFluidOutputHandler(), FluidCollectorBlockEntity.TANK_SLOT, x + 60, y + 20, 16, 47, mouseX, mouseY, "Empty");
+        drawTankTooltip(guiGraphics, menu.blockEntity.getFluidHandler(), FluidCollectorBlockEntity.TANK_SLOT, x + 60, y + 20, 16, 47, mouseX, mouseY, "Empty");
         drawTankTooltip(guiGraphics, menu.blockEntity.getFilterFluidHandler(), FluidCollectorBlockEntity.TANK_SLOT, x + 134, y + 53, 16, 16, mouseX, mouseY, "Empty Filter");
     }
 

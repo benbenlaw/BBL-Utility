@@ -8,7 +8,6 @@ import com.benbenlaw.utility.data.custom.FluidGeneratorRecipeBuilder;
 import com.benbenlaw.utility.data.custom.ResourceGeneratorRecipeBuilder;
 import com.benbenlaw.utility.data.custom.SummoningRecipeBuilder;
 import com.benbenlaw.utility.item.UtilityItems;
-import com.benbenlaw.utility.recipe.DryingTableRecipeType;
 import com.benbenlaw.utility.util.BlockTarget;
 import com.benbenlaw.utility.util.TemperatureValues;
 import com.google.common.collect.ImmutableList;
@@ -25,9 +24,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.TemperatureVariants;
-import net.minecraft.world.entity.animal.cow.CowVariants;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -36,7 +32,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,6 +66,32 @@ public class UtilityRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes() {
+
+        //Reset
+        shapeless(RecipeCategory.MISC, UtilityBlocks.DRYING_TABLE)
+                .requires(UtilityBlocks.DRYING_TABLE)
+                .unlockedBy("has_modifier", has(UtilityBlocks.DRYING_TABLE))
+                .save(output, "utility:reset/drying_table");
+
+        shapeless(RecipeCategory.MISC, UtilityBlocks.RESOURCE_GENERATOR)
+                .requires(UtilityBlocks.RESOURCE_GENERATOR)
+                .unlockedBy("has_modifier", has(UtilityBlocks.RESOURCE_GENERATOR))
+                .save(output, "utility:reset/resource_generator");
+
+        shapeless(RecipeCategory.MISC, UtilityBlocks.FLUID_GENERATOR)
+                .requires(UtilityBlocks.FLUID_GENERATOR)
+                .unlockedBy("has_modifier", has(UtilityBlocks.FLUID_GENERATOR))
+                .save(output, "utility:reset/fluid_generator");
+
+        shapeless(RecipeCategory.MISC, UtilityBlocks.FLUID_PLACER)
+                .requires(UtilityBlocks.FLUID_PLACER)
+                .unlockedBy("has_modifier", has(UtilityBlocks.FLUID_PLACER))
+                .save(output, "utility:reset/fluid_placer");
+
+        shapeless(RecipeCategory.MISC, UtilityBlocks.FLUID_COLLECTOR)
+                .requires(UtilityBlocks.FLUID_COLLECTOR)
+                .unlockedBy("has_modifier", has(UtilityBlocks.FLUID_COLLECTOR))
+                .save(output, "utility:reset/fluid_collector");
 
         //Summoning Block
         shaped(RecipeCategory.MISC, UtilityBlocks.SUMMONING_BLOCK.get())
@@ -395,30 +416,30 @@ public class UtilityRecipeProvider extends RecipeProvider {
 
         //Dead Bush
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(this.tag(ItemTags.SAPLINGS).getValues()), 1),
-                new ItemStackTemplate(Items.DEAD_BUSH), DryingTableRecipeType.DRYING).save(output, "drying/dead_bush");
+                new ItemStackTemplate(Items.DEAD_BUSH), Optional.empty(), Optional.empty()).save(output, "drying/dead_bush");
 
         //Cracked Stone Bricks
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.STONE_BRICKS), 1),
-                new ItemStackTemplate(Items.CRACKED_STONE_BRICKS), DryingTableRecipeType.DRYING).save(output, "drying/cracked_stone_bricks");
+                new ItemStackTemplate(Items.CRACKED_STONE_BRICKS), Optional.empty(), Optional.empty()).save(output, "drying/cracked_stone_bricks");
 
         //Paper
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(UtilityItems.SOAKED_PAPER), 1),
-                new ItemStackTemplate(Items.PAPER), DryingTableRecipeType.DRYING).save(output, "drying/paper");
+                new ItemStackTemplate(Items.PAPER), Optional.empty(), Optional.empty()).save(output, "drying/paper");
 
         //Soaked Paper
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.PAPER), 1),
-                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), DryingTableRecipeType.SOAKING).save(output, "soaking/soaked_paper");
+                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), Optional.of(new FluidStackTemplate(Fluids.WATER, 1000)), Optional.empty()).save(output, "soaking/soaked_paper");
 
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(UtilityItems.LOG_SHEET), 1),
-                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), DryingTableRecipeType.SOAKING).save(output, "soaking/soaked_paper_from_log_sheet");
+                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), Optional.of(new FluidStackTemplate(Fluids.WATER, 1000)), Optional.of(100)).save(output, "soaking/soaked_paper_from_log_sheet");
 
         //Sponge
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.WET_SPONGE), 1),
-                new ItemStackTemplate(Items.SPONGE), DryingTableRecipeType.DRYING).save(output, "drying/sponge");
+                new ItemStackTemplate(Items.SPONGE), Optional.empty(), Optional.empty()).save(output, "drying/sponge");
 
         //Dry Sponge
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.SPONGE), 1),
-                new ItemStackTemplate(Items.WET_SPONGE), DryingTableRecipeType.SOAKING).save(output, "soaking/wet_sponge");
+                new ItemStackTemplate(Items.WET_SPONGE), Optional.of(new FluidStackTemplate(Fluids.WATER, 1000)), Optional.of(1000)).save(output, "soaking/wet_sponge");
 
         //Resource Generator
         ResourceGeneratorRecipeBuilder.resourceGenerator(new ItemStackTemplate(Items.COBBLESTONE), new ItemStackTemplate(Items.COBBLESTONE),

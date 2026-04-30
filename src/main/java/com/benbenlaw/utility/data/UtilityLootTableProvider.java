@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.data;
 
 import com.benbenlaw.utility.block.UtilityBlocks;
+import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.item.UtilityItems;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.core.HolderLookup;
@@ -9,10 +10,14 @@ import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,14 +36,14 @@ public class UtilityLootTableProvider extends VanillaBlockLoot {
 
         this.createEnderOreDrops(UtilityBlocks.ENDER_ORE.get());
         this.createEnderOreDrops(UtilityBlocks.DEEPSLATE_ENDER_ORE.get());
-        this.dropSelf(UtilityBlocks.DRYING_TABLE.get());
+        this.dropWithFluidComponent(UtilityBlocks.DRYING_TABLE.get());
         this.dropSelf(UtilityBlocks.BLOCK_PLACER.get());
         this.dropSelf(UtilityBlocks.BLOCK_BREAKER.get());
-        this.dropSelf(UtilityBlocks.RESOURCE_GENERATOR.get());
-        this.dropSelf(UtilityBlocks.FLUID_COLLECTOR.get());
-        this.dropSelf(UtilityBlocks.FLUID_PLACER.get());
+        this.dropWithFluidComponent(UtilityBlocks.RESOURCE_GENERATOR.get());
+        this.dropWithFluidComponent(UtilityBlocks.FLUID_COLLECTOR.get());
+        this.dropWithFluidComponent(UtilityBlocks.FLUID_PLACER.get());
         this.dropSelf(UtilityBlocks.ITEM_REPAIRER.get());
-        this.dropSelf(UtilityBlocks.FLUID_GENERATOR.get());
+        this.dropWithFluidComponent(UtilityBlocks.FLUID_GENERATOR.get());
         this.dropSelf(UtilityBlocks.REDSTONE_CLOCK.get());
         this.dropSelf(UtilityBlocks.ITEM_COLLECTOR.get());
         this.dropSelf(UtilityBlocks.SUMMONING_BLOCK.get());
@@ -58,6 +63,15 @@ public class UtilityLootTableProvider extends VanillaBlockLoot {
         );
 
         this.add(block, table);
+    }
+
+    private void dropWithFluidComponent(Block block) {
+        this.add(block, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(block)
+                                .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+                                        .include(UtilityDataComponents.FLUIDS.get())))));
     }
 
     @Override

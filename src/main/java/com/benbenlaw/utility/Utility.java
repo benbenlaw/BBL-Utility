@@ -2,7 +2,6 @@ package com.benbenlaw.utility;
 
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.UtilityBlocks;
-import com.benbenlaw.utility.block.UtilityCapabilities;
 import com.benbenlaw.utility.block.entity.renderer.DryingTableBlockEntityRenderer;
 import com.benbenlaw.utility.block.entity.renderer.SummoningBlockEntityRenderer;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
@@ -24,7 +23,6 @@ import com.benbenlaw.utility.screen.placer.FluidPlacerScreen;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerScreen;
 import com.benbenlaw.utility.screen.summoning.SummoningBlockScreen;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -59,7 +57,6 @@ public class Utility {
         UtilityRecipeTypes.SERIALIZER.register(eventBus);
         UtilityRecipeTypes.TYPES.register(eventBus);
 
-        eventBus.addListener(this::registerCapabilities);
         eventBus.addListener(this::registerNetworking);
     }
 
@@ -94,10 +91,6 @@ public class Utility {
             event.registerBlockEntityRenderer(UtilityBlockEntities.SUMMONING_BLOCK_ENTITY.get(), SummoningBlockEntityRenderer::new);
         }
 
-    }
-
-    public void registerCapabilities(RegisterCapabilitiesEvent event) {
-        UtilityCapabilities.registerCapabilities(event);
     }
 
     public void registerNetworking(RegisterPayloadHandlersEvent event) {

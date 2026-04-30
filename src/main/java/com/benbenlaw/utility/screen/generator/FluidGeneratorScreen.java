@@ -48,6 +48,7 @@ public class FluidGeneratorScreen extends AbstractContainerScreen<FluidGenerator
     }
 
     private void renderTanks(GuiGraphicsExtractor GuiGraphicsExtractor, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getOutputFluidHandler(), FluidGeneratorBlockEntity.TANK_SLOT, x, y, 116, 20, 47, 16, mouseX, mouseY);
+        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), FluidGeneratorBlockEntity.TANK_SLOT, x, y,
+                116, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
     }
 }

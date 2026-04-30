@@ -48,7 +48,7 @@ public class ResourceGeneratorScreen extends AbstractContainerScreen<ResourceGen
     }
 
     private void renderTanks(GuiGraphicsExtractor GuiGraphicsExtractor, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getInputFluidHandlerLeft(), ResourceGeneratorBlockEntity.LEFT_TANK_SLOT, x, y, 8, 20, 47, 16, mouseX, mouseY);
-        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getInputFluidHandlerRight(), ResourceGeneratorBlockEntity.RIGHT_TANK_SLOT, x, y, 152, 20, 47, 16, mouseX, mouseY);
+        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), ResourceGeneratorBlockEntity.LEFT_TANK_SLOT, x, y, 8, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), ResourceGeneratorBlockEntity.RIGHT_TANK_SLOT, x, y, 152, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
     }
 }

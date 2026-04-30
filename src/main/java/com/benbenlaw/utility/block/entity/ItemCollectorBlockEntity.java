@@ -4,6 +4,7 @@ import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
 import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
+import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.ItemCollectorBlock;
 import com.benbenlaw.utility.screen.collector.ItemCollectorMenu;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,12 +49,10 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     private int height = 1;
     private int depth = 1;
 
-    private final OutputItemHandler outputHandler = new OutputItemHandler(this,9, i -> {
-        for (int slot : OUTPUT_SLOTS) {
-            if (i == slot) return true;
-        }
-        return false;
-    });
+    private final SyncableItemHandler inventory = new SyncableItemHandler(this, 9,
+            (i, stack) -> false,
+            i -> true
+    );
 
     private boolean whitelist = true;
     private final FilterItemHandler filterHandler = new FilterItemHandler(this,8);
@@ -112,20 +112,22 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
 
                     boolean fullyInserted = false;
 
-                    for (int i = 0; i < outputHandler.size(); i++) {
-                        ItemStack outputSlot = outputHandler.getResource(i).toStack();
+                    for (int i = 0; i < inventory.size(); i++) {
+                        ItemStack outputSlot = inventory.getResource(i).toStack();
 
                         if (!outputSlot.isEmpty() && !ItemStack.isSameItemSameComponents(outputSlot, stack)) continue;
 
-                        try (Transaction tx = Transaction.open(null)) {
-                            long inserted = outputHandler.insertInternalReturn(i, resource, stack.getCount(), tx);
-                            if (inserted > 0) {
-                                tx.commit();
-                                stack.shrink((int) inserted);
-                                if (stack.isEmpty()) itemEntity.discard();
-                                break;
+                        int finalI = i;
+                        inventory.runInternal(() -> {
+                            try (Transaction tx = Transaction.open(null)) {
+                                int inserted = inventory.insert(finalI, resource, stack.getCount(), tx);
+                                if (inserted > 0) {
+                                    tx.commit();
+                                    stack.shrink(inserted);
+                                    if (stack.isEmpty()) itemEntity.discard();
+                                }
                             }
-                        }
+                        });
                     }
                     if (!fullyInserted) itemEntity.setItem(stack);
                 }
@@ -176,15 +178,8 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         return new AABB(finalMinX, finalMinY, finalMinZ, finalMaxX + 1.0, finalMaxY + 1.0, finalMaxZ + 1.0);
     }
 
-
-
-
-    public OutputItemHandler getOutputHandler() {
-        return outputHandler;
-    }
-
-    public ResourceHandler<ItemResource> getItemCapability() {
-        return outputHandler;
+    public ItemStacksResourceHandler getItemHandler() {
+        return inventory;
     }
 
     public FilterItemHandler getFilterHandler() {
@@ -251,52 +246,6 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         sync();
     }
 
-    public void onRightClick() {
-        Level level = this.getLevel();
-        if (level != null && !level.isClientSide()) {
-            showWorkingArea((ServerLevel) level);
-        }
-    }
-
-    private void showWorkingArea(ServerLevel level) {
-        AABB range = createArea();
-
-        int minX = (int) Math.floor(range.minX);
-        int minY = (int) Math.floor(range.minY);
-        int minZ = (int) Math.floor(range.minZ);
-        int maxX = (int) Math.ceil(range.maxX);
-        int maxY = (int) Math.ceil(range.maxY);
-        int maxZ = (int) Math.ceil(range.maxZ);
-
-        // Draw edges
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                spawnParticle(level, x + 0.5, y + 0.5, minZ + 0.5);
-                spawnParticle(level, x + 0.5, y + 0.5, maxZ + 0.5);
-            }
-        }
-
-        for (int z = minZ; z <= maxZ; z++) {
-            for (int y = minY; y <= maxY; y++) {
-                spawnParticle(level, minX + 0.5, y + 0.5, z + 0.5);
-                spawnParticle(level, maxX + 0.5, y + 0.5, z + 0.5);
-            }
-        }
-
-        for (int x = minX; x <= maxX; x++) {
-            for (int z = minZ; z <= maxZ; z++) {
-                spawnParticle(level, x + 0.5, minY + 0.5, z + 0.5);
-                spawnParticle(level, x + 0.5, maxY + 0.5, z + 0.5);
-            }
-        }
-    }
-
-
-    private void spawnParticle(ServerLevel level, double x, double y, double z) {
-        level.sendParticles(ParticleTypes.END_ROD,true, true,
-                x - 0.5, y - 0.5, z - 0.5,1,0.0, 0.0, 0.0, 0.0);
-    }
-
     private BlockPos getOffsetStartPos() {
         if (level == null) return worldPosition;
 
@@ -313,7 +262,6 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         } else {
             leftDir = Direction.WEST;
         }
-
 
         int x = worldPosition.getX() + forwardBackOffset * facing.getStepX() + leftRightOffset * leftDir.getStepX();
         int y = worldPosition.getY() + upDownOffset;
@@ -336,7 +284,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        outputHandler.serialize(output.child("output"));
+        inventory.serialize(output.child("inventory"));
         filterHandler.serialize(output.child("filter"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
@@ -355,7 +303,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        outputHandler.deserialize(input.childOrEmpty("output"));
+        inventory.deserialize(input.childOrEmpty("inventory"));
         filterHandler.deserialize(input.childOrEmpty("filter"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
@@ -372,7 +320,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
 
     @Override
     public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        dropInventoryContents(outputHandler);
+        dropInventoryContents(inventory);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class SummoningBlockMenu extends SimpleAbstractContainerMenu {
         this.blockEntity = (SummoningBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
-        this.addSlot(new InputSlot(blockEntity.getInputHandler(), blockEntity.getInputHandler()::set,
+        this.addSlot(new InputSlot(blockEntity.getItemHandler(), blockEntity.getItemHandler()::set,
                 SummoningBlockEntity.INPUT_SLOT, 80, 50));
 
 

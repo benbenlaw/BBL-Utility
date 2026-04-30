@@ -4,10 +4,15 @@ import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.fluid.FilterFluidHandler;
 import com.benbenlaw.core.block.entity.handler.fluid.OutputFluidHandler;
+import com.benbenlaw.core.block.entity.handler.fluid.SyncableFluidHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.FluidCollectorBlock;
+import com.benbenlaw.utility.item.FluidListComponent;
+import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.screen.collector.FluidCollectorMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -27,6 +32,7 @@ import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +47,10 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     private int maxProgress = 20;
     private int progress = 0;
 
-    private final OutputFluidHandler outputFluidHandler = new OutputFluidHandler(this,1,16000, i -> i == TANK_SLOT);
+    private final SyncableFluidHandler fluidInventory = new SyncableFluidHandler(this,1,16000,
+            (i, stack) -> i == TANK_SLOT,
+            i -> i == TANK_SLOT
+    );
     public static final int TANK_SLOT = 0;
     private boolean whitelist = true;
     private FilterFluidHandler filterFluidHandler = new FilterFluidHandler(this, 1);
@@ -83,25 +92,27 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
             Fluid fluidInWorld = level.getFluidState(targetPos).getType();
             FluidStack fluidStack = new FluidStack(fluidInWorld, 1000);
 
-            if (outputFluidHandler.getAmountAsInt(TANK_SLOT) > outputFluidHandler.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY) - 1000) return;
+            if (FluidUtil.getStack(fluidInventory, TANK_SLOT).amount() > fluidInventory.getCapacityAsInt(TANK_SLOT, FluidResource.EMPTY) - 1000) return;
 
-            FluidResource current = outputFluidHandler.getResource(TANK_SLOT);
-            if (!current.isEmpty() && !current.getFluid().isSame(fluidInWorld) /*&& !filter.isEmpty()*/) return;
+            FluidResource current = fluidInventory.getResource(TANK_SLOT);
+            if (!current.isEmpty() && !current.getFluid().isSame(fluidInWorld)) return;
 
             if (!level.getFluidState(targetPos).isEmpty() && filterFluidHandler.matchesFluid(fluidStack, whitelist)) {
                 progress++;
                 if (progress >= maxProgress) {
 
-                    Fluid fluid = outputFluidHandler.getResource(TANK_SLOT).getFluid();
+                    Fluid fluid = FluidUtil.getStack(fluidInventory, TANK_SLOT).getFluid();
                     SoundEvent soundEvent = fluid.getFluidType().getSound(new FluidStack(fluid, 1000), SoundActions.BUCKET_FILL);
                     if (soundEvent == null)
                         soundEvent = SoundEvents.BUCKET_FILL;
                     level.playSound(null, worldPosition, soundEvent, SoundSource.BLOCKS, 0.4f, 1.0f);
 
-                    try (Transaction tx = Transaction.open(null)) {
-                        outputFluidHandler.insertInternal(TANK_SLOT, FluidResource.of(fluidInWorld), 1000, tx);
-                        tx.commit();
-                    }
+                    fluidInventory.runInternal(() -> {
+                        try (Transaction tx = Transaction.openRoot()) {
+                            fluidInventory.insert(TANK_SLOT, FluidResource.of(fluidInWorld), 1000, tx);
+                            tx.commit();
+                        }
+                    });
 
                     level.setBlockAndUpdate(targetPos, Blocks.AIR.defaultBlockState());
                     progress = 0;
@@ -114,20 +125,16 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
         }
     }
 
-    public OutputFluidHandler getFluidOutputHandler() {
-        return outputFluidHandler;
+    public FluidStacksResourceHandler getFluidHandler() {
+        return fluidInventory;
     }
 
     public FilterFluidHandler getFilterFluidHandler() {
         return filterFluidHandler;
     }
 
-    public ResourceHandler<FluidResource> getFluidCapability() {
-        return outputFluidHandler;
-    }
-
     public boolean onPlayerUse(Player player, InteractionHand hand) {
-        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, outputFluidHandler);
+        return FluidUtil.interactWithFluidHandler(player, hand, this.worldPosition, fluidInventory);
     }
 
     @Override
@@ -143,7 +150,7 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     @Override
     protected void saveAdditional(@NotNull ValueOutput output) {
 
-        outputFluidHandler.serialize(output.child("outputFluid"));
+        fluidInventory.serialize(output.child("fluidInventory"));
         filterFluidHandler.serialize(output.child("fluidFilter"));
         output.putInt("maxProgress", maxProgress);
         output.putInt("progress", progress);
@@ -154,7 +161,7 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
     @Override
     protected void loadAdditional(@NotNull ValueInput input) {
 
-        outputFluidHandler.deserialize(input.childOrEmpty("outputFluid"));
+        fluidInventory.deserialize(input.childOrEmpty("fluidInventory"));
         filterFluidHandler.deserialize(input.childOrEmpty("fluidFilter"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
@@ -172,5 +179,21 @@ public class FluidCollectorBlockEntity extends SyncableBlockEntity implements Me
         this.whitelist = whitelist;
         setChanged();
         sync();
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        builder.set(UtilityDataComponents.FLUIDS.get(),
+                FluidListComponent.fromHandlers(fluidInventory));
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        FluidListComponent component = components.get(UtilityDataComponents.FLUIDS.get());
+        if (component != null) {
+            component.applyToHandlers(fluidInventory);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.block.custom;
 
+import com.benbenlaw.core.block.SyncableBlock;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
 import com.mojang.serialization.MapCodec;
@@ -36,12 +37,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class DryingTableBlock extends SyncableBlock {
 
     public static final MapCodec<DryingTableBlock> CODEC = simpleCodec(DryingTableBlock::new);
-    public static final BooleanProperty RUNNING = BooleanProperty.create("running");
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
     public @NotNull MapCodec<DryingTableBlock> codec() {
         return CODEC;
@@ -49,81 +47,22 @@ public class DryingTableBlock extends BaseEntityBlock implements SimpleWaterlogg
 
     public DryingTableBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(RUNNING, true).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
-    }
-
-    @Override
-    protected void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @Nullable Orientation orientation, boolean p_60514_) {
-
-        if (!level.isClientSide()) {
-            boolean powered = level.hasNeighborSignal(pos);
-            if (powered && state.getValue(RUNNING)) {
-                level.setBlock(pos, state.setValue(RUNNING, false), 3);
-            } else if (!powered && !state.getValue(RUNNING)) {
-                level.setBlock(pos, state.setValue(RUNNING, true), 3);
-            }
-        }
-    }
-
-    @Override
-    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos blockPos = context.getClickedPos();
-        BlockState blockState = context.getLevel().getBlockState(blockPos);
-        Direction direction = context.getHorizontalDirection().getOpposite();
-
-        if (blockState.is(Blocks.WATER)) {
-            return this.defaultBlockState().setValue(WATERLOGGED, true).setValue(FACING, direction).setValue(RUNNING, true);
-        } else {
-            return this.defaultBlockState().setValue(WATERLOGGED, false).setValue(FACING, direction).setValue(RUNNING, true);
-        }
     }
 
     @Override
     protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(pos);
-            ItemStack itemStack = player.getItemInHand(player.getUsedItemHand());
-
-            //Not happy about the waterlogging as vanilla change prevent shift clicking to waterlog blocks, it works but probably not a permanent solution
-            if (itemStack.is(Items.WATER_BUCKET) && !state.getValue(WATERLOGGED)) {
-                this.placeLiquid(level, pos, state, Fluids.WATER.defaultFluidState());
-                player.setItemInHand(player.getUsedItemHand(), Items.BUCKET.getDefaultInstance());
-                return InteractionResult.PASS;
-            }
-
-            if (itemStack.is(Items.BUCKET) && state.getValue(WATERLOGGED)) {
-                player.setItemInHand(player.getUsedItemHand(), this.pickupBlock(player, level, pos, state));
-                return InteractionResult.PASS;
-            }
-
             if (entity instanceof DryingTableBlockEntity entity1) {
+                if (entity1.onPlayerUse(player, player.getUsedItemHand())) {
+                    return InteractionResult.SUCCESS;
+                }
                 player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }
         }
         return InteractionResult.SUCCESS;
-    }
-
-
-    @Override
-    public @NotNull BlockState rotate(BlockState blockState, @NotNull LevelAccessor level, @NotNull BlockPos blockPos, Rotation direction) {
-        return blockState.setValue(RUNNING, blockState.getValue(RUNNING)).setValue(WATERLOGGED, blockState.getValue(WATERLOGGED)).setValue(FACING, direction.rotate(blockState.getValue(FACING)));
-
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(RUNNING, WATERLOGGED, FACING);
-    }
-
-    public @NotNull FluidState getFluidState(BlockState blockState) {
-        return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
-    }
-
-    @Override
-    protected @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.MODEL;
     }
 
     @Override
