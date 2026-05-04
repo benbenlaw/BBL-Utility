@@ -1,5 +1,6 @@
 package com.benbenlaw.utility.block.entity;
 
+import com.benbenlaw.castingtools.utils.ModifierUtils;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
@@ -124,8 +126,14 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
                 progress += progressPerTick;
 
                 if (progress >= 1.0f) {
-                    Block.dropResources(targetBlockState, level, targetPos, targetBlockEntity, fakePlayer, tool);
-                    level.destroyBlock(targetPos, false, fakePlayer);
+
+                    // Handle casting tools if installed, otherwise break the block normally
+                    if (ModList.get().isLoaded("castingtools")) {
+                        ModifierUtils.breakBlockWithCasting(level, fakePlayer, targetPos, tool.copy());
+                    } else {
+                        Block.dropResources(targetBlockState, level, targetPos, targetBlockEntity, fakePlayer, tool.copy());
+                        level.destroyBlock(targetPos, false, fakePlayer);
+                    }
 
                     if (tool.isDamageableItem()) {
                         int oldDamage = tool.getDamageValue();
