@@ -24,6 +24,21 @@ public class UtilityItemTags extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
+        //Enchantments
+        tag(ItemTags.DURABILITY_ENCHANTABLE)
+                .add(UtilityItems.CROOK.get())
+                .add(UtilityItems.SAPLING_GROWER.get())
+                .add(UtilityItems.ANIMAL_NET.get())
+                .add(UtilityItems.WOODEN_SHEARS.get())
+        ;
+
+        tag(Tags.Items.ENCHANTABLES)
+                .add(UtilityItems.CROOK.get())
+                .add(UtilityItems.SAPLING_GROWER.get())
+                .add(UtilityItems.ANIMAL_NET.get())
+                .add(UtilityItems.WOODEN_SHEARS.get())
+        ;
+
         //Hot Blocks
         tag(UtilityTags.Items.HOT_BLOCKS)
                 .add(Items.MAGMA_BLOCK)

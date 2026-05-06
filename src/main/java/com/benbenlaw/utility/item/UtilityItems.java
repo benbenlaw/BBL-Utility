@@ -30,19 +30,24 @@ public class UtilityItems {
     public static final DeferredItem<Item> WOODEN_SHEARS = ITEMS.registerItem("wooden_shears",
             properties -> new ShearsItem(properties
                     .durability(UtilityStartUpConfig.woodenShearsDurability.get())
+                    .enchantable(15)
                     .component(DataComponents.TOOL, ShearsItem.createToolProperties())));
 
     public static final DeferredItem<CrookItem> CROOK = ITEMS.registerItem("crook",
             CrookItem::new, properties -> properties
                     .durability(UtilityStartUpConfig.crookDurability.get())
+                    .enchantable(15)
                     .component(DataComponents.TOOL, CrookItem.createToolProperties()));
 
     public static final DeferredItem<SaplingGrowerItem> SAPLING_GROWER = ITEMS.registerItem("sapling_grower",
             SaplingGrowerItem::new, properties -> properties
+                    .enchantable(15)
                     .durability(UtilityStartUpConfig.saplingGrowerDurability.get()));
 
     public static final DeferredItem<AnimalNetItem> ANIMAL_NET = ITEMS.registerItem("animal_net",
-            AnimalNetItem::new, properties -> properties.durability(UtilityStartUpConfig.animalNetDurability.get()));
+            AnimalNetItem::new, properties -> properties
+                    .enchantable(15)
+                    .durability(UtilityStartUpConfig.animalNetDurability.get()));
 
 
 

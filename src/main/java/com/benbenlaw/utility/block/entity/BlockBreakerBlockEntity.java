@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -100,8 +101,6 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
             BlockState targetBlockState = level.getBlockState(targetPos);
             BlockEntity targetBlockEntity = level.getBlockEntity(targetPos);
 
-            //TODO restore filtering
-
             if (targetBlockState.isAir() || !filterHandler.matchesBlockState(targetBlockState, whitelist)) {
                 progress = 0f;
                 return;
@@ -136,19 +135,16 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
                     }
 
                     if (tool.isDamageableItem()) {
-                        int oldDamage = tool.getDamageValue();
-                        tool.setDamageValue(oldDamage + 1);
-                        inventory.set(INPUT_SLOT, ItemResource.of(tool), 1);
-                        if (tool.getDamageValue() >= tool.getMaxDamage()) {
-                            inventory.runInternal(() -> {
-                                try (Transaction tx = Transaction.openRoot()) {
-                                    inventory.extract(INPUT_SLOT, inventory.getResource(INPUT_SLOT), 1, tx);
-                                    tx.commit();
-                                }
-                            });
+                        tool.hurtAndConvertOnBreak(1, Items.AIR, fakePlayer, fakePlayer.getEquipmentSlotForItem(tool));
+                        inventory.set(0, ItemResource.of(tool), tool.getCount());
+
+                        if (tool.isEmpty()) {
                             level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 1.0f, 1.0f);
                         }
                     }
+
+                    level.levelEvent(2001, targetPos, Block.getId(targetBlockState));
+
                     clearBlockBreakingProgress(this.getPersistentData().getId(), targetPos, progressPerTick);
                     progress = 0f;
                 }
