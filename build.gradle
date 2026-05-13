@@ -80,7 +80,7 @@ dependencies {
     implementation("curse.maven:bblcore-1135181:${core_version}")
     //Casting
     implementation("curse.maven:bbl-casting-1052163:8021681")
-    implementation("curse.maven:bbl-casting-tools-1501619:8037141")
+    implementation("curse.maven:bbl-casting-tools-1501619:8084030")
 }
 
 tasks.withType(ProcessResources).configureEach {
