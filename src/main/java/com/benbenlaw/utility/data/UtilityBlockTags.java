@@ -54,6 +54,7 @@ public class UtilityBlockTags extends BlockTagsProvider {
         //Pickaxe
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(UtilityBlocks.ENDER_ORE.get())
+                .add(UtilityBlocks.ENDER_ORE.get())
                 .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get())
                 .add(UtilityBlocks.BLOCK_BREAKER.get())
                 .add(UtilityBlocks.BLOCK_PLACER.get())
@@ -65,10 +66,7 @@ public class UtilityBlockTags extends BlockTagsProvider {
                 .add(UtilityBlocks.ITEM_REPAIRER.get())
                 .add(UtilityBlocks.REDSTONE_CLOCK.get())
                 .add(UtilityBlocks.SUMMONING_BLOCK.get())
-        ;
-
-        //Axe
-        tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(UtilityBlocks.COMPACTOR.get())
                 .add(UtilityBlocks.DRYING_TABLE.get())
         ;
 

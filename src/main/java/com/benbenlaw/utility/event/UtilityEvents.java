@@ -8,19 +8,19 @@ import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
-import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
-import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
+import com.benbenlaw.utility.recipe.custom.*;
+import mezz.jei.api.constants.RecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeMap;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -30,11 +30,9 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @EventBusSubscriber(modid = Utility.MOD_ID)
 public class UtilityEvents {
@@ -156,5 +154,86 @@ public class UtilityEvents {
         }
         ClientRecipeCache.setCachedSummoningRecipes(summoningRecipeMap);
 
+        //Crafting Recipes
+        Collection<RecipeHolder<CraftingRecipe>> craftingRecipes = recipeMap.byType(RecipeType.CRAFTING);
+
+        Map<Item, List<CompressionRecipe>> result = new HashMap<>();
+
+        for (RecipeHolder<CraftingRecipe> holder : craftingRecipes) {
+
+            CraftingRecipe recipe = holder.value();
+
+            if (!(recipe instanceof ShapedRecipe shaped)) continue;
+
+            CompressionRecipe compression = convert(shaped);
+            if (compression == null) continue;
+
+            result
+                    .computeIfAbsent(compression.item(), k -> new ArrayList<>())
+                    .add(compression);
+        }
+
+        ClientRecipeCache.setCachedCompressionRecipes(result);
+
+    }
+
+    public static CompressionRecipe convert(ShapedRecipe recipe) {
+
+        int width = recipe.pattern.width();
+        int height = recipe.pattern.height();
+
+        // ONLY allow 2x2 or 3x3 compression grids
+        if (!((width == 2 && height == 2) || (width == 3 && height == 3))) {
+            return null;
+        }
+
+        List<Optional<Ingredient>> ingredients = recipe.pattern.ingredients();
+        if (ingredients.isEmpty()) return null;
+
+        Item firstItem = null;
+
+        for (Optional<Ingredient> optional : ingredients) {
+
+            if (optional.isEmpty()) return null;
+
+            Ingredient ingredient = optional.get();
+
+            ItemStack[] stacks = ingredient.items()
+                    .map(h -> new ItemStack(h.value()))
+                    .toArray(ItemStack[]::new);
+
+            if (stacks.length != 1) return null;
+
+            Item item = stacks[0].getItem();
+
+            if (firstItem == null) {
+                firstItem = item;
+            } else if (item != firstItem) {
+                return null;
+            }
+        }
+
+        if (firstItem == null) return null;
+
+        boolean is3x3 = (width == 3 && height == 3);
+
+        ItemStack input = new ItemStack(firstItem, width * height);
+
+        CraftingInput craftingInput = getCraftingInput(input);
+        if (craftingInput == null) return null;
+
+        return new CompressionRecipe(firstItem, width * height, recipe.assemble(craftingInput), is3x3);
+    }
+
+    public static CraftingInput getCraftingInput(ItemStack stack) {
+        if (stack.isEmpty()) return null;
+
+        if (stack.count() >= 4 && stack.count() < 9) {
+            return CraftingInput.of(2, 2, List.of(stack, stack, stack, stack));
+        } else if (stack.count() >= 9) {
+            return CraftingInput.of(3, 3, List.of(stack, stack, stack, stack, stack, stack, stack, stack, stack));
+        } else {
+            return null;
+        }
     }
 }

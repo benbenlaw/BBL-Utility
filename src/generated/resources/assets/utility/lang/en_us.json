@@ -1,6 +1,7 @@
 {
   "block.utility.block_breaker": "Block Breaker",
   "block.utility.block_placer": "Block Placer",
+  "block.utility.compactor": "Compactor",
   "block.utility.deepslate_ender_ore": "Deepslate Ender Ore",
   "block.utility.drying_table": "Drying Table",
   "block.utility.ender_ore": "Ender Ore",
@@ -59,6 +60,9 @@
   "tooltip.redstone_clock.on_time": "Pulse in ticks",
   "tooltip.redstone_clock.signal_strength": "Signal Strength (0-15)",
   "tooltip.utility.animal_net": "Used to catch and release mobs",
+  "tooltip.utility.compactor_button.is2x2": "2x2",
+  "tooltip.utility.compactor_button.is3x3": "3x3",
+  "tooltip.utility.compactor_button.mode": "Mode: %s",
   "tooltip.utility.crook": "Breaks leaves faster and increase leaves drops rates",
   "tooltip.utility.death_stone": "Given upon death, right click to return to your death location",
   "tooltip.utility.empty": "Empty",

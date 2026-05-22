@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "utility",
+  "key": {
+    "A": "#c:ingots/iron",
+    "B": "#c:ingots/gold",
+    "C": "#c:player_workstations/crafting_tables",
+    "D": "minecraft:piston"
+  },
+  "pattern": [
+    "ABA",
+    "CDC",
+    "ABA"
+  ],
+  "result": {
+    "id": "utility:compactor"
+  }
+}

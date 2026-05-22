@@ -93,6 +93,19 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_modifier", has(UtilityBlocks.FLUID_COLLECTOR))
                 .save(output, "utility:reset/fluid_collector");
 
+        //Compactor
+        shaped(RecipeCategory.MISC, UtilityBlocks.COMPACTOR.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Tags.Items.PLAYER_WORKSTATIONS_CRAFTING_TABLES)
+                .define('D', Items.PISTON)
+                .group("utility")
+                .unlockedBy("has_item", has(Items.PISTON))
+                .save(output);
+
         //Summoning Block
         shaped(RecipeCategory.MISC, UtilityBlocks.SUMMONING_BLOCK.get())
                 .pattern("ABA")

@@ -1,6 +1,7 @@
-// 26.1.2	2026-04-30T10:35:23.3627083	Loot Tables
+// 26.1.2	2026-05-22T11:06:39.3448448	Loot Tables
 d8e3abf1bbd543c916f4b0050a91c8883639ca87 data/utility/loot_table/blocks/block_breaker.json
 9e54278cade735ab2fad4d916750e0c4101fd21b data/utility/loot_table/blocks/block_placer.json
+da4482f635fd46d67ca63798a04a52e86c6a0e94 data/utility/loot_table/blocks/compactor.json
 a62611520d389a80bc1345a1423fe63cde7846e9 data/utility/loot_table/blocks/deepslate_ender_ore.json
 0ec50def757a4ca644c1114ab1bc5e92f923700f data/utility/loot_table/blocks/drying_table.json
 ae0dc794d802b2dcc89f3f6e669c15b8cbb30093 data/utility/loot_table/blocks/ender_ore.json

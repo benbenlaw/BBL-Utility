@@ -1,4 +1,4 @@
-// 26.1.2	2026-04-30T10:35:23.3585693	utility Recipes
+// 26.1.2	2026-05-22T11:06:39.3361586	utility Recipes
 cacec4c017a49450423191309f405f3ffa4bfa8b data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_deepslate_ender_ore.json
 5cf6c9b2d9ac6f4651910eea06a0e02f2f3f9f7e data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_ender_ore.json
 8f8a6d21064f19973e29410b0fe2c9e0f1a5037a data/minecraft/recipe/ender_pearl_fragment_from_deepslate_ender_ore.json
@@ -18,6 +18,7 @@ e266cb9158815b61b5f40bcd25ad508782352dc4 data/utility/advancement/recipes/misc/b
 bfbbdb07b8cc865eb9d68e00715b0490dfefec2b data/utility/advancement/recipes/misc/charcoal.json
 6c88230658b7242f6a1d127bd8c529dfab5ef9d5 data/utility/advancement/recipes/misc/chests.json
 1a9b2d4fe91b2825ec8014b3491cdbd8240e0373 data/utility/advancement/recipes/misc/coal.json
+d2411a574330e47c9f0f4287b1fb2a8cd8c55817 data/utility/advancement/recipes/misc/compactor.json
 5473c3108cbb7cd8de302b6459a454f6a49ec021 data/utility/advancement/recipes/misc/diamond_horse_armor.json
 4911c33dc2e27dbb813286effbcf0eca87aca9fd data/utility/advancement/recipes/misc/drying_table.json
 7c2e1076faf4c869ba74e61373fdc36e6cca20ca data/utility/advancement/recipes/misc/ender_pearl.json
@@ -123,6 +124,7 @@ ce23b28324bc38acf29099bb901f5efbc67d238d data/utility/recipe/animal_net.json
 2a38ba1cc95c72b871d29e1393a357917f2ab168 data/utility/recipe/charcoal.json
 cf408969dba17ea1059fcf28fb98e026980c0dac data/utility/recipe/chests.json
 5f833aa6dfde737ed78506aab59c598e41fe9304 data/utility/recipe/coal.json
+7172dad72e222cd4272e7a7b34f6f2ddb1673eba data/utility/recipe/compactor.json
 0225d2a3ac7c35507eab7acfdd165d4933015af7 data/utility/recipe/crook.json
 45b7a1f0678046b63f97587c0e19d7d0cc91471c data/utility/recipe/diamond_horse_armor.json
 8e20831b97da5fd4a0f96a088a28de9691077d10 data/utility/recipe/drying_table.json

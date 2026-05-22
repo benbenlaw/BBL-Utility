@@ -126,13 +126,8 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
 
                 if (progress >= 1.0f) {
 
-                    // Handle casting tools if installed, otherwise break the block normally
-                    //if (ModList.get().isLoaded("castingtools")) {
-                    //    ModifierUtils.breakBlockWithCasting(level, fakePlayer, targetPos, tool.copy());
-                    //} else {
-                        Block.dropResources(targetBlockState, level, targetPos, targetBlockEntity, fakePlayer, tool.copy());
-                        level.destroyBlock(targetPos, false, fakePlayer);
-                    //}
+                    Block.dropResources(targetBlockState, level, targetPos, targetBlockEntity, fakePlayer, tool.copy());
+                    level.destroyBlock(targetPos, false, fakePlayer);
 
                     if (tool.isDamageableItem()) {
                         tool.hurtAndConvertOnBreak(1, Items.AIR, fakePlayer, fakePlayer.getEquipmentSlotForItem(tool));

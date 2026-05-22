@@ -5,6 +5,7 @@ import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
 import com.benbenlaw.utility.screen.clock.RedstoneClockMenu;
 import com.benbenlaw.utility.screen.collector.FluidCollectorMenu;
 import com.benbenlaw.utility.screen.collector.ItemCollectorMenu;
+import com.benbenlaw.utility.screen.compactor.CompactorMenu;
 import com.benbenlaw.utility.screen.drying.DryingTableMenu;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorMenu;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorMenu;
@@ -54,6 +55,9 @@ public class UtilityMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<SummoningBlockMenu>> SUMMONING_MENU = MENUS.register("summoning_block_menu",
             () -> IMenuTypeExtension.create(SummoningBlockMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<CompactorMenu>> COMPACTOR_MENU = MENUS.register("compactor_menu",
+            () -> IMenuTypeExtension.create(CompactorMenu::new));
 
 }
 

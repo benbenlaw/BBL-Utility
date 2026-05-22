@@ -2,6 +2,7 @@ package com.benbenlaw.utility;
 
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.UtilityBlocks;
+import com.benbenlaw.utility.block.entity.CompactorBlockEntity;
 import com.benbenlaw.utility.block.entity.renderer.DryingTableBlockEntityRenderer;
 import com.benbenlaw.utility.block.entity.renderer.SummoningBlockEntityRenderer;
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
@@ -15,6 +16,7 @@ import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
 import com.benbenlaw.utility.screen.clock.RedstoneClockScreen;
 import com.benbenlaw.utility.screen.collector.FluidCollectorScreen;
 import com.benbenlaw.utility.screen.collector.ItemCollectorScreen;
+import com.benbenlaw.utility.screen.compactor.CompactorScreen;
 import com.benbenlaw.utility.screen.drying.DryingTableScreen;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorScreen;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
@@ -79,6 +81,7 @@ public class Utility {
             event.register(UtilityMenuTypes.REDSTONE_CLOCK_MENU.get(), RedstoneClockScreen::new);
             event.register(UtilityMenuTypes.ITEM_COLLECTOR_MENU.get(), ItemCollectorScreen::new);
             event.register(UtilityMenuTypes.SUMMONING_MENU.get(), SummoningBlockScreen::new);
+            event.register(UtilityMenuTypes.COMPACTOR_MENU.get(), CompactorScreen::new);
         }
 
         @SubscribeEvent

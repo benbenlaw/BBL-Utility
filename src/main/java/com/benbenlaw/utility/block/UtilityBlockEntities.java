@@ -56,4 +56,8 @@ public class UtilityBlockEntities {
             BLOCK_ENTITIES.register("summoning_block_entity", () ->
                     new BlockEntityType<>(SummoningBlockEntity::new, UtilityBlocks.SUMMONING_BLOCK.get()));
 
+    public static final Supplier<BlockEntityType<CompactorBlockEntity>> COMPACTOR_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("compactor_block_entity", () ->
+                    new BlockEntityType<>(CompactorBlockEntity::new, UtilityBlocks.COMPACTOR.get()));
+
 }

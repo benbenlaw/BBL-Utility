@@ -2,16 +2,13 @@ package com.benbenlaw.utility.block.custom;
 
 import com.benbenlaw.core.block.SyncableBlock;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
-import com.benbenlaw.utility.block.entity.ItemCollectorBlockEntity;
-import com.benbenlaw.utility.block.entity.renderer.ClientRenderState;
+import com.benbenlaw.utility.block.entity.CompactorBlockEntity;
+import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -21,56 +18,39 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemCollectorBlock extends SyncableBlock {
+public class CompactorBlock extends SyncableBlock {
 
-    public static final MapCodec<ItemCollectorBlock> CODEC = simpleCodec(ItemCollectorBlock::new);
+    public static final MapCodec<CompactorBlock> CODEC = simpleCodec(CompactorBlock::new);
 
-    public @NotNull MapCodec<ItemCollectorBlock> codec() {
+    public @NotNull MapCodec<CompactorBlock> codec() {
         return CODEC;
     }
 
-    public ItemCollectorBlock(Properties properties) {
+    public CompactorBlock(Properties properties) {
         super(properties);
     }
 
     @Override
     protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
-        if (player.isCrouching()) {
-
-            if (level.isClientSide()) {
-                ClientRenderState.toggleCollector(pos);
-            }
-
-            return InteractionResult.SUCCESS;
-        }
-
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(pos);
-
-            if (entity instanceof ItemCollectorBlockEntity entity1) {
+            if (entity instanceof CompactorBlockEntity entity1) {
                 player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }
         }
-
         return InteractionResult.SUCCESS;
     }
 
-    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction direction = context.getNearestLookingDirection();
-        return this.defaultBlockState().setValue(FACING, direction).setValue(RUNNING, true);
-    }
-
-
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new ItemCollectorBlockEntity(pos, state);
+        return new CompactorBlockEntity(pos, state);
     }
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, UtilityBlockEntities.ITEM_COLLECTOR_BLOCK_ENTITY.get(),
+        return createTickerHelper(blockEntityType, UtilityBlockEntities.COMPACTOR_BLOCK_ENTITY.get(),
                 (thisLevel, thisPos, thisState, thisEntity) -> thisEntity.tick());
     }
 }

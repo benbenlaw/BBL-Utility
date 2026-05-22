@@ -31,6 +31,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("block.utility.item_repairer", "Item Repairer");
         add("block.utility.item_collector", "Item Collector");
         add("block.utility.summoning_block", "Summoning Block");
+        add("block.utility.compactor", "Compactor");
 
         //Items
         add("item.utility.crook", "Crook");
@@ -52,6 +53,9 @@ public class UtilityLangProvider extends LanguageProvider {
         add("tooltip.utility.animal_net", "Used to catch and release mobs");
         add("tooltip.utility.death_stone", "Given upon death, right click to return to your death location");
         add("tooltip.utility.floater", "When in your off hand allows you to place a block in your main hand in the air or water");
+        add("tooltip.utility.compactor_button.mode", "Mode: %s");
+        add("tooltip.utility.compactor_button.is3x3", "3x3");
+        add("tooltip.utility.compactor_button.is2x2", "2x2");
 
         //Animal Net Tooltips
         add("tooltip.animal_net.mob_types", "Can Catch:");

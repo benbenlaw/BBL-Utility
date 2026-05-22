@@ -1,6 +1,7 @@
 {
   "values": [
     "utility:ender_ore",
+    "utility:ender_ore",
     "utility:deepslate_ender_ore",
     "utility:block_breaker",
     "utility:block_placer",
@@ -11,6 +12,8 @@
     "utility:item_collector",
     "utility:item_repairer",
     "utility:redstone_clock",
-    "utility:summoning_block"
+    "utility:summoning_block",
+    "utility:compactor",
+    "utility:drying_table"
   ]
 }

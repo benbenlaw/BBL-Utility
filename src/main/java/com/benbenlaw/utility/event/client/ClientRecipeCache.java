@@ -1,19 +1,15 @@
 package com.benbenlaw.utility.event.client;
 
-import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
-import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
+import com.benbenlaw.utility.recipe.custom.*;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ClientRecipeCache {
 
     //Drying Table Recipe Cache
-        public static Map<Identifier, DryingTableRecipe> cachedDryingTableRecipes = new HashMap<>();
+    public static Map<Identifier, DryingTableRecipe> cachedDryingTableRecipes = new HashMap<>();
 
     public static void setCachedDryingTableRecipes(Map<Identifier, DryingTableRecipe> recipes) {
         cachedDryingTableRecipes = recipes;
@@ -56,5 +52,16 @@ public class ClientRecipeCache {
         cachedSummoningRecipes = recipes;
     }
 
+    //Compression Recipe Cache
+    private static final Map<Item, List<CompressionRecipe>> cachedCompressionRecipes = new HashMap<>();
+
+    public static List<CompressionRecipe> getCompressionRecipes(Item item) {
+        return cachedCompressionRecipes.getOrDefault(item, List.of());
+    }
+
+    public static void setCachedCompressionRecipes(Map<Item, List<CompressionRecipe>> recipes) {
+        cachedCompressionRecipes.clear();
+        cachedCompressionRecipes.putAll(recipes);
+    }
 
 }

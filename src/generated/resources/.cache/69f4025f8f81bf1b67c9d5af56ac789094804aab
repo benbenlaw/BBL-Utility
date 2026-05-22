@@ -1,6 +1,7 @@
-// 26.1.2	2026-04-12T11:09:01.637589	utility Models
+// 26.1.2	2026-05-22T11:06:39.3416657	utility Models
 7b478f6fe076b3dd01e19bd9af4c462234d4b866 assets/utility/blockstates/block_breaker.json
 9393e9a041dc32ae873931a80bfe2ea3a3fa0505 assets/utility/blockstates/block_placer.json
+f5aca2a1c0e16e1aa156f383185a28f813b3af91 assets/utility/blockstates/compactor.json
 24e85a681138e6d4534934d26d5defd3d7ccc990 assets/utility/blockstates/deepslate_ender_ore.json
 87694b9f16e373a3ac48c0cde5a0bcc929b52969 assets/utility/blockstates/ender_ore.json
 f650a479d13491f6f9463e257ad2e3b0f21ae05f assets/utility/blockstates/fluid_collector.json
@@ -14,6 +15,7 @@ d10963ea3d630694a3a4b9671197b35743284dfb assets/utility/blockstates/item_collect
 9206eec1fe9f71d09debfd8ed9dcafce178bb289 assets/utility/items/animal_net.json
 bf92ff024d8153b2a9374c4599f690dac2d87408 assets/utility/items/block_breaker.json
 829c1d68b5b0dafb15ced0785aec990327298177 assets/utility/items/block_placer.json
+38889321e78c5872012d72e7e4877f2bdd2a476e assets/utility/items/compactor.json
 7b47ea4aed9a0c9714dacf616316bb5717614bb7 assets/utility/items/crook.json
 80c699ebb21da5cd33dbf0291a5db1f9ba347005 assets/utility/items/death_stone.json
 f89394f11f78737624b873b4ecfd3d4558a83162 assets/utility/items/deepslate_ender_ore.json
@@ -44,6 +46,10 @@ ce3b032eec94eac443afd59a35117c29c5037e6f assets/utility/models/block/block_break
 41f486fcc71363641c2a1a670cc40333a674f9d2 assets/utility/models/block/block_placer_vertical.json
 0f175b484dd9c215853c83c5ffda0bb0642ccf53 assets/utility/models/block/block_placer_working.json
 f58cfd6ae8382f0cef215d09e00b07497a6a2cd8 assets/utility/models/block/block_placer_working_vertical.json
+f3f357c51abf971926f98b0f88a98600187223bf assets/utility/models/block/compactor.json
+6c7907b968c5ddcf50b985257bba331b5e34a16f assets/utility/models/block/compactor_vertical.json
+40e4a9ac54ccd897e13ea43064aefc5e40290bee assets/utility/models/block/compactor_working.json
+ad556779bb9ae24a386b6b907090b4c58ce69c81 assets/utility/models/block/compactor_working_vertical.json
 d72a105e3b5a7aa627da2cb359bd17d7cb76e8ba assets/utility/models/block/deepslate_ender_ore.json
 cbdb6fc849612cb4221960db22cbe6862c7c7aa2 assets/utility/models/block/ender_ore.json
 b4750d7f856473c5e2b252f3d506ec0c5bc4240e assets/utility/models/block/fluid_collector.json
