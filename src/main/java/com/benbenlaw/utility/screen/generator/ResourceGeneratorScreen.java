@@ -41,14 +41,12 @@ public class ResourceGeneratorScreen extends AbstractContainerScreen<ResourceGen
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        guiGraphics.nextStratum();
-        renderTanks(guiGraphics, x, y, mouseX, mouseY);
-        extractTooltip(guiGraphics, mouseX, mouseY);
         DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
-    }
 
-    private void renderTanks(GuiGraphicsExtractor GuiGraphicsExtractor, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), ResourceGeneratorBlockEntity.LEFT_TANK_SLOT, x, y, 8, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
-        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), ResourceGeneratorBlockEntity.RIGHT_TANK_SLOT, x, y, 152, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getFluidHandler(), ResourceGeneratorBlockEntity.LEFT_TANK_SLOT, x, y,
+                8, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getFluidHandler(), ResourceGeneratorBlockEntity.RIGHT_TANK_SLOT, x, y,
+                152, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+
     }
 }

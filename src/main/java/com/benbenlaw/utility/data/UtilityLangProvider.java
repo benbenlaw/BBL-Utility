@@ -56,6 +56,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("tooltip.utility.compactor_button.mode", "Mode: %s");
         add("tooltip.utility.compactor_button.is3x3", "3x3");
         add("tooltip.utility.compactor_button.is2x2", "2x2");
+        add("tooltip.utility.empty_filter", "Empty Filter");
 
         //Animal Net Tooltips
         add("tooltip.animal_net.mob_types", "Can Catch:");

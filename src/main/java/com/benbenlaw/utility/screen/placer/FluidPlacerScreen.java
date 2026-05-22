@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.screen.placer;
 
 import com.benbenlaw.core.Core;
+import com.benbenlaw.core.screen.util.DurationTooltip;
 import com.benbenlaw.core.screen.util.FluidRenderingUtils;
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.block.entity.FluidPlacerBlockEntity;
@@ -40,10 +41,10 @@ public class FluidPlacerScreen extends AbstractContainerScreen<FluidPlacerMenu> 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        renderTanks(guiGraphics, x, y, mouseX, mouseY);
-    }
+        DurationTooltip.renderDurationTooltip(guiGraphics, mouseX, mouseY, x, y, 161, 5, menu.data.get(0), menu.data.get(1));
 
-    private void renderTanks(GuiGraphicsExtractor GuiGraphicsExtractor, int x, int y, int mouseX, int mouseY) {
-        FluidRenderingUtils.renderFluid(GuiGraphicsExtractor, menu.blockEntity.getFluidHandler(), FluidPlacerBlockEntity.TANK_SLOT, x, y, 60, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+        FluidRenderingUtils.renderFluid(guiGraphics, menu.blockEntity.getFluidHandler(), FluidPlacerBlockEntity.TANK_SLOT, x, y,
+                60, 20, 47, 16, mouseX, mouseY, Component.translatable("tooltip.utility.empty"));
+
     }
 }
