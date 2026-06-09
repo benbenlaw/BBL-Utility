@@ -144,12 +144,27 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
 
             fluidInventory.runInternal(() -> {
                 try (Transaction tx = Transaction.open(null)) {
+                    var leftTank = fluidInventory.getResource(LEFT_TANK_SLOT);
+                    var rightTank = fluidInventory.getResource(RIGHT_TANK_SLOT);
+
                     if (recipe.consumeLeft()) {
-                        fluidInventory.extract(LEFT_TANK_SLOT, FluidResource.of(recipe.leftFluid()), recipe.leftFluid().amount(), tx);
+
+                        if (recipe.leftFluid().is(leftTank.getFluidType())) {
+                            fluidInventory.extract(LEFT_TANK_SLOT, leftTank, recipe.leftFluid().amount(), tx);
+                        } else if (recipe.leftFluid().is(rightTank.getFluidType())) {
+                            fluidInventory.extract(RIGHT_TANK_SLOT, rightTank, recipe.leftFluid().amount(), tx);
+                        }
                     }
                     if (recipe.consumeRight()) {
-                        fluidInventory.extract(RIGHT_TANK_SLOT, FluidResource.of(recipe.rightFluid()), recipe.rightFluid().amount(), tx);
+
+                        if (recipe.rightFluid().is(rightTank.getFluidType())) {
+                            fluidInventory.extract(RIGHT_TANK_SLOT, rightTank, recipe.rightFluid().amount(), tx);
+
+                        } else if (recipe.rightFluid().is(leftTank.getFluidType())) {
+                            fluidInventory.extract(LEFT_TANK_SLOT, leftTank, recipe.rightFluid().amount(), tx);
+                        }
                     }
+
                     tx.commit();
                 }
             });
