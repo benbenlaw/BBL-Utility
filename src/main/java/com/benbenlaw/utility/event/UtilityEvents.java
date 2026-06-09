@@ -30,12 +30,20 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.*;
 
 @EventBusSubscriber(modid = Utility.MOD_ID)
 public class UtilityEvents {
+
+
+    @SubscribeEvent
+    public static void registerCapabilities(PlayerTickEvent.Post event) {
+
+
+    }
 
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -74,8 +82,15 @@ public class UtilityEvents {
                 (blockEntity, side) -> blockEntity.getFluidHandler());
 
         event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.ITEM_COLLECTOR_BLOCK_ENTITY.get(),
-                (blockEntity, side) -> blockEntity.getItemHandler()
-        );
+                (blockEntity, side) -> blockEntity.getItemHandler());
+
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.COMPACTOR_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemHandler());
+
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.CLICKER_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemHandler());
+
+
     }
 
 

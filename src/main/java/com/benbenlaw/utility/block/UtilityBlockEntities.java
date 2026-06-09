@@ -60,4 +60,8 @@ public class UtilityBlockEntities {
             BLOCK_ENTITIES.register("compactor_block_entity", () ->
                     new BlockEntityType<>(CompactorBlockEntity::new, UtilityBlocks.COMPACTOR.get()));
 
+    public static final Supplier<BlockEntityType<ClickerBlockEntity>> CLICKER_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("clicker_block_entity", () ->
+                    new BlockEntityType<>(ClickerBlockEntity::new, UtilityBlocks.CLICKER.get()));
+
 }

@@ -2,6 +2,7 @@ package com.benbenlaw.utility.screen;
 
 import com.benbenlaw.utility.Utility;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
+import com.benbenlaw.utility.screen.clicker.ClickerMenu;
 import com.benbenlaw.utility.screen.clock.RedstoneClockMenu;
 import com.benbenlaw.utility.screen.collector.FluidCollectorMenu;
 import com.benbenlaw.utility.screen.collector.ItemCollectorMenu;
@@ -58,6 +59,11 @@ public class UtilityMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<CompactorMenu>> COMPACTOR_MENU = MENUS.register("compactor_menu",
             () -> IMenuTypeExtension.create(CompactorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<ClickerMenu>> CLICKER_MENU = MENUS.register("clicker_menu",
+            () -> IMenuTypeExtension.create(ClickerMenu::new));
+
+
 
 }
 

@@ -73,6 +73,10 @@ public class UtilityBlocks {
     public static final DeferredBlock<Block> COMPACTOR = registerBlock("compactor",
             properties -> new CompactorBlock(machineProperties(properties)));
 
+    public static final DeferredBlock<Block> CLICKER = registerBlock("clicker",
+            properties -> new ClickerBlock(machineProperties(properties)));
+
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function) {
         DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);
         registerBlockItem(name, toReturn);

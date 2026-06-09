@@ -3,16 +3,13 @@ package com.benbenlaw.utility.util;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.util.StringRepresentable;
 
-public enum TemperatureValues {
+public enum TemperatureValues implements StringRepresentable {
 
     WARM,
     TEMPERATE,
     COLD;
-
-    public String asString() {
-        return this.name().toLowerCase();
-    }
 
     public static TemperatureValues fromString(String name) {
         return switch (name.toLowerCase()) {
@@ -24,7 +21,7 @@ public enum TemperatureValues {
     }
 
     public static final Codec<TemperatureValues> CODEC = Codec.STRING
-            .xmap(TemperatureValues::fromString, TemperatureValues::asString);
+            .xmap(TemperatureValues::fromString, TemperatureValues::getSerializedName);
 
     public static void writeToBuffer(FriendlyByteBuf buffer, TemperatureValues temp) {
         buffer.writeEnum(temp);
@@ -35,4 +32,8 @@ public enum TemperatureValues {
         return buffer.readEnum(TemperatureValues.class);
     }
 
+    @Override
+    public String getSerializedName() {
+        return name().toLowerCase();
+    }
 }

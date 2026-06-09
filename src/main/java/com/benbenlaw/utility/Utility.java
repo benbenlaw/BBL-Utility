@@ -13,6 +13,7 @@ import com.benbenlaw.utility.network.UtilityNetworking;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.screen.UtilityMenuTypes;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
+import com.benbenlaw.utility.screen.clicker.ClickerScreen;
 import com.benbenlaw.utility.screen.clock.RedstoneClockScreen;
 import com.benbenlaw.utility.screen.collector.FluidCollectorScreen;
 import com.benbenlaw.utility.screen.collector.ItemCollectorScreen;
@@ -82,6 +83,7 @@ public class Utility {
             event.register(UtilityMenuTypes.ITEM_COLLECTOR_MENU.get(), ItemCollectorScreen::new);
             event.register(UtilityMenuTypes.SUMMONING_MENU.get(), SummoningBlockScreen::new);
             event.register(UtilityMenuTypes.COMPACTOR_MENU.get(), CompactorScreen::new);
+            event.register(UtilityMenuTypes.CLICKER_MENU.get(), ClickerScreen::new);
         }
 
         @SubscribeEvent
