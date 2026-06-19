@@ -22,6 +22,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +35,7 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
     public static final Identifier WATERLOGGED = Utility.identifier("textures/gui/sprites/waterlogged_progress_arrow.png");
     public static final IRecipeType<DryingTableRecipe> RECIPE_TYPE = IRecipeType.create(Utility.identifier("drying_table"), DryingTableRecipe.class);
 
-    private final int width = 66;
+    private final int width = 85;
     private final int height = 20;
     private final IDrawable icon;
 
@@ -86,15 +88,22 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DryingTableRecipe recipe, @NotNull IFocusGroup focuses) {
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 2).add(recipe.input().ingredient());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 48, 2).add(recipe.output().create());
+        if (recipe.fluid().isPresent()) {
+            SizedFluidIngredient fluid = new SizedFluidIngredient(FluidIngredient.of(recipe.fluid().get().create().getFluid()), recipe.fluid().get().amount());
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, 2).add(fluid.ingredient().display());
+        }
+        builder.addSlot(RecipeIngredientRole.INPUT, 21, 2).add(recipe.input().ingredient());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 67, 2).add(recipe.output().create());
 
     }
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, DryingTableRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
-        if (MouseUtil.isMouseAboveArea((int) mouseX, (int) mouseY, 19, 1, 0, 0, 28, 18)) {
+        if (MouseUtil.isMouseAboveArea((int) mouseX, (int) mouseY, 38, 1, 0, 0, 28, 18)) {
             tooltip.add(Component.translatable("tooltip.core.ticks", UtilityStartUpConfig.dryingTableMaxDuration.get()));
+            if (recipe.consumeAmount().isPresent()) {
+                tooltip.add(Component.translatable("tooltip.utility.consume", recipe.consumeAmount().get()));
+            }
         }
     }
 
@@ -105,6 +114,6 @@ public class DryingTableRecipeCategory implements IRecipeCategory<DryingTableRec
 
     @Override
     public void createRecipeExtras(@NotNull IRecipeExtrasBuilder builder, DryingTableRecipe recipe, @NotNull IFocusGroup focuses) {
-        builder.addAnimatedRecipeArrow(200).setPosition(22, 1);
+        builder.addAnimatedRecipeArrow(200).setPosition(41, 1);
     }
 }

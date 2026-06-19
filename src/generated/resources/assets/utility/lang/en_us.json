@@ -63,6 +63,7 @@
   "tooltip.utility.compactor_button.is2x2": "2x2",
   "tooltip.utility.compactor_button.is3x3": "3x3",
   "tooltip.utility.compactor_button.mode": "Mode: %s",
+  "tooltip.utility.consume": "Consumes %smb of Fluid",
   "tooltip.utility.crook": "Breaks leaves faster and increase leaves drops rates",
   "tooltip.utility.death_stone": "Given upon death, right click to return to your death location",
   "tooltip.utility.empty": "Empty",
