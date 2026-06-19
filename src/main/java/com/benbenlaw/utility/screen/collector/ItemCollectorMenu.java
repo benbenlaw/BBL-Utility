@@ -29,7 +29,7 @@ public class ItemCollectorMenu extends SimpleAbstractContainerMenu {
     }
 
     public ItemCollectorMenu(int containerID, Inventory inventory, BlockPos pos, ContainerData data) {
-        super(UtilityMenuTypes.ITEM_COLLECTOR_MENU.get(), containerID, inventory, pos, 1);
+        super(UtilityMenuTypes.ITEM_COLLECTOR_MENU.get(), containerID, inventory, pos, 9);
         this.player = inventory.player;
         this.level = inventory.player.level();
         this.data = data;
