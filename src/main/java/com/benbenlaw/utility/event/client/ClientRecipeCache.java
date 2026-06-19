@@ -51,17 +51,4 @@ public class ClientRecipeCache {
     public static void setCachedSummoningRecipes(Map<Identifier, SummoningRecipe> recipes) {
         cachedSummoningRecipes = recipes;
     }
-
-    //Compression Recipe Cache
-    private static final Map<Item, List<CompressionRecipe>> cachedCompressionRecipes = new HashMap<>();
-
-    public static List<CompressionRecipe> getCompressionRecipes(Item item) {
-        return cachedCompressionRecipes.getOrDefault(item, List.of());
-    }
-
-    public static void setCachedCompressionRecipes(Map<Item, List<CompressionRecipe>> recipes) {
-        cachedCompressionRecipes.clear();
-        cachedCompressionRecipes.putAll(recipes);
-    }
-
 }

@@ -81,8 +81,10 @@ dependencies {
     //Casting
     implementation("curse.maven:bbl-casting-1052163:8021681")
     implementation("curse.maven:bbl-casting-tools-1501619:8084030")
-    //Casting
+    //Spark
     runtimeOnly("curse.maven:spark-361579:7815877")
+    //Strainers
+    runtimeOnly("curse.maven:opolis-strainers-882351:8258249")
 }
 
 tasks.withType(ProcessResources).configureEach {

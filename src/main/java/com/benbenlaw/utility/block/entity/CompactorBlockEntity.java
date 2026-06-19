@@ -4,8 +4,6 @@ import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.CompactorBlock;
-import com.benbenlaw.utility.event.client.ClientRecipeCache;
-import com.benbenlaw.utility.recipe.custom.CompressionRecipe;
 import com.benbenlaw.utility.screen.compactor.CompactorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -16,7 +14,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -26,6 +29,12 @@ import net.neoforged.neoforge.transfer.item.ItemUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class CompactorBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
@@ -37,6 +46,9 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
     private static final int INPUT_END = 8;
     private static final int OUTPUT_START = 9;
     private static final int OUTPUT_END = 17;
+
+    private static final Map<Item, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_2X2 = new HashMap<>();
+    private static final Map<Item, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_3X3 = new HashMap<>();
 
     boolean is3x3 = false;
 
@@ -82,22 +94,22 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
             return;
         }
 
+        int needed = requiredCount();
+
         for (int i = INPUT_START; i <= INPUT_END; i++) {
 
             ItemStack stack = ItemUtil.getStack(inventory, i);
             if (stack.isEmpty()) continue;
+            if (stack.getCount() < needed) continue;
 
-            CompressionRecipe recipe = ClientRecipeCache.getCompressionRecipes(stack.getItem())
-                    .stream()
-                    .filter(r -> r.is3x3() == this.is3x3)
-                    .findFirst()
-                    .orElse(null);
-
+            CraftingInput input = buildCraftingInput(stack);
+            RecipeHolder<CraftingRecipe> recipe = getRecipeForInput(stack.getItem(), input);
             if (recipe == null) continue;
-            if (recipe.is3x3() != this.is3x3) continue;
-            if (stack.getCount() < recipe.inputCount()) continue;
 
-            int outputSlot = findOutputSlot(recipe.output());
+            ItemStack output = recipe.value().assemble(input);
+            if (output.isEmpty()) continue;
+
+            int outputSlot = findOutputSlot(output);
             if (outputSlot == -1) {
                 progress = 0;
                 sync();
@@ -107,7 +119,7 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
             progress++;
 
             if (progress >= maxProgress) {
-                craftItem(i, outputSlot, recipe);
+                craftItem(i, outputSlot, output, needed);
             }
 
             sync();
@@ -118,13 +130,52 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
         sync();
     }
 
-    private void craftItem(int inputSlot, int outputSlot, CompressionRecipe recipe) {
+    private int requiredCount() {
+        return is3x3 ? 9 : 4;
+    }
+
+    private CraftingInput buildCraftingInput(ItemStack stack) {
+        int size = is3x3 ? 3 : 2;
+
+        List<ItemStack> items = new ArrayList<>(size * size);
+        for (int i = 0; i < size * size; i++) {
+            items.add(stack.copyWithCount(1));
+        }
+
+        return CraftingInput.of(size, size, items);
+    }
+
+    @Nullable
+    private RecipeHolder<CraftingRecipe> getRecipeForInput(Item item, CraftingInput input) {
+
+        Map<Item, Optional<RecipeHolder<CraftingRecipe>>> cache = is3x3 ? RECIPE_CACHE_3X3 : RECIPE_CACHE_2X2;
+
+        Optional<RecipeHolder<CraftingRecipe>> cached = cache.get(item);
+        if (cached != null) {
+            return cached.orElse(null);
+        }
+
+        assert level != null;
+
+        Optional<RecipeHolder<CraftingRecipe>> found = level.getServer().getRecipeManager()
+                .getRecipeFor(RecipeType.CRAFTING, input, level);
+
+        cache.put(item, found);
+        return found.orElse(null);
+    }
+
+    public static void clearRecipeCache() {
+        RECIPE_CACHE_2X2.clear();
+        RECIPE_CACHE_3X3.clear();
+    }
+
+    private void craftItem(int inputSlot, int outputSlot, ItemStack output, int consumeCount) {
 
         inventory.runInternal(() -> {
             try (Transaction tx = Transaction.openRoot()) {
 
-                inventory.extract(inputSlot, inventory.getResource(inputSlot), recipe.inputCount(), tx);
-                inventory.insert(outputSlot, ItemResource.of(recipe.output()), recipe.output().getCount(), tx);
+                inventory.extract(inputSlot, inventory.getResource(inputSlot), consumeCount, tx);
+                inventory.insert(outputSlot, ItemResource.of(output), output.getCount(), tx);
                 tx.commit();
             }
         });
@@ -162,6 +213,7 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
 
     public void toggleCraftingMode() {
         is3x3 = !is3x3;
+        progress = 0;
         sync();
     }
 
