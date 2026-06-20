@@ -115,7 +115,7 @@ public class SummoningRecipeCategory implements IRecipeCategory<SummoningRecipe>
         if (tagTarget.isPresent()) {
             TagKey<Item> tag = TagKey.create(Registries.ITEM, tagTarget.get().location());
             Ingredient ingredient = Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag));
-            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 2, 21).add(ingredient).addRichTooltipCallback(
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, 21).add(ingredient).addRichTooltipCallback(
                     (ingredients, tooltip) -> {
                         tooltip.add(Component.translatable("jei.utility.summoning_block_below_block").withStyle(ChatFormatting.GOLD));
                     }
@@ -133,7 +133,7 @@ public class SummoningRecipeCategory implements IRecipeCategory<SummoningRecipe>
                 blockItem = new ItemStack(Items.LAVA_BUCKET);
             }
 
-            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 2, 21).add(blockItem).addRichTooltipCallback(
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, 21).add(blockItem).addRichTooltipCallback(
                     (ingredients, tooltip) -> {
                         tooltip.add(Component.translatable("jei.utility.summoning_block_below_block").withStyle(ChatFormatting.GOLD));
                     }
