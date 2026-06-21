@@ -6,6 +6,7 @@ import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.CompactorBlock;
 import com.benbenlaw.utility.screen.compactor.CompactorMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -47,8 +48,10 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
     private static final int OUTPUT_START = 9;
     private static final int OUTPUT_END = 17;
 
-    private static final Map<Item, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_2X2 = new HashMap<>();
-    private static final Map<Item, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_3X3 = new HashMap<>();
+    private record RecipeCacheKey(Item item, DataComponentPatch components) {}
+
+    private static final Map<RecipeCacheKey, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_2X2 = new HashMap<>();
+    private static final Map<RecipeCacheKey, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_3X3 = new HashMap<>();
 
     boolean is3x3 = false;
 
@@ -103,7 +106,7 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
             if (stack.getCount() < needed) continue;
 
             CraftingInput input = buildCraftingInput(stack);
-            RecipeHolder<CraftingRecipe> recipe = getRecipeForInput(stack.getItem(), input);
+            RecipeHolder<CraftingRecipe> recipe = getRecipeForInput(stack, input);
             if (recipe == null) continue;
 
             ItemStack output = recipe.value().assemble(input);
@@ -146,11 +149,13 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
     }
 
     @Nullable
-    private RecipeHolder<CraftingRecipe> getRecipeForInput(Item item, CraftingInput input) {
+    private RecipeHolder<CraftingRecipe> getRecipeForInput(ItemStack stack, CraftingInput input) {
 
-        Map<Item, Optional<RecipeHolder<CraftingRecipe>>> cache = is3x3 ? RECIPE_CACHE_3X3 : RECIPE_CACHE_2X2;
+        Map<RecipeCacheKey, Optional<RecipeHolder<CraftingRecipe>>> cache = is3x3 ? RECIPE_CACHE_3X3 : RECIPE_CACHE_2X2;
 
-        Optional<RecipeHolder<CraftingRecipe>> cached = cache.get(item);
+        RecipeCacheKey key = new RecipeCacheKey(stack.getItem(), stack.getComponentsPatch());
+
+        Optional<RecipeHolder<CraftingRecipe>> cached = cache.get(key);
         if (cached != null) {
             return cached.orElse(null);
         }
@@ -160,7 +165,7 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
         Optional<RecipeHolder<CraftingRecipe>> found = level.getServer().getRecipeManager()
                 .getRecipeFor(RecipeType.CRAFTING, input, level);
 
-        cache.put(item, found);
+        cache.put(key, found);
         return found.orElse(null);
     }
 
