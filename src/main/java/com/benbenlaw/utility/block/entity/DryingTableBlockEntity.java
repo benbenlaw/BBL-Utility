@@ -29,6 +29,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
@@ -58,6 +59,8 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
     private RecipeHolder<DryingTableRecipe> cachedRecipe;
+
+    private ItemStack lastInputSnapshot = ItemStack.EMPTY;
 
     public DryingTableBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.DRYING_TABLE_BLOCK_ENTITY.get(), pos, state);
@@ -103,14 +106,20 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
             progress = 0;
             sync();
             cachedRecipe = null;
+            lastInputSnapshot = ItemStack.EMPTY;
             return;
         }
 
-        if (cachedRecipe == null) {
+        if (cachedRecipe == null || !ItemStack.isSameItemSameComponents(inputStack, lastInputSnapshot)) {
             updateCachedRecipe();
+            lastInputSnapshot = inputStack.copy();
         }
 
-        if (cachedRecipe != null && canInsertOutput(cachedRecipe.value().output().create())) {
+        boolean canCraft = cachedRecipe != null
+                && hasSufficientFluid(cachedRecipe.value())
+                && canInsertOutput(cachedRecipe.value().output().create());
+
+        if (canCraft) {
             progress++;
             if (progress >= maxProgress) craftItem();
         } else {
@@ -119,6 +128,16 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
         }
     }
 
+    private boolean hasSufficientFluid(DryingTableRecipe recipe) {
+        if (recipe.fluid().isEmpty()) {
+            return true;
+        }
+
+        FluidStack actual = FluidUtil.getStack(fluidInventory, 0);
+
+        var requiredFluid = recipe.fluid().get();
+        return requiredFluid.is(actual.getFluidType()) && actual.getAmount() >= requiredFluid.amount();
+    }
 
     private void craftItem() {
         if (cachedRecipe != null) {
@@ -147,6 +166,9 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
             } else {
                 level.playSound(null, worldPosition, SoundEvents.DRY_GRASS, SoundSource.BLOCKS, 0.4f, 1.0f);
             }
+
+            cachedRecipe = null;
+            lastInputSnapshot = ItemStack.EMPTY;
 
             progress = 0;
             sync();
