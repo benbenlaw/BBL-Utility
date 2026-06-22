@@ -78,7 +78,7 @@ public class ItemRepairerBlockEntity extends SyncableBlockEntity implements Menu
                 ItemStack tool = inventory.getResource(INPUT_SLOT).toStack();
                 int damage = tool.getDamageValue();
                 int maxDamage = tool.getMaxDamage();
-                maxProgress = maxDamage - damage;
+                maxProgress = (maxDamage + damage) / 2;
                 progress++;
 
                 if (progress >= maxProgress) {
