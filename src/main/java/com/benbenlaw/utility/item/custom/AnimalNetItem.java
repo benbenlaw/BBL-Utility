@@ -47,6 +47,8 @@ public class AnimalNetItem extends Item {
 
         Level level = player.level();
 
+        if (stack.has(UtilityDataComponents.ENTITY_TYPE.get()) || stack.has(UtilityDataComponents.ENTITY_DATA.get())) return InteractionResult.FAIL;
+
         boolean canCaptureHostileMobs = interactionTarget instanceof Monster && UtilityStartUpConfig.animalNetHostileMobs.get();
         boolean canCaptureWaterMobs = interactionTarget instanceof WaterAnimal && UtilityStartUpConfig.animalNetWaterMobs.get();
         boolean canCaptureAnimalMobs = interactionTarget instanceof Animal && UtilityStartUpConfig.animalNetAnimalMobs.get();
