@@ -527,7 +527,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 EntityType.COW, Optional.of(temperateEntityData), Optional.of(TemperatureValues.TEMPERATE)).save(output, "cows/temperate");
 
         SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.CHICKEN), 1), new BlockTarget.Tag(BlockTags.DIRT),
-                EntityType.CHICKEN, Optional.of(temperateEntityData), Optional.of(TemperatureValues.WARM)).save(output, "chicken/warm");
+                EntityType.CHICKEN, Optional.of(warmEntityData), Optional.of(TemperatureValues.WARM)).save(output, "chicken/warm");
 
         SummoningRecipeBuilder.summoningRecipe(new SizedIngredient(Ingredient.of(Items.CHICKEN), 1), new BlockTarget.Tag(BlockTags.DIRT),
                 EntityType.CHICKEN, Optional.of(coldEntityData), Optional.of(TemperatureValues.COLD)).save(output, "chicken/cold");

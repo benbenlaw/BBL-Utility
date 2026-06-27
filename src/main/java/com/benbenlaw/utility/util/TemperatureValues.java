@@ -27,7 +27,6 @@ public enum TemperatureValues implements StringRepresentable {
         buffer.writeEnum(temp);
     }
 
-    // Read a TemperatureValues from a buffer
     public static TemperatureValues readFromBuffer(FriendlyByteBuf buffer) {
         return buffer.readEnum(TemperatureValues.class);
     }

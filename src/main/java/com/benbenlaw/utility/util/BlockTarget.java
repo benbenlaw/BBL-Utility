@@ -29,7 +29,7 @@ public sealed interface BlockTarget permits BlockTarget.Single, BlockTarget.Tag 
             if (ignoreBlockState) {
                 return true;
             } else {
-                // Compare only the non-default properties
+
                 BlockState defaultState = blockState.getBlock().defaultBlockState();
                 for (Property<?> property : blockState.getProperties()) {
                     Comparable<?> recipeValue = blockState.getValue(property);

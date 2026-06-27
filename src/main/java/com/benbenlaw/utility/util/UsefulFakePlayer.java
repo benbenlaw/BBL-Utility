@@ -38,7 +38,7 @@ public class UsefulFakePlayer extends FakePlayer {
 
     @Override
     public float getAttackStrengthScale(float adjustTicks) {
-        return 1; // Prevent the attack strength from always being 0.03 due to not ticking.
+        return 1; // Prevent the attack strength from alw
     }
 
     @Override

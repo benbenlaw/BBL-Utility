@@ -51,7 +51,7 @@ public class LineRendererEvent {
 
         AABB shifted = box.move(-cam.x, -cam.y, -cam.z);
 
-        ShapeRenderer.renderShape(poseStack, lineBuilder, Shapes.create(shifted), 0, 1, 0,  ARGB.colorFromFloat(0.4F, 0, 0, 0),2f);
+        ShapeRenderer.renderShape(poseStack, lineBuilder, Shapes.create(shifted), 0, 0, 0,  ARGB.colorFromFloat(0.4F, 96, 245, 66),10f);
 
         buffer.endBatch();
     }

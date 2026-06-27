@@ -108,7 +108,8 @@ public class UtilityModelProvider extends ModelProvider {
     @Override
     protected @NotNull Stream<? extends Holder<Block>> getKnownBlocks() {
         return UtilityBlocks.BLOCKS.getEntries().stream().filter(x ->
-                !x.is(UtilityBlocks.DRYING_TABLE.getId())
+                !x.is(UtilityBlocks.DRYING_TABLE.getId()) &&
+                !x.is(UtilityBlocks.CLICKER.getId())
         );
     }
 

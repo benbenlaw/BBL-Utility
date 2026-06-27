@@ -151,23 +151,18 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
             leftDir = Direction.WEST;
         }
 
-        // Calculate world-space min/max coordinates
         int minX = startPos.getX();
         int minY = startPos.getY();
         int minZ = startPos.getZ();
 
-        // Left/right expansion
         int maxX = minX + leftDir.getStepX() * (width - 1);
         int maxZ = minZ + leftDir.getStepZ() * (width - 1);
 
-        // Forward/back expansion
         maxX += facing.getStepX() * (depth - 1);
         maxZ += facing.getStepZ() * (depth - 1);
 
-        // Up/down expansion
         int maxY = minY + height - 1;
 
-        // Ensure min/max are correct (for negative step)
         double finalMinX = Math.min(minX, maxX);
         double finalMaxX = Math.max(minX, maxX);
         double finalMinY = minY;

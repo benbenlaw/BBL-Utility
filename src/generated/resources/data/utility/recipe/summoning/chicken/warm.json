@@ -3,7 +3,7 @@
   "below_block": "#minecraft:dirt",
   "entity": "minecraft:chicken",
   "entity_data": {
-    "variant": "minecraft:temperate"
+    "variant": "minecraft:warm"
   },
   "input": {
     "count": 1,
