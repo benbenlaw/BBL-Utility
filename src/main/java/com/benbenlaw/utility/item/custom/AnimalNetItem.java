@@ -2,10 +2,13 @@ package com.benbenlaw.utility.item.custom;
 
 import com.benbenlaw.utility.config.UtilityStartUpConfig;
 import com.benbenlaw.utility.item.UtilityDataComponents;
+import com.benbenlaw.utility.util.UtilityTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -36,6 +39,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.text.Utilities;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -55,8 +59,9 @@ public class AnimalNetItem extends Item {
         boolean canCaptureWaterMobs = interactionTarget instanceof WaterAnimal && UtilityStartUpConfig.animalNetWaterMobs.get();
         boolean canCaptureAnimalMobs = interactionTarget instanceof Animal && UtilityStartUpConfig.animalNetAnimalMobs.get();
         boolean canCaptureVillagerMobs = interactionTarget instanceof Villager && UtilityStartUpConfig.animalNetVillagerMobs.get();
+        boolean isInValidTag = interactionTarget.is(UtilityTags.Entities.CAN_BE_RELOCATED);
 
-        boolean isValidTarget = canCaptureHostileMobs || canCaptureWaterMobs || canCaptureAnimalMobs || canCaptureVillagerMobs;
+        boolean isValidTarget = canCaptureHostileMobs || canCaptureWaterMobs || canCaptureAnimalMobs || canCaptureVillagerMobs || isInValidTag;
 
         if (!level.isClientSide()) {
 
@@ -172,7 +177,13 @@ public class AnimalNetItem extends Item {
                     consumer.accept(Component.translatable("tooltip.animal_net.villager_mobs").withStyle(ChatFormatting.GREEN));
                 }
 
-
+                Objects.requireNonNull(context.registries()).lookup(Registries.ENTITY_TYPE).flatMap(lookup -> lookup.get(UtilityTags.Entities.CAN_BE_RELOCATED)).ifPresent(holderSet -> {
+                    for (Holder<EntityType<?>> holder : holderSet) {
+                        consumer.accept(Component.literal("- ")
+                                .append(holder.value().getDescription())
+                                .withStyle(ChatFormatting.GRAY));
+                    }
+                });
             }
         } else {
             consumer.accept(Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW));
