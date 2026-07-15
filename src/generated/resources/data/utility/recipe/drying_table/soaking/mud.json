@@ -2,14 +2,14 @@
   "type": "utility:drying_table",
   "consume_amount": 100,
   "fluid": {
-    "amount": 100,
+    "amount": 250,
     "id": "minecraft:water"
   },
   "input": {
     "count": 1,
-    "ingredient": "utility:log_sheet"
+    "ingredient": "#minecraft:dirt"
   },
   "output": {
-    "id": "utility:soaked_paper"
+    "id": "minecraft:mud"
   }
 }

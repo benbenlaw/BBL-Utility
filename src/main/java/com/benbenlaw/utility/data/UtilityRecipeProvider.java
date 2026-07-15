@@ -448,7 +448,11 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), Optional.of(new FluidStackTemplate(Fluids.WATER, 1000)), Optional.empty()).save(output, "soaking/soaked_paper");
 
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(UtilityItems.LOG_SHEET), 1),
-                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), Optional.of(new FluidStackTemplate(Fluids.WATER, 1000)), Optional.of(100)).save(output, "soaking/soaked_paper_from_log_sheet");
+                new ItemStackTemplate(UtilityItems.SOAKED_PAPER.get()), Optional.of(new FluidStackTemplate(Fluids.WATER, 100)), Optional.of(100)).save(output, "soaking/soaked_paper_from_log_sheet");
+
+        //Mud
+        DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(tag(ItemTags.DIRT).getValues()), 1),
+                new ItemStackTemplate(Items.MUD), Optional.of(new FluidStackTemplate(Fluids.WATER, 250)), Optional.of(100)).save(output, "soaking/mud");
 
         //Sponge
         DryingTableRecipeBuilder.dryingTable(new SizedIngredient(Ingredient.of(Items.WET_SPONGE), 1),

@@ -54,7 +54,13 @@ public class DryingTableBlockEntity extends SyncableBlockEntity implements MenuP
     private final SyncableFluidHandler fluidInventory = new SyncableFluidHandler(this, 1, 16000,
             (i, stack) -> true,
             i -> true
-    );
+    ) {
+        @Override
+        protected void onContentsChanged(int index, FluidStack previousContents) {
+            super.onContentsChanged(index, previousContents);
+            updateCachedRecipe();
+        }
+    };
 
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;

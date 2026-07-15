@@ -160,6 +160,7 @@ jobs:
           java: 25
           curseforge-id: ${{ needs.build.outputs.curseforge_id }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
+          environment: client | server
 
   publish-modrinth:
     name: Publish to Modrinth

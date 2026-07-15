@@ -1,4 +1,4 @@
-// 26.1.2	2026-06-27T08:55:34.0071673	utility Recipes
+// 26.1.2	2026-07-15T12:36:44.5232023	utility Recipes
 cacec4c017a49450423191309f405f3ffa4bfa8b data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_deepslate_ender_ore.json
 5cf6c9b2d9ac6f4651910eea06a0e02f2f3f9f7e data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_ender_ore.json
 8f8a6d21064f19973e29410b0fe2c9e0f1a5037a data/minecraft/recipe/ender_pearl_fragment_from_deepslate_ender_ore.json
@@ -7,6 +7,7 @@ ac575c4e20c091cb9cd856fefb9ae5efb0f154e4 data/minecraft/recipe/ender_pearl_fragm
 5e44addfc78033c81f450d8791f450ed02cb6eba data/utility/advancement/recipes/drying_table/drying_table/drying/dead_bush.json
 09e9222b960ab94bf15bd667453d8148b52646bf data/utility/advancement/recipes/drying_table/drying_table/drying/paper.json
 eb37c07134f9e3cf3378ce9df8ce2ce57cc210a3 data/utility/advancement/recipes/drying_table/drying_table/drying/sponge.json
+8c6b57d035629704727a146f415606943eb18942 data/utility/advancement/recipes/drying_table/drying_table/soaking/mud.json
 e79c308ca0a8cc0e0473278e78d3e0e302a405e1 data/utility/advancement/recipes/drying_table/drying_table/soaking/soaked_paper.json
 744ac16d5ad73f167eb125ddbe996a389f444807 data/utility/advancement/recipes/drying_table/drying_table/soaking/soaked_paper_from_log_sheet.json
 d207324a428b0a9f9c0d46df36c30fe70368b366 data/utility/advancement/recipes/drying_table/drying_table/soaking/wet_sponge.json
@@ -132,8 +133,9 @@ cf408969dba17ea1059fcf28fb98e026980c0dac data/utility/recipe/chests.json
 2bc0623b0dae29eda6c02dacbfedbe3dd49a3546 data/utility/recipe/drying_table/drying/dead_bush.json
 eff3cefb67cd380d8c2ef232af69da0fdc953b23 data/utility/recipe/drying_table/drying/paper.json
 306068acb852f192cfc70c3ed18a09c8c229a2c3 data/utility/recipe/drying_table/drying/sponge.json
+b6b84bccef960f16b03904e64dd2ffb15366126b data/utility/recipe/drying_table/soaking/mud.json
 12c0e7b308b77df7e682de219affad9f812412e4 data/utility/recipe/drying_table/soaking/soaked_paper.json
-440dab71c92e2a872a0d3b028131649c8d018077 data/utility/recipe/drying_table/soaking/soaked_paper_from_log_sheet.json
+f90fd4757d35d428ebbcc0716dcd9ec2216f8339 data/utility/recipe/drying_table/soaking/soaked_paper_from_log_sheet.json
 cfad0de9d2bcf7b5aab97e23d85832953ebeae26 data/utility/recipe/drying_table/soaking/wet_sponge.json
 8602be3a013da24de9e15246d7e55fe1fd51e740 data/utility/recipe/ender_pearl.json
 7d7b828f1d3cc08d06ef4ebe1b810a9ee6a2edfa data/utility/recipe/ender_pearl_fragment.json

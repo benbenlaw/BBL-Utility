@@ -29,6 +29,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
@@ -55,7 +56,15 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
     private final SyncableFluidHandler fluidInventory = new SyncableFluidHandler(this, 2, 16000,
             (i, stack) -> true,
             i -> true
-    );
+    ) {
+        @Override
+        protected void onContentsChanged(int index, FluidStack previousContents) {
+            super.onContentsChanged(index, previousContents);
+            if (index == LEFT_TANK_SLOT || index == RIGHT_TANK_SLOT) {
+                updateCachedRecipe();
+            }
+        }
+    };
 
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
@@ -169,6 +178,7 @@ public class ResourceGeneratorBlockEntity extends SyncableBlockEntity implements
                 }
             });
 
+            cachedRecipe = null;
             progress = 0;
             sync();
         }

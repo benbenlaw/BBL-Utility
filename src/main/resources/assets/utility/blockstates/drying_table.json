@@ -29,6 +29,18 @@
     "facing=west,running=true": {
       "model": "utility:block/drying_table_working",
       "y": 270
+    },
+    "facing=up,running=true": {
+      "model": "utility:block/drying_table_working"
+    },
+    "facing=up,running=false": {
+      "model": "utility:block/drying_table"
+    },
+    "facing=down,running=true": {
+      "model": "utility:block/drying_table_working"
+    },
+    "facing=down,running=false": {
+      "model": "utility:block/drying_table"
     }
   }
 }
