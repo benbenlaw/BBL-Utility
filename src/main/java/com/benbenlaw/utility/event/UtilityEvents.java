@@ -9,16 +9,22 @@ import com.benbenlaw.utility.item.UtilityDataComponents;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.recipe.UtilityRecipeTypes;
 import com.benbenlaw.utility.recipe.custom.*;
+import com.benbenlaw.utility.sound.UtilitySounds;
+import com.benbenlaw.utility.util.UtilityTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,6 +33,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.*;
@@ -167,5 +174,21 @@ public class UtilityEvents {
             summoningRecipeMap.put(holder.id().identifier(), holder.value());
         }
         ClientRecipeCache.setCachedSummoningRecipes(summoningRecipeMap);
+    }
+
+    @SubscribeEvent
+    public static void doorBellSounds(PlayerInteractEvent.RightClickBlock event) {
+        if(UtilityStartUpConfig.woodenButtonsMakeDoorbellSound.get()) {
+            Level level = event.getLevel();
+            BlockState state = event.getLevel().getBlockState(event.getPos());
+            if (!level.isClientSide()) {
+                if (state.is(UtilityTags.Blocks.DOORBELL_BLOCKS)) {
+                    level.playSound(null, event.getPos(), UtilitySounds.DOORBELL.get(), SoundSource.BLOCKS, 0.25F, 1.0F);
+                    event.getEntity().swing(InteractionHand.MAIN_HAND, true);
+
+                }
+            }
+
+        }
     }
 }

@@ -27,6 +27,11 @@ public class UtilityBlockTags extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
 
+        //Doorbell Blocks
+        tag(UtilityTags.Blocks.DOORBELL_BLOCKS)
+                .addTag(BlockTags.WOODEN_BUTTONS)
+        ;
+
         //Hot Blocks
         tag(UtilityTags.Blocks.HOT_BLOCKS)
                 .add(Blocks.MAGMA_BLOCK)

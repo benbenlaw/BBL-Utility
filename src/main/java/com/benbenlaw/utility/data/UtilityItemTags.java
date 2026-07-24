@@ -24,6 +24,12 @@ public class UtilityItemTags extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
+        //Doorbell Blocks
+        tag(UtilityTags.Items.DOORBELL_BLOCKS)
+                .addTag(ItemTags.WOODEN_BUTTONS)
+        ;
+
+
         //Enchantments
         tag(ItemTags.DURABILITY_ENCHANTABLE)
                 .add(UtilityItems.CROOK.get())

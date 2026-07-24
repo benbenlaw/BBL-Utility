@@ -1,0 +1,8 @@
+{
+    "doorbell": {
+        "subtitle": "sounds.utility.doorbell",
+        "sounds": [
+            "utility:doorbell"
+        ]
+    }
+}

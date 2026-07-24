@@ -25,6 +25,7 @@ import com.benbenlaw.utility.screen.placer.BlockPlacerScreen;
 import com.benbenlaw.utility.screen.placer.FluidPlacerScreen;
 import com.benbenlaw.utility.screen.repairer.ItemRepairerScreen;
 import com.benbenlaw.utility.screen.summoning.SummoningBlockScreen;
+import com.benbenlaw.utility.sound.UtilitySounds;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
@@ -59,6 +60,7 @@ public class Utility {
         UtilityMenuTypes.MENUS.register(eventBus);
         UtilityRecipeTypes.SERIALIZER.register(eventBus);
         UtilityRecipeTypes.TYPES.register(eventBus);
+        UtilitySounds.SOUND_EVENTS.register(eventBus);
 
         eventBus.addListener(this::registerNetworking);
     }

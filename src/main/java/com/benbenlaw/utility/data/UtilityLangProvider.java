@@ -16,6 +16,9 @@ public class UtilityLangProvider extends LanguageProvider {
     protected void addTranslations() {
         add("itemGroup.utility", "BBL Utility");
 
+        //Misc
+        add("sounds.utility.doorbell", "Doorbell Rings");
+
         //Blocks
         add("block.utility.ender_ore", "Ender Ore");
         add("block.utility.deepslate_ender_ore", "Deepslate Ender Ore");

@@ -31,10 +31,19 @@ public class UtilityStartUpConfig {
     public static final ModConfigSpec.ConfigValue<Integer> fluidGeneratorMaxDuration;
     public static final ModConfigSpec.ConfigValue<Integer> summoningBlockDuration;
 
+    public static final ModConfigSpec.ConfigValue<Boolean> woodenButtonsMakeDoorbellSound;
 
 
     static {
         BUILDER.comment("BBL Utility Startup Config");
+
+        //Misc Configs
+        BUILDER.push("Misc Configs");
+
+        woodenButtonsMakeDoorbellSound = BUILDER.comment("Should wooden buttons play a doorbell sound when right clicked, default = false")
+                .define("Wooden Buttons Make Doorbell Sound", false);
+
+        BUILDER.pop();
 
         //Crook Configs
         BUILDER.push("Crook Configs");
