@@ -28,6 +28,7 @@ import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemUtil;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +59,35 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
     private final SyncableItemHandler inventory = new SyncableItemHandler(this, 18,
             (i, stack) -> i >= 0 && i <= 8,
             i -> i >= 9 && i <= 17
-    );
+    ) {
+        public int insert(ItemResource resource, int amount, TransactionContext tx) {
+            if (resource.isEmpty() || amount <= 0) {
+                return 0;
+            }
+
+            int remaining = amount;
+            int size = this.size();
+
+            for (int i = 0; i < size && remaining > 0; i++) {
+                ItemStack existing = ItemUtil.getStack(this, i);
+                if (existing.isEmpty()) continue;
+                if (!ItemResource.of(existing).equals(resource)) continue;
+
+                int inserted = this.insert(i, resource, remaining, tx);
+                remaining -= inserted;
+            }
+
+            for (int i = 0; i < size && remaining > 0; i++) {
+                ItemStack existing = ItemUtil.getStack(this, i);
+                if (!existing.isEmpty()) continue;
+
+                int inserted = this.insert(i, resource, remaining, tx);
+                remaining -= inserted;
+            }
+
+            return amount - remaining;
+        }
+    };
 
     public CompactorBlockEntity(BlockPos pos, BlockState state) {
         super(UtilityBlockEntities.COMPACTOR_BLOCK_ENTITY.get(), pos, state);
@@ -194,18 +223,25 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
 
     private int findOutputSlot(ItemStack output) {
 
+        int firstEmpty = -1;
+
         for (int i = OUTPUT_START; i <= OUTPUT_END; i++) {
             ItemStack stack = ItemUtil.getStack(inventory, i);
 
-            if (stack.isEmpty()) return i;
+            if (stack.isEmpty()) {
+                if (firstEmpty == -1) firstEmpty = i;
+                continue;
+            }
 
-            if (ItemStack.isSameItemSameComponents(stack, output)
-                    && stack.getCount() + output.getCount() <= stack.getMaxStackSize()) {
+            boolean sameItem = ItemStack.isSameItemSameComponents(stack, output);
+            boolean hasRoom = stack.getCount() + output.getCount() <= stack.getMaxStackSize();
+
+            if (sameItem && hasRoom) {
                 return i;
             }
         }
 
-        return -1;
+        return firstEmpty;
     }
 
     public ItemStacksResourceHandler getItemHandler() {

@@ -85,6 +85,8 @@ dependencies {
     runtimeOnly("curse.maven:spark-361579:7815877")
     //Strainers
     runtimeOnly("curse.maven:opolis-strainers-882351:8258249")
+    //Observable
+    runtimeOnly("curse.maven:observable-remake-1639360:8589511")
 }
 
 tasks.withType(ProcessResources).configureEach {

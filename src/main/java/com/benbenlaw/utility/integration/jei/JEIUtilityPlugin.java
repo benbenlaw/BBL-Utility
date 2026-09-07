@@ -7,6 +7,7 @@ import com.benbenlaw.utility.event.client.ClientRecipeCache;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerScreen;
 import com.benbenlaw.utility.screen.collector.FluidCollectorScreen;
+import com.benbenlaw.utility.screen.collector.ItemCollectorScreen;
 import com.benbenlaw.utility.screen.drying.DryingTableScreen;
 import com.benbenlaw.utility.screen.generator.FluidGeneratorScreen;
 import com.benbenlaw.utility.screen.generator.ResourceGeneratorScreen;
@@ -64,6 +65,7 @@ public class JEIUtilityPlugin implements IModPlugin {
 
         registration.addGhostIngredientHandler(BlockBreakerScreen.class, new GhostFilter<>());
         registration.addGhostIngredientHandler(FluidCollectorScreen.class, new GhostFilter<>());
+        registration.addGhostIngredientHandler(ItemCollectorScreen.class, new GhostFilter<>());
 
     }
 }
