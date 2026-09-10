@@ -6,6 +6,7 @@ import com.benbenlaw.utility.block.entity.DryingTableBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,11 +51,11 @@ public class DryingTableBlock extends SyncableBlock {
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof DryingTableBlockEntity entity1) {
-                if (entity1.onPlayerUse(player, player.getUsedItemHand())) {
+                if (entity1.onPlayerUse(player, hand)) {
                     return InteractionResult.SUCCESS;
                 }
                 player.openMenu(new SimpleMenuProvider(entity1, entity1.getDisplayName()), pos);
