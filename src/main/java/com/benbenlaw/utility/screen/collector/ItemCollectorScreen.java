@@ -17,8 +17,12 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+
+import static com.benbenlaw.utility.block.entity.ItemCollectorBlockEntity.MAX_OFFSET;
+import static com.benbenlaw.utility.block.entity.ItemCollectorBlockEntity.MAX_SIZE;
 
 import java.util.Collections;
 import java.util.List;
@@ -79,17 +83,19 @@ public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMe
         this.heightSize.setResponder(this::onSearchChanged);
         this.depthSize.setResponder(this::onSearchChanged);
 
+        addRenderableWidget(new RangePreviewButton(x + 149, y + 5, 10, 10, menu.blockPos));
+
         addRenderableWidget(WhitelistButton.create(x + 151, y + 52, 20, 20, menu.blockEntity));
 
     }
 
     private void onSearchChanged(String text) {
-        int offsetXPosValue = parseSafe(leftRightOffset);
-        int offsetYPosValue = parseSafe(upDownOffset);
-        int offsetZPosValue = parseSafe(forwardBackOffset);
-        int xSizeValue = Math.max(1, parseSafe(widthSize));
-        int ySizeValue = Math.max(1, parseSafe(heightSize));
-        int zSizeValue = Math.max(1, parseSafe(depthSize));
+        int offsetXPosValue = parseSafe(leftRightOffset, -MAX_OFFSET, MAX_OFFSET);
+        int offsetYPosValue = parseSafe(upDownOffset, -MAX_OFFSET, MAX_OFFSET);
+        int offsetZPosValue = parseSafe(forwardBackOffset, -MAX_OFFSET, MAX_OFFSET);
+        int xSizeValue = parseSafe(widthSize, 1, MAX_SIZE);
+        int ySizeValue = parseSafe(heightSize, 1, MAX_SIZE);
+        int zSizeValue = parseSafe(depthSize, 1, MAX_SIZE);
 
         ClientPacketDistributor.sendToServer(new SyncItemCollectorPacket(menu.blockPos, offsetXPosValue, offsetYPosValue, offsetZPosValue,
                 xSizeValue, ySizeValue, zSizeValue));
@@ -230,15 +236,12 @@ public class ItemCollectorScreen extends AbstractContainerScreen<ItemCollectorMe
 
     }
 
-    private int parseSafe(EditBox box) {
-        String value = box.getValue();
-        if (value == null || value.isEmpty()) return 0;
+    private int parseSafe(EditBox box, int min, int max) {
         try {
-            int parsed = Integer.parseInt(value);
-            // Clamp between -9 and 9
-            return Math.max(-9, Math.min(9, parsed));
+            return Mth.clamp(Integer.parseInt(box.getValue()), min, max);
         } catch (NumberFormatException e) {
-            return 0;
+            // empty, a lone "-" mid-typing, or anything else unparseable
+            return Mth.clamp(0, min, max);
         }
     }
 

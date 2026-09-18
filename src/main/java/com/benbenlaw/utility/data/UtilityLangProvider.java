@@ -51,6 +51,9 @@ public class UtilityLangProvider extends LanguageProvider {
         add("item.utility.ender_pearl_fragment", "Ender Pearl Fragment");
 
         //Tooltips
+        add("tooltip.utility.range_button.shown", "Shown");
+        add("tooltip.utility.range_button.hidden", "Hidden");
+        add("tooltip.utility.range_button.mode", "Range: %s");
         add("tooltip.utility.crook", "Breaks leaves faster and increase leaves drops rates");
         add("tooltip.utility.sapling_grower", "Used to grow saplings instantly");
         add("tooltip.utility.animal_net", "Used to catch and release mobs");

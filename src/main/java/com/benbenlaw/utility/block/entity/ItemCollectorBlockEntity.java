@@ -3,16 +3,14 @@ package com.benbenlaw.utility.block.entity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
-import com.benbenlaw.core.block.entity.handler.item.OutputItemHandler;
 import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.ItemCollectorBlock;
 import com.benbenlaw.utility.screen.collector.ItemCollectorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -21,12 +19,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -48,6 +44,9 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     private int width = 1;
     private int height = 1;
     private int depth = 1;
+
+    public static final int MAX_SIZE = 9;
+    public static final int MAX_OFFSET = 9;
 
     private final SyncableItemHandler inventory = new SyncableItemHandler(this, 9,
             (i, stack) -> false,
@@ -136,41 +135,24 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public AABB createArea() {
-        BlockPos startPos = getOffsetStartPos();
-        BlockState state = getBlockState();
-        Direction facing = state.getValue(ItemCollectorBlock.FACING);
+        BlockPos center = getAreaCenter();
+        Direction facing = getBlockState().getValue(ItemCollectorBlock.FACING);
 
         if (!facing.getAxis().isHorizontal()) {
             facing = Direction.NORTH;
         }
 
-        Direction leftDir;
-        if (facing.getAxis().isHorizontal()) {
-            leftDir = facing.getClockWise();
-        } else {
-            leftDir = Direction.WEST;
-        }
+        // depth runs along the facing, with the width across it
+        boolean facingOnX = facing.getAxis() == Direction.Axis.X;
+        int sizeX = facingOnX ? depth : width;
+        int sizeZ = facingOnX ? width : depth;
 
-        int minX = startPos.getX();
-        int minY = startPos.getY();
-        int minZ = startPos.getZ();
+        // centered on the block, an even size takes the extra block on the positive side
+        int minX = center.getX() - (sizeX - 1) / 2;
+        int minY = center.getY() - (height - 1) / 2;
+        int minZ = center.getZ() - (sizeZ - 1) / 2;
 
-        int maxX = minX + leftDir.getStepX() * (width - 1);
-        int maxZ = minZ + leftDir.getStepZ() * (width - 1);
-
-        maxX += facing.getStepX() * (depth - 1);
-        maxZ += facing.getStepZ() * (depth - 1);
-
-        int maxY = minY + height - 1;
-
-        double finalMinX = Math.min(minX, maxX);
-        double finalMaxX = Math.max(minX, maxX);
-        double finalMinY = minY;
-        double finalMaxY = maxY;
-        double finalMinZ = Math.min(minZ, maxZ);
-        double finalMaxZ = Math.max(minZ, maxZ);
-
-        return new AABB(finalMinX, finalMinY, finalMinZ, finalMaxX + 1.0, finalMaxY + 1.0, finalMaxZ + 1.0);
+        return new AABB(minX, minY, minZ, minX + sizeX, minY + height, minZ + sizeZ);
     }
 
     public ItemStacksResourceHandler getItemHandler() {
@@ -186,7 +168,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public void setOffsetX(int offsetXPos) {
-        this.leftRightOffset = offsetXPos;
+        this.leftRightOffset = Mth.clamp(offsetXPos, -MAX_OFFSET, MAX_OFFSET);
         setChanged();
         sync();
     }
@@ -196,7 +178,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public void setOffsetY(int offsetYPos) {
-        this.upDownOffset = offsetYPos;
+        this.upDownOffset = Mth.clamp(offsetYPos, -MAX_OFFSET, MAX_OFFSET);
         setChanged();
         sync();
     }
@@ -206,7 +188,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public void setOffsetZ(int offsetZPos) {
-        this.forwardBackOffset = offsetZPos;
+        this.forwardBackOffset = Mth.clamp(offsetZPos, -MAX_OFFSET, MAX_OFFSET);
         setChanged();
         sync();
     }
@@ -216,7 +198,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public void setSizeX(int xSize) {
-        this.width = xSize;
+        this.width = Mth.clamp(xSize, 1, MAX_SIZE);
         setChanged();
         sync();
     }
@@ -226,7 +208,7 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public void setSizeY(int ySize) {
-        this.height = ySize;
+        this.height = Mth.clamp(ySize, 1, MAX_SIZE);
         setChanged();
         sync();
     }
@@ -236,12 +218,12 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
     }
 
     public void setSizeZ(int zSize) {
-        this.depth = zSize;
+        this.depth = Mth.clamp(zSize, 1, MAX_SIZE);
         setChanged();
         sync();
     }
 
-    private BlockPos getOffsetStartPos() {
+    private BlockPos getAreaCenter() {
         if (level == null) return worldPosition;
 
         BlockState state = getBlockState();
@@ -253,9 +235,9 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
 
         Direction leftDir;
         if (facing.getAxis().isHorizontal()) {
-            leftDir = facing.getClockWise();
+            leftDir = facing.getCounterClockWise();
         } else {
-            leftDir = Direction.WEST;
+            leftDir = Direction.EAST;
         }
 
         int x = worldPosition.getX() + forwardBackOffset * facing.getStepX() + leftRightOffset * leftDir.getStepX();
@@ -302,12 +284,12 @@ public class ItemCollectorBlockEntity extends SyncableBlockEntity implements Men
         filterHandler.deserialize(input.childOrEmpty("filter"));
         maxProgress = input.getIntOr("maxProgress", 20);
         progress = input.getIntOr("progress", 0);
-        leftRightOffset = input.getIntOr("leftRightOffset", 0);
-        upDownOffset = input.getIntOr("upDownOffset", 0);
-        forwardBackOffset = input.getIntOr("forwardBackOffset", 0);
-        width = input.getIntOr("width", 1);
-        height = input.getIntOr("height", 1);
-        depth = input.getIntOr("depth", 1);
+        leftRightOffset = Mth.clamp(input.getIntOr("leftRightOffset", 0), -MAX_OFFSET, MAX_OFFSET);
+        upDownOffset = Mth.clamp(input.getIntOr("upDownOffset", 0), -MAX_OFFSET, MAX_OFFSET);
+        forwardBackOffset = Mth.clamp(input.getIntOr("forwardBackOffset", 0), -MAX_OFFSET, MAX_OFFSET);
+        width = Mth.clamp(input.getIntOr("width", 1), 1, MAX_SIZE);
+        height = Mth.clamp(input.getIntOr("height", 1), 1, MAX_SIZE);
+        depth = Mth.clamp(input.getIntOr("depth", 1), 1, MAX_SIZE);
         whitelist = input.getBooleanOr("whitelist", true);
 
         super.loadAdditional(input);

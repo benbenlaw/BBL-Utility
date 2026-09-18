@@ -43,6 +43,7 @@
   "message.utility.sapling_grower.blocked_by": "There's a block in the way: %s %s",
   "message.utility.sapling_grower.blocked_by.height_many": "(%s blocks above)",
   "message.utility.sapling_grower.blocked_by.height_one": "(%s block above)",
+  "message.utility.sapling_grower.blocked_by.offset": "(%s, %s, %s from sapling)",
   "sounds.utility.doorbell": "Doorbell Rings",
   "tooltip.animal_net.animal_mobs": "- Animal Mobs",
   "tooltip.animal_net.contains": "Contains - %s",
@@ -75,5 +76,8 @@
   "tooltip.utility.empty_filter": "Empty Filter",
   "tooltip.utility.floater": "When in your off hand allows you to place a block in your main hand in the air or water",
   "tooltip.utility.fluids_header": "Fluids:",
+  "tooltip.utility.range_button.hidden": "Hidden",
+  "tooltip.utility.range_button.mode": "Range: %s",
+  "tooltip.utility.range_button.shown": "Shown",
   "tooltip.utility.sapling_grower": "Used to grow saplings instantly"
 }
