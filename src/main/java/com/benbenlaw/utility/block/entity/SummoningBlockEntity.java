@@ -51,6 +51,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -112,6 +113,7 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
         assert level != null;
         if (!level.isClientSide()) {
 
+            AABB areaAbove = new AABB(worldPosition.above());
             if (!level.getBlockState(worldPosition).getValue(SummoningBlock.RUNNING)) return;
             if (!level.getBlockState(worldPosition.above()).is(Blocks.AIR)) return;
 
@@ -129,6 +131,9 @@ public class SummoningBlockEntity extends SyncableBlockEntity implements MenuPro
             }
 
             if (cachedRecipe != null) {
+
+                if (!level.getEntitiesOfClass(cachedRecipe.value().summonedEntity().getBaseClass(), areaAbove).isEmpty()) return;
+
                 sync();
                 PacketDistributor.sendToAllPlayers(new SyncEntitySummoningBlockPacket(worldPosition, cachedRecipe.value().summonedEntity(), cachedRecipe.value().entityData()));
                 progress++;

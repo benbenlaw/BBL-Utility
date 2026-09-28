@@ -93,6 +93,9 @@ public class UtilityEvents {
         event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.CLICKER_BLOCK_ENTITY.get(),
                 (blockEntity, side) -> blockEntity.getItemHandler());
 
+        event.registerBlockEntity(Capabilities.Item.BLOCK, UtilityBlockEntities.SUMMONING_BLOCK_ENTITY.get(),
+                (blockEntity, side) -> blockEntity.getItemHandler());
+
 
     }
 
