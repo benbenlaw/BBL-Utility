@@ -51,7 +51,7 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
     private float progress = 0f;
     private FakePlayer fakePlayer;
     private final SyncableItemHandler inventory = new SyncableItemHandler(this, 1,
-            (_, _) -> true, (_) -> false);
+            (_, _) -> true, (_) -> true);
 
     private boolean whitelist = true;
     private final FilterItemHandler filterHandler = new FilterItemHandler(this,8);
