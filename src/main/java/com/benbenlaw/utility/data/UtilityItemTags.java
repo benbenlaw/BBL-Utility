@@ -30,6 +30,9 @@ public class UtilityItemTags extends ItemTagsProvider {
         ;
 
 
+        //Clicker Blacklist
+        tag(UtilityTags.Items.CLICKER_BLACKLIST);
+
         //Enchantments
         tag(ItemTags.DURABILITY_ENCHANTABLE)
                 .add(UtilityItems.CROOK.get())

@@ -71,6 +71,7 @@ public class UtilityModelProvider extends ModelProvider {
         createMachineBlock(UtilityBlocks.ITEM_COLLECTOR.get(), blockModels.blockStateOutput, blockModels.modelOutput);
         createMachineBlock(UtilityBlocks.SUMMONING_BLOCK.get(), blockModels.blockStateOutput, blockModels.modelOutput);
         createMachineBlock(UtilityBlocks.COMPACTOR.get(), blockModels.blockStateOutput, blockModels.modelOutput);
+        createMachineBlock(UtilityBlocks.CLICKER.get(), blockModels.blockStateOutput, blockModels.modelOutput);
 
 
     }

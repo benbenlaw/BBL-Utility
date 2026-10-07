@@ -1,5 +1,5 @@
-// 26.1.2	2026-07-24T14:01:03.5100002	utility Block Tags
-cb9ba79d92e3bb3f885ab18cbf8905400bb0cc89 data/minecraft/tags/block/mineable/pickaxe.json
+// 26.1.2	2026-10-07T15:13:52.8345455	utility Block Tags
+fd8b049aad5c9c51b02d32a7f63d6dd7ccf6ae8b data/minecraft/tags/block/mineable/pickaxe.json
 ffe1a60b865b46427c31ba4e706cc5abb1c1df6f data/utility/tags/block/cold_blocks.json
 b05e8be12aa5c9188b6af838b8f2e2d373c63559 data/utility/tags/block/doorbell_blocks.json
 590ee82b56a84d9825ff98c3730c82a2b891a597 data/utility/tags/block/hot_blocks.json

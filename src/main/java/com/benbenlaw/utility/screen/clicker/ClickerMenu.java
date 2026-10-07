@@ -19,10 +19,10 @@ public class ClickerMenu extends SimpleAbstractContainerMenu {
     protected Level level;
     protected ContainerData data;
     protected Player player;
-    protected BlockPos blockPos;
+    public final BlockPos blockPos;
 
     public ClickerMenu(int containerID, Inventory inventory, FriendlyByteBuf extraData) {
-        this(containerID, inventory, extraData.readBlockPos(), new SimpleContainerData(2));
+        this(containerID, inventory, extraData.readBlockPos(), new SimpleContainerData(4));
     }
 
     public ClickerMenu(int containerID, Inventory inventory, BlockPos pos, ContainerData data) {
@@ -38,6 +38,14 @@ public class ClickerMenu extends SimpleAbstractContainerMenu {
                 ClickerBlockEntity.INPUT_SLOT, 44, 35));
 
         this.addDataSlots(data);
+    }
+
+    public boolean isLeftClick() {
+        return data.get(2) != 0;
+    }
+
+    public boolean isSneaking() {
+        return data.get(3) != 0;
     }
 
     public boolean isCrafting() {

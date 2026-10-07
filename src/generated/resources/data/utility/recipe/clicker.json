@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "utility",
+  "key": {
+    "A": "#c:ingots/iron",
+    "B": "#c:ingots/gold",
+    "C": "#c:rods/wooden"
+  },
+  "pattern": [
+    "ABA",
+    "C C",
+    "ABA"
+  ],
+  "result": {
+    "id": "utility:clicker"
+  }
+}

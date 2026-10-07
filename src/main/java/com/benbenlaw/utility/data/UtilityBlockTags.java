@@ -60,6 +60,7 @@ public class UtilityBlockTags extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(UtilityBlocks.ENDER_ORE.get())
                 .add(UtilityBlocks.ENDER_ORE.get())
+                .add(UtilityBlocks.CLICKER.get())
                 .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get())
                 .add(UtilityBlocks.BLOCK_BREAKER.get())
                 .add(UtilityBlocks.BLOCK_PLACER.get())

@@ -35,6 +35,7 @@ public class UtilityLangProvider extends LanguageProvider {
         add("block.utility.item_collector", "Item Collector");
         add("block.utility.summoning_block", "Summoning Block");
         add("block.utility.compactor", "Compactor");
+        add("block.utility.clicker", "Clicker");
 
         //Items
         add("item.utility.crook", "Crook");
@@ -60,6 +61,10 @@ public class UtilityLangProvider extends LanguageProvider {
         add("tooltip.utility.death_stone", "Given upon death, right click to return to your death location");
         add("tooltip.utility.floater", "When in your off hand allows you to place a block in your main hand in the air or water");
         add("tooltip.utility.compactor_button.mode", "Mode: %s");
+        add("gui.utility.clicker.right_click", "Right Click");
+        add("gui.utility.clicker.left_click", "Left Click");
+        add("gui.utility.clicker.sneak_on", "Sneak: On");
+        add("gui.utility.clicker.sneak_off", "Sneak: Off");
         add("tooltip.utility.compactor_button.is3x3", "3x3");
         add("tooltip.utility.compactor_button.is2x2", "2x2");
         add("tooltip.utility.empty_filter", "Empty Filter");

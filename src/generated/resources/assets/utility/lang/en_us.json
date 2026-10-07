@@ -1,6 +1,7 @@
 {
   "block.utility.block_breaker": "Block Breaker",
   "block.utility.block_placer": "Block Placer",
+  "block.utility.clicker": "Clicker",
   "block.utility.compactor": "Compactor",
   "block.utility.deepslate_ender_ore": "Deepslate Ender Ore",
   "block.utility.drying_table": "Drying Table",
@@ -14,6 +15,10 @@
   "block.utility.resource_generator": "Resource Generator",
   "block.utility.soaking_table": "Soaking Table (%s)",
   "block.utility.summoning_block": "Summoning Block",
+  "gui.utility.clicker.left_click": "Left Click",
+  "gui.utility.clicker.right_click": "Right Click",
+  "gui.utility.clicker.sneak_off": "Sneak: Off",
+  "gui.utility.clicker.sneak_on": "Sneak: On",
   "item.utility.animal_net": "Animal Net",
   "item.utility.crook": "Crook",
   "item.utility.death_stone": "Death Stone",

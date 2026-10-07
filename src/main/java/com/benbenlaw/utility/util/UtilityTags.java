@@ -28,6 +28,8 @@ public class UtilityTags{
 
         public static final TagKey<Item> DOORBELL_BLOCKS = tag(Utility.MOD_ID, "doorbell_blocks");
 
+        public static final TagKey<Item> CLICKER_BLACKLIST = tag(Utility.MOD_ID, "clicker_blacklist");
+
     }
 
     public static class Entities {

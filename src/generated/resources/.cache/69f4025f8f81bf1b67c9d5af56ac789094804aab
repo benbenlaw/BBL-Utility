@@ -1,6 +1,7 @@
-// 26.1.2	2026-06-27T08:50:59.1738754	utility Models
+// 26.1.2	2026-10-07T15:13:52.8325437	utility Models
 7b478f6fe076b3dd01e19bd9af4c462234d4b866 assets/utility/blockstates/block_breaker.json
 9393e9a041dc32ae873931a80bfe2ea3a3fa0505 assets/utility/blockstates/block_placer.json
+aa1d7a89fd677fcbd565b8d4fe9e033a1edfdcd3 assets/utility/blockstates/clicker.json
 f5aca2a1c0e16e1aa156f383185a28f813b3af91 assets/utility/blockstates/compactor.json
 24e85a681138e6d4534934d26d5defd3d7ccc990 assets/utility/blockstates/deepslate_ender_ore.json
 87694b9f16e373a3ac48c0cde5a0bcc929b52969 assets/utility/blockstates/ender_ore.json
@@ -47,6 +48,10 @@ ce3b032eec94eac443afd59a35117c29c5037e6f assets/utility/models/block/block_break
 41f486fcc71363641c2a1a670cc40333a674f9d2 assets/utility/models/block/block_placer_vertical.json
 0f175b484dd9c215853c83c5ffda0bb0642ccf53 assets/utility/models/block/block_placer_working.json
 f58cfd6ae8382f0cef215d09e00b07497a6a2cd8 assets/utility/models/block/block_placer_working_vertical.json
+b645930907b005433a8af6d1d359c55ac8cde056 assets/utility/models/block/clicker.json
+260808ab0ae1573b6265977d447e8f07d26155ad assets/utility/models/block/clicker_vertical.json
+6aff5a78e5a03728ea1d80f163ebef3b87214805 assets/utility/models/block/clicker_working.json
+20fa5dcc39256a909549f9f3d9130d5d51d661e5 assets/utility/models/block/clicker_working_vertical.json
 f3f357c51abf971926f98b0f88a98600187223bf assets/utility/models/block/compactor.json
 6c7907b968c5ddcf50b985257bba331b5e34a16f assets/utility/models/block/compactor_vertical.json
 40e4a9ac54ccd897e13ea43064aefc5e40290bee assets/utility/models/block/compactor_working.json

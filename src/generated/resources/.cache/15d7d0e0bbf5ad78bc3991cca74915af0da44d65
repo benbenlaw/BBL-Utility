@@ -1,4 +1,4 @@
-// 26.1.2	2026-07-15T12:36:44.5232023	utility Recipes
+// 26.1.2	2026-10-07T15:13:52.8276738	utility Recipes
 cacec4c017a49450423191309f405f3ffa4bfa8b data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_deepslate_ender_ore.json
 5cf6c9b2d9ac6f4651910eea06a0e02f2f3f9f7e data/minecraft/advancement/recipes/misc/ender_pearl_fragment_from_ender_ore.json
 8f8a6d21064f19973e29410b0fe2c9e0f1a5037a data/minecraft/recipe/ender_pearl_fragment_from_deepslate_ender_ore.json
@@ -14,10 +14,11 @@ d207324a428b0a9f9c0d46df36c30fe70368b366 data/utility/advancement/recipes/drying
 d852edd5f402bb6c50197e27a51312993d070e6c data/utility/advancement/recipes/fluid_generator/fluid_generator/lava.json
 7ced2d85f2fec67bb731f99fb746c1a2f7ce8aaf data/utility/advancement/recipes/fluid_generator/fluid_generator/water.json
 a96de3d68426d6f4b3a2499161d34a44e035b9f9 data/utility/advancement/recipes/misc/animal_net.json
-399b726988e736ce2de3b7ebed136a4eb21475b4 data/utility/advancement/recipes/misc/block_breaker.json
-e266cb9158815b61b5f40bcd25ad508782352dc4 data/utility/advancement/recipes/misc/block_placer.json
+8479632deef8c4adcc796cfbd2d745b585301a68 data/utility/advancement/recipes/misc/block_breaker.json
+86a51d73af0d25db44ced4c77981623668fb93fe data/utility/advancement/recipes/misc/block_placer.json
 bfbbdb07b8cc865eb9d68e00715b0490dfefec2b data/utility/advancement/recipes/misc/charcoal.json
 6c88230658b7242f6a1d127bd8c529dfab5ef9d5 data/utility/advancement/recipes/misc/chests.json
+c94d3d3064af4116b1f4e9560710dab04ec58741 data/utility/advancement/recipes/misc/clicker.json
 1a9b2d4fe91b2825ec8014b3491cdbd8240e0373 data/utility/advancement/recipes/misc/coal.json
 d2411a574330e47c9f0f4287b1fb2a8cd8c55817 data/utility/advancement/recipes/misc/compactor.json
 5473c3108cbb7cd8de302b6459a454f6a49ec021 data/utility/advancement/recipes/misc/diamond_horse_armor.json
@@ -124,6 +125,7 @@ ce23b28324bc38acf29099bb901f5efbc67d238d data/utility/recipe/animal_net.json
 33d84e362fbb98b463836d33aa68d5e9aa601796 data/utility/recipe/block_placer.json
 2a38ba1cc95c72b871d29e1393a357917f2ab168 data/utility/recipe/charcoal.json
 cf408969dba17ea1059fcf28fb98e026980c0dac data/utility/recipe/chests.json
+53f348f2cb396ef11d020d4c34d8ac078d501b5f data/utility/recipe/clicker.json
 5f833aa6dfde737ed78506aab59c598e41fe9304 data/utility/recipe/coal.json
 7172dad72e222cd4272e7a7b34f6f2ddb1673eba data/utility/recipe/compactor.json
 0225d2a3ac7c35507eab7acfdd165d4933015af7 data/utility/recipe/crook.json

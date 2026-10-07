@@ -97,6 +97,18 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_modifier", has(UtilityBlocks.FLUID_COLLECTOR))
                 .save(output, "utility:reset/fluid_collector");
 
+        //Clicker
+        shaped(RecipeCategory.MISC, UtilityBlocks.CLICKER.get())
+                .pattern("ABA")
+                .pattern("C C")
+                .pattern("ABA")
+                .define('A', Tags.Items.INGOTS_IRON)
+                .define('B', Tags.Items.INGOTS_GOLD)
+                .define('C', Tags.Items.RODS_WOODEN)
+                .group("utility")
+                .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
+                .save(output);
+
         //Compactor
         shaped(RecipeCategory.MISC, UtilityBlocks.COMPACTOR.get())
                 .pattern("ABA")
@@ -157,7 +169,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('B', Tags.Items.INGOTS_GOLD)
                 .define('C', Tags.Items.STONES)
                 .group("utility")
-                .unlockedBy("has_item", has(Items.DISPENSER))
+                .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
                 .save(output);
 
         //Block Breaker
@@ -170,7 +182,7 @@ public class UtilityRecipeProvider extends RecipeProvider {
                 .define('C', Tags.Items.RODS_WOODEN)
                 .define('D', Tags.Items.TOOLS)
                 .group("utility")
-                .unlockedBy("has_item", has(Items.DISPENSER))
+                .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
                 .save(output);
 
         //Resource Generator
