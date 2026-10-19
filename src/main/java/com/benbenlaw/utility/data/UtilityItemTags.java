@@ -1,6 +1,7 @@
 package com.benbenlaw.utility.data;
 
 import com.benbenlaw.utility.Utility;
+import com.benbenlaw.utility.block.UtilityBlocks;
 import com.benbenlaw.utility.item.UtilityItems;
 import com.benbenlaw.utility.util.UtilityTags;
 import net.minecraft.core.HolderLookup;
@@ -24,11 +25,21 @@ public class UtilityItemTags extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
+        //Ore
+        tag(UtilityTags.Items.ENDER_PEARL_ORES)
+                .add(UtilityBlocks.ENDER_ORE.get().asItem())
+                .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get().asItem())
+        ;
+
+        tag(Tags.Items.ORES)
+                .add(UtilityBlocks.ENDER_ORE.get().asItem())
+                .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get().asItem())
+        ;
+
         //Doorbell Blocks
         tag(UtilityTags.Items.DOORBELL_BLOCKS)
                 .addTag(ItemTags.WOODEN_BUTTONS)
         ;
-
 
         //Clicker Blacklist
         tag(UtilityTags.Items.CLICKER_BLACKLIST);

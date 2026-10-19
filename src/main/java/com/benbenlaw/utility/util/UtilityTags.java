@@ -17,18 +17,17 @@ public class UtilityTags{
         public static final TagKey<Block> VALID_FOR_SAPLING_GROWER = tag(Utility.MOD_ID, "valid_for_sapling_grower");
         public static final TagKey<Block> HOT_BLOCKS = tag(Utility.MOD_ID, "hot_blocks");
         public static final TagKey<Block> COLD_BLOCKS = tag(Utility.MOD_ID, "cold_blocks");
-
         public static final TagKey<Block> DOORBELL_BLOCKS = tag(Utility.MOD_ID, "doorbell_blocks");
+        public static final TagKey<Block> ENDER_PEARL_ORES = commonTag("ores/ender_pearl");
     }
 
     public static class Items extends CoreTags.Items {
         public static final TagKey<Item> VALID_FOR_SAPLING_GROWER = tag(Utility.MOD_ID, "valid_for_sapling_grower");
         public static final TagKey<Item> HOT_BLOCKS = tag(Utility.MOD_ID, "hot_blocks");
         public static final TagKey<Item> COLD_BLOCKS = tag(Utility.MOD_ID, "cold_blocks");
-
         public static final TagKey<Item> DOORBELL_BLOCKS = tag(Utility.MOD_ID, "doorbell_blocks");
-
         public static final TagKey<Item> CLICKER_BLACKLIST = tag(Utility.MOD_ID, "clicker_blacklist");
+        public static final TagKey<Item> ENDER_PEARL_ORES = commonTag("ores/ender_pearl");
 
     }
 

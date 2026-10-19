@@ -1,5 +1,7 @@
-// 26.1.2	2026-10-07T15:02:16.8242021	utility Item Tags
+// 26.1.2	2026-10-19T12:27:00.9249545	utility Item Tags
 72d86d847b3bcd663eb00004b18b728d3e599fa2 data/c/tags/item/enchantables.json
+d24e0f3addd1949419a43642e3aa05eeb421d1b1 data/c/tags/item/ores.json
+d24e0f3addd1949419a43642e3aa05eeb421d1b1 data/c/tags/item/ores/ender_pearl.json
 a9bb799f551eb1e9c746f119c4fe6bbf1ecc5999 data/c/tags/item/strings.json
 002f76467b5b8062f03a937d3541a883d3b7b0a1 data/c/tags/item/tools/shear.json
 72d86d847b3bcd663eb00004b18b728d3e599fa2 data/minecraft/tags/item/enchantable/durability.json

@@ -1,4 +1,6 @@
-// 26.1.2	2026-10-07T15:13:52.8345455	utility Block Tags
+// 26.1.2	2026-10-19T12:27:00.9239471	utility Block Tags
+d24e0f3addd1949419a43642e3aa05eeb421d1b1 data/c/tags/block/ores.json
+d24e0f3addd1949419a43642e3aa05eeb421d1b1 data/c/tags/block/ores/ender_pearl.json
 fd8b049aad5c9c51b02d32a7f63d6dd7ccf6ae8b data/minecraft/tags/block/mineable/pickaxe.json
 ffe1a60b865b46427c31ba4e706cc5abb1c1df6f data/utility/tags/block/cold_blocks.json
 b05e8be12aa5c9188b6af838b8f2e2d373c63559 data/utility/tags/block/doorbell_blocks.json

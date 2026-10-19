@@ -14,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +27,17 @@ public class UtilityBlockTags extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+
+        //Ore
+        tag(UtilityTags.Blocks.ENDER_PEARL_ORES)
+                .add(UtilityBlocks.ENDER_ORE.get())
+                .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get())
+        ;
+
+        tag(Tags.Blocks.ORES)
+                .add(UtilityBlocks.ENDER_ORE.get())
+                .add(UtilityBlocks.DEEPSLATE_ENDER_ORE.get())
+        ;
 
         //Doorbell Blocks
         tag(UtilityTags.Blocks.DOORBELL_BLOCKS)
