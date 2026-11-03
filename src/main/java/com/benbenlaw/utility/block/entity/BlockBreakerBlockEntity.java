@@ -10,6 +10,9 @@ import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.BlockBreakerBlock;
 import com.benbenlaw.utility.screen.breaker.BlockBreakerMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.GameType;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -97,7 +100,12 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
 
             if (!level.getBlockState(worldPosition).getValue(BlockBreakerBlock.RUNNING)) return;
 
-            BlockPos targetPos = worldPosition.relative(level.getBlockState(worldPosition).getValue(BlockBreakerBlock.FACING));
+            Direction facing = level.getBlockState(worldPosition).getValue(BlockBreakerBlock.FACING);
+            fakePlayer.setYRot(facing.toYRot());
+            fakePlayer.setYHeadRot(facing.toYRot());
+            fakePlayer.setXRot(facing == Direction.DOWN ? 90 : facing == Direction.UP ? -90 : 0);
+
+            BlockPos targetPos = worldPosition.relative(facing);
             BlockState targetBlockState = level.getBlockState(targetPos);
             BlockEntity targetBlockEntity = level.getBlockEntity(targetPos);
 
@@ -125,6 +133,12 @@ public class BlockBreakerBlockEntity extends SyncableBlockEntity implements Menu
                 progress += progressPerTick;
 
                 if (progress >= 1.0f) {
+
+                    if (CommonHooks.fireBlockBreak(level, GameType.SURVIVAL, fakePlayer, targetPos, targetBlockState).isCanceled()) {
+                        clearBlockBreakingProgress(this.getPersistentData().getId(), targetPos, progressPerTick);
+                        progress = 0f;
+                        return;
+                    }
 
                     Block.dropResources(targetBlockState, level, targetPos, targetBlockEntity, fakePlayer, tool.copy());
                     level.destroyBlock(targetPos, false, fakePlayer);
