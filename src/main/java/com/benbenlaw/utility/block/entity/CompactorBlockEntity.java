@@ -4,6 +4,7 @@ import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.handler.item.SyncableItemHandler;
 import com.benbenlaw.utility.block.UtilityBlockEntities;
 import com.benbenlaw.utility.block.custom.CompactorBlock;
+import com.benbenlaw.utility.recipe.custom.CompactorRecipe;
 import com.benbenlaw.utility.screen.compactor.CompactorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
@@ -17,10 +18,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -32,11 +30,7 @@ import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class CompactorBlockEntity extends SyncableBlockEntity implements MenuProvider {
 
@@ -53,6 +47,7 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
 
     private static final Map<RecipeCacheKey, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_2X2 = new HashMap<>();
     private static final Map<RecipeCacheKey, Optional<RecipeHolder<CraftingRecipe>>> RECIPE_CACHE_3X3 = new HashMap<>();
+    private static final Map<RecipeCacheKey, Optional<RecipeHolder<CompactorRecipe>>> COMPACTOR_RECIPE_CACHE = new HashMap<>();
 
     boolean is3x3 = false;
 
@@ -126,20 +121,34 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
             return;
         }
 
-        int needed = requiredCount();
-
         for (int i = INPUT_START; i <= INPUT_END; i++) {
 
             ItemStack stack = ItemUtil.getStack(inventory, i);
             if (stack.isEmpty()) continue;
-            if (stack.getCount() < needed) continue;
 
-            CraftingInput input = buildCraftingInput(stack);
-            RecipeHolder<CraftingRecipe> recipe = getRecipeForInput(stack, input);
-            if (recipe == null) continue;
+            CompactorRecipe compactorRecipe = getCompactorRecipe(stack);
 
-            ItemStack output = recipe.value().assemble(input);
-            if (output.isEmpty()) continue;
+            ItemStack output;
+            int needed;
+
+            if (compactorRecipe != null) {
+                needed = compactorRecipe.input().count();
+
+                if (stack.getCount() < needed) continue;
+
+                output = compactorRecipe.assemble(new SingleRecipeInput(stack));
+            } else {
+
+                needed = requiredCount();
+
+                if (stack.getCount() < needed) continue;
+
+                CraftingInput input = buildCraftingInput(stack);
+                RecipeHolder<CraftingRecipe> recipe = getRecipeForInput(stack, input);
+                if (recipe == null) continue;
+
+                output = recipe.value().assemble(input);
+            }
 
             int outputSlot = findOutputSlot(output);
             if (outputSlot == -1) {
@@ -175,6 +184,16 @@ public class CompactorBlockEntity extends SyncableBlockEntity implements MenuPro
         }
 
         return CraftingInput.of(size, size, items);
+    }
+
+    @Nullable
+    private CompactorRecipe getCompactorRecipe(ItemStack stack) {
+        assert level != null;
+
+        return Objects.requireNonNull(level.getServer()).getRecipeManager()
+                .getRecipeFor(CompactorRecipe.TYPE, new SingleRecipeInput(stack), level)
+                .map(RecipeHolder::value).orElse(null);
+
     }
 
     @Nullable

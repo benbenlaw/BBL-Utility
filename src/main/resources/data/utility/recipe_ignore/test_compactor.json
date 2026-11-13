@@ -1,0 +1,10 @@
+{
+  "type": "utility:compactor",
+  "input": {
+    "count": 12,
+    "ingredient": "minecraft:diamond"
+  },
+  "output": {
+    "id": "minecraft:cracked_stone_bricks"
+  }
+}

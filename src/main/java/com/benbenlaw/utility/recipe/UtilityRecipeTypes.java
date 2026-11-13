@@ -1,10 +1,7 @@
 package com.benbenlaw.utility.recipe;
 
 import com.benbenlaw.utility.Utility;
-import com.benbenlaw.utility.recipe.custom.DryingTableRecipe;
-import com.benbenlaw.utility.recipe.custom.FluidGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.ResourceGeneratorRecipe;
-import com.benbenlaw.utility.recipe.custom.SummoningRecipe;
+import com.benbenlaw.utility.recipe.custom.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -43,6 +40,13 @@ public class UtilityRecipeTypes {
 
     public static final Supplier<RecipeType<SummoningRecipe>> SUMMONING_TYPE =
             TYPES.register("summoning", () -> SummoningRecipe.TYPE);
+
+
+    public static final Supplier<RecipeSerializer<CompactorRecipe>> COMPACTOR_SERIALIZER =
+            SERIALIZER.register("compactor", () -> CompactorRecipe.SERIALIZER);
+
+    public static final Supplier<RecipeType<CompactorRecipe>> COMPACTOR_TYPE =
+            TYPES.register("compactor", () -> CompactorRecipe.TYPE);
 
 
 
